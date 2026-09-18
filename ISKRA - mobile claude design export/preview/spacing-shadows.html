@@ -1,0 +1,17 @@
+<!-- @dsCard group="Spacing" -->
+<!DOCTYPE html><html lang="sr"><head><meta charset="UTF-8" />
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  html,body{margin:0}
+  body{background:var(--bg);font-family:var(--font);padding:30px;display:flex;gap:26px;flex-wrap:wrap;align-items:flex-start}
+  .w{display:flex;flex-direction:column;align-items:center;gap:12px;flex:1;min-width:120px}
+  .b{width:96px;height:64px;border-radius:16px;background:#fff}
+  .lab{font:600 11px/1.3 var(--font);color:var(--text-sub);text-align:center}
+  .eb{width:120px;height:48px;border-radius:16px;background:var(--ember-grad);display:flex;align-items:center;justify-content:center;color:#fff;font:700 14px/1 var(--font)}
+</style></head>
+<body>
+  <div class="w"><div class="b" style="box-shadow:var(--shadow-sm)"></div><span class="lab">shadow-sm<br>resting small card</span></div>
+  <div class="w"><div class="b" style="box-shadow:var(--shadow-card)"></div><span class="lab">shadow-card<br>standard card</span></div>
+  <div class="w"><div class="b" style="box-shadow:var(--shadow-soft)"></div><span class="lab">shadow-soft<br>modern / feature</span></div>
+  <div class="w"><div class="eb" style="box-shadow:var(--shadow-ember)"></div><span class="lab">shadow-ember<br>primary button</span></div>
+</body></html>

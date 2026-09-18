@@ -1,0 +1,155 @@
+/* ============================================================
+   ISKRA — Design Tokens (colors + type)
+   Quit-smoking app, Serbian market (Latin script).
+   Extracted from the canonical app screens (Home v3-1 et al).
+   Use these CSS vars in the website + as the source of truth
+   for the app handoff. App screens use the same values inline
+   via the `ISK3` / `CAT` JS objects — keep them in sync.
+   ============================================================ */
+
+/* Manrope — the single brand typeface. Loaded from Google Fonts.
+   If self-hosting, drop the .woff2 files in fonts/ and swap @import
+   for @font-face. Weights used: 300,400,500,600,700,800. */
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  /* ---- Brand (ember) ------------------------------------- */
+  --ember:        #E8621A; /* primary brand — CTAs, active nav, selected state, accents */
+  --ember-top:    #F0701F; /* top stop of the vertical button/surface gradient */
+  --ember-deep:   #C9530F; /* pressed / bold label-on-tint / streak number */
+  --ember-soft:   #FBEAE0; /* soft tint — avatar chips, monograms */
+  --ember-tint:   #FEF0E8; /* lightest tint — selected-card bg, icon circles, badges */
+  --ember-grad:   linear-gradient(180deg, #F0701F 0%, #E8621A 100%); /* button/surface */
+
+  /* ---- Neutrals / surfaces ------------------------------- */
+  --bg:           #FDFCFA; /* app background — warm near-white */
+  --bg-warm:      #FEF6F0; /* warm interstitial (reflection / insight screens) */
+  --card:         #FFFFFF; /* card surface */
+  --border:       #ECE9E3; /* hairline card border */
+  --border-input: #E8E8E8; /* input / divider border */
+  --faint:        #F1EDE6; /* progress-track / future-day fill */
+
+  /* ---- Text ---------------------------------------------- */
+  --text:         #1A1A1A; /* primary */
+  --text-sub:     #999999; /* secondary / labels */
+  --text-muted:   #888888; /* muted body on warm screens */
+  --text-faint:   #BBBBBB; /* fine print */
+  --text-ghost:   #CCCCCC; /* disabled / locked / hints */
+  --body:         #555555; /* long-form body copy inside cards */
+
+  /* ---- Category color system ----------------------------- */
+  /* Home stat cards + detail screens. Cards stay WHITE; color
+     lives on the icon and its pastel chip. */
+  --cat-money:        #3A7A3A;  --cat-money-chip:   #E1F1E1; /* Novac / savings (green) */
+  --cat-cigarettes:   #C24A43;  --cat-cig-chip:     #FBE9E7; /* Cigare avoided (red) */
+  --cat-health:       #3A7A3A;  --cat-health-chip:  #E1F1E1; /* Zdravlje milestone (green) */
+
+  /* "Moj napredak" goal categories — each its own hue + bar */
+  --goal-zdravlje:    #D4547E;  /* rose       */
+  --goal-pluca:       #4A8AC4;  /* sky blue   */
+  --goal-ekologija:   #3A7A3A;  /* green      */
+  --goal-finansije:   #2E8B80;  /* teal       */
+  --goal-telo:        #C4724A;  /* terracotta */
+  --goal-nikotin:     #6B52A8;  /* purple     */
+
+  /* Reason / fear / trigger icon hues (onboarding pills) */
+  --reason-health:    #D4547E;  /* heart   */
+  --reason-family:    #4A6080;  /* people  */
+  --reason-money:     #2E8B80;  /* coin    */
+  --reason-fitness:   #3A7A3A;  /* running */
+  --reason-freedom:   #6B52A8;  /* bird    */
+  --reason-pressure:  #BA7517;  /* amber   */
+
+  /* Supporting accents */
+  --teal-deep:        #1A5C5A;  --teal-deep-top: #1F6B68; /* "Dnevno znanje" card */
+  --amber:            #BA7517;  /* time/streak amber, countdown pills */
+
+  /* Immersive craving-tool backgrounds (full-screen takeovers) */
+  --tool-disem:       #1A1714;  /* breathing — warm charcoal */
+  --tool-voda:        #2D6FA8;  /* water — calm blue          */
+  --tool-posmatram:   #1C1B35;  /* urge-surf — deep indigo    */
+  --tool-setam:       #1A3A20;  /* walk — forest green        */
+  --tool-igram:       #2D1F5E;  /* bubble game — deep purple  */
+
+  /* ---- Radii --------------------------------------------- */
+  --r-input:   12px;  /* inputs, small tool rows */
+  --r-chip:    14px;  /* category goal cards, small cards */
+  --r-btn:     16px;  /* primary buttons, section cards */
+  --r-card:    18px;  /* standard cards */
+  --r-card-lg: 20px;  /* feature cards, stat cards, sheets */
+  --r-hero:    26px;  /* photo hero containers */
+  --r-pill:    999px;
+
+  /* ---- Shadows / elevation ------------------------------- */
+  --shadow-sm:    0 2px 8px rgba(26,22,15,0.035);
+  --shadow-card:  0 4px 14px rgba(26,22,15,0.04), 0 1px 2px rgba(26,22,15,0.022);
+  --shadow-soft:  0 8px 22px rgba(120,80,40,0.06);
+  --shadow-ember: 0 8px 20px rgba(232,98,26,0.28);
+  --shadow-hero:  0 10px 26px rgba(70,110,150,0.18);
+
+  /* ---- Type ---------------------------------------------- */
+  --font: "Manrope", system-ui, -apple-system, sans-serif;
+
+  /* weights — semantic */
+  --w-light: 300;   /* italic accent words ("slobode.") */
+  --w-reg:   400;   /* body */
+  --w-med:   500;   /* card titles, values */
+  --w-semi:  600;   /* PRIMARY headlines, big numbers, question titles */
+  --w-bold:  700;   /* buttons, section titles, streak number */
+  --w-black: 800;   /* share-card hero number only */
+
+  /* size scale (px) */
+  --t-hero:    80px; /* AHA / share big number */
+  --t-display: 36px; /* slip/headline display */
+  --t-title:   28px; /* onboarding question title */
+  --t-h2:      22px; /* secondary headline */
+  --t-lead:    18px; /* lead / card title large */
+  --t-base:    16px; /* body / button */
+  --t-card:    15px; /* card body */
+  --t-sub:     14px; /* subtext */
+  --t-small:   13px; /* fine subtext */
+  --t-fine:    12px; /* fine print */
+  --t-label:   11px; /* all-caps eyebrow labels */
+}
+
+/* ============================================================
+   Semantic type classes — match the app's usage exactly.
+   ============================================================ */
+.isk-eyebrow {            /* "ZNAJ OVO", "TVOJ PLAN", "DNEVNO ZNANJE" */
+  font: var(--w-bold) var(--t-label)/1.2 var(--font);
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--ember);
+}
+.isk-question {           /* onboarding question title */
+  font: var(--w-semi) var(--t-title)/1.25 var(--font);
+  letter-spacing: -0.02em; color: var(--text);
+}
+.isk-display {            /* big celebratory headline */
+  font: var(--w-bold) var(--t-display)/1.0 var(--font);
+  letter-spacing: -0.5px; color: var(--text);
+}
+.isk-h2 {
+  font: var(--w-semi) var(--t-h2)/1.35 var(--font); color: var(--text);
+}
+.isk-section {            /* "Moj napredak", "Ova nedelja" */
+  font: var(--w-bold) var(--t-base)/1.3 var(--font);
+  letter-spacing: -0.01em; color: var(--text);
+}
+.isk-card-title {
+  font: var(--w-med) var(--t-lead)/1.3 var(--font); color: var(--text);
+}
+.isk-body {
+  font: var(--w-reg) var(--t-card)/1.55 var(--font); color: var(--body);
+}
+.isk-sub {
+  font: var(--w-reg) var(--t-sub)/1.5 var(--font); color: var(--text-sub);
+}
+.isk-fine {
+  font: var(--w-reg) var(--t-fine)/1.45 var(--font); color: var(--text-faint);
+}
+.isk-number {             /* big stat / countdown number */
+  font: var(--w-semi) var(--t-hero)/1 var(--font);
+  letter-spacing: -0.02em; color: var(--text); font-variant-numeric: tabular-nums;
+}
+.isk-btn-label {
+  font: var(--w-bold) var(--t-base)/1 var(--font); letter-spacing: 0.01em;
+}

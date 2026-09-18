@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="640" viewBox="0 0 1600 640" fill="none" preserveAspectRatio="xMidYMax slice">
+  <defs>
+    <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity="0"></stop>
+      <stop offset="0.55" stop-color="#fff" stop-opacity="1"></stop>
+    </linearGradient>
+    <mask id="fadeMask"><rect width="1600" height="640" fill="url(#fade)"></rect></mask>
+  </defs>
+  <g stroke="#E8621A" stroke-width="2" fill="none" stroke-linejoin="round" stroke-linecap="round" mask="url(#fadeMask)">
+    <path opacity="0.55" d="M0 560 L150 470 L260 520 L400 360 L520 430 L660 300 L800 400 L940 280 L1080 380 L1220 300 L1360 420 L1480 360 L1600 440"></path>
+    <path opacity="0.42" d="M0 600 L120 520 L280 560 L420 440 L560 510 L700 390 L840 470 L980 360 L1140 450 L1280 380 L1440 470 L1600 410"></path>
+    <path opacity="0.30" d="M0 470 L180 400 L320 450 L460 320 L600 390 L760 250 L900 350 L1040 240 L1200 340 L1340 260 L1500 360 L1600 320"></path>
+    <path opacity="0.22" d="M0 520 L140 480 L300 500 L440 400 L600 460 L740 360 L880 430 L1020 330 L1180 410 L1320 340 L1480 420 L1600 380"></path>
+    <path opacity="0.16" d="M0 400 L200 350 L360 390 L520 280 L680 340 L820 220 L980 300 L1120 210 L1280 290 L1420 230 L1560 300 L1600 290"></path>
+  </g>
+</svg>

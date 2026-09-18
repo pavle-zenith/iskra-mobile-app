@@ -1,0 +1,26 @@
+<!-- @dsCard group="Components" -->
+<!DOCTYPE html><html lang="sr"><head><meta charset="UTF-8" />
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  html,body{margin:0}
+  body{background:var(--bg);font-family:var(--font);padding:24px 30px;display:flex;gap:14px}
+  .stat{flex:1;background:#fff;border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow:var(--shadow-card)}
+  .chip{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+  .num{font:600 26px/1 var(--font);letter-spacing:-0.02em;margin-top:12px}
+  .lab{font:600 12.5px/1 var(--font);color:var(--text);margin-top:6px}
+  .sub{font:500 11px/1 var(--font);color:var(--text-faint);margin-top:3px}
+</style></head>
+<body>
+  <div class="stat">
+    <span class="chip" style="background:var(--cat-money-chip)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3A7A3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/></svg></span>
+    <div class="num" style="color:#3A7A3A">18.800</div>
+    <div class="lab">RSD ušteđeno</div>
+    <div class="sub">Raste svaki dan</div>
+  </div>
+  <div class="stat">
+    <span class="chip" style="background:var(--cat-cig-chip)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C24A43" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="13" width="13.5" height="4" rx="1.4"/><line x1="11.5" y1="13" x2="11.5" y2="17"/><line x1="3" y1="4" x2="21" y2="20.5"/></svg></span>
+    <div class="num" style="color:#C24A43">940</div>
+    <div class="lab">cigareta odbijeno</div>
+    <div class="sub">u 47 dana slobode</div>
+  </div>
+</body></html>

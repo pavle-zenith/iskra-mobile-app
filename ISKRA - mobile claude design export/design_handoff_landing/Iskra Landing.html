@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Iskra, aplikacija za prestanak pušenja u Srbiji</title>
+<meta name="description" content="Iskra ti pomaže da prestaneš da pušiš kroz praćenje napretka, alate za poriv, personalizovan plan i podršku bez osuđivanja. Uđi na Early Access listu." />
+<meta property="og:title" content="Prestani da pušiš. Ovaj put zaista." />
+<meta property="og:description" content="Iskra je aplikacija za prestanak pušenja napravljena za Srbiju. Pomaže ti baš u trenutku kada ti se zapali." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="landing/styles.css" />
+</head>
+<body>
+
+<template id="__bundler_thumbnail" data-bg-color="#E8621A">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#E8621A"/>
+    <path d="M560 300c-13 40-58 53-58 106a98 98 0 0 0 196 0c0-33-13-46-26-72-20 26-46 26-46 0 0-26 6-39-6-66-20 13-33 26-54 32z" fill="#fff"/>
+    <text x="600" y="560" font-family="Manrope,sans-serif" font-size="64" font-weight="800" letter-spacing="14" fill="#fff" text-anchor="middle">ISKRA</text>
+  </svg>
+</template>
+
+<!-- NAV -->
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#top"><span class="mk"><img src="assets/iskra-logo-sm.png" alt="" /></span>ISKRA</a>
+    <nav class="nav-links">
+      <a href="#kako">Kako radi</a>
+      <a href="#alati">Alati</a>
+      <a href="#napredak">Napredak</a>
+      <a href="#pitanja">Pitanja</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="#cta" class="btn btn-primary">Uradi kviz</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="section hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="mtn mtn-o"></div>
+  <div class="hero-visual">
+    <div class="hero-visual-bg"></div>
+    <img class="hero-phone" src="mockups/home.png" alt="Iskra aplikacija" />
+  </div>
+  <div class="wrap hero-2col">
+    <div class="hero-copy">
+      <span class="eyebrow">Uskoro za Srbiju</span>
+      <h1 style="margin-top:18px">Prestani da pušiš.<br /><span class="accent" style="font-weight:600">Ovaj put zaista.</span></h1>
+      <p class="lead">Iskra ti pomaže baš u trenutku kada ti se zapali. Dan po dan, poriv po poriv, bez osuđivanja.</p>
+      <form class="hero-form" id="form1" style="margin-top:30px">
+        <input type="email" placeholder="Tvoj email" required aria-label="Email" />
+        <button class="btn btn-primary" type="submit">Prijavi se</button>
+      </form>
+      <div class="hero-note" id="note1">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9A938B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V8a5 5 0 0 1 10 0v3"/></svg>
+        Bez spama. Javljamo se samo kada Early Access bude spreman.
+      </div>
+      <div class="hero-note ok" id="ok1">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9530F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+        Na listi si. Vidimo se uskoro.
+      </div>
+      <div class="stores">
+        <span class="store"><span class="soon">Uskoro</span>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M16.5 1.6c.1 1-.3 2-1 2.8-.7.8-1.8 1.4-2.8 1.3-.1-1 .4-2 1-2.7.8-.8 1.9-1.4 2.8-1.4zM19.9 17c-.5 1.2-.8 1.7-1.5 2.8-1 1.5-2.3 3.3-4 3.3-1.5 0-1.9-1-3.9-1-2 0-2.4 1-3.9 1-1.7 0-3-1.7-3.9-3.1C-.1 16.7-.6 11 1.7 8c1.1-1.5 2.7-2.4 4.3-2.4 1.6 0 2.7 1 4 1 1.3 0 2-1 4-1 1.4 0 2.9.8 3.9 2.1-3.4 1.9-2.9 6.8 1.9 9.3z"/></svg>
+          <span><small>Preuzmi na</small><b>App Store</b></span>
+        </span>
+        <span class="store"><span class="soon">Uskoro</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M3 2.3 13.8 12 3 21.7c-.3-.2-.5-.6-.5-1.1V3.4c0-.5.2-.9.5-1.1zM15.2 13.4l2.6 2.4-3.3 1.9-2.2-2.4 2.9-1.9zM18.9 7.9l2.6 1.5c.7.4.7 1.4 0 1.8l-2.6 1.5-2.5-2.4 2.5-2.4zM14.5 6.3l3.3 1.9-2.6 2.4-2.9-1.9 2.2-2.4z"/></svg>
+          <span><small>Uskoro na</small><b>Google Play</b></span>
+        </span>
+      </div>
+      <div class="proof">
+        <div class="p"><b id="pc1">2.596+</b><span>na listi čekanja</span></div>
+        <div class="p"><b>100%</b><span>za Srbiju</span></div>
+        <div class="p"><b>0</b><span>osuđivanja</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<section class="trust">
+  <div class="wrap">
+    <p class="tt reveal">Pristup zasnovan na javno dostupnim <b>smernicama i istraživanjima o prestanku pušenja</b></p>
+    <div class="trust-row reveal d1">
+      <span>WHO</span>
+      <span class="serif">Mayo Clinic</span>
+      <span>NHS</span>
+      <span class="serif">Harvard Health</span>
+      <span>CDC</span>
+      <span class="serif">Cochrane</span>
+      <span>NIH</span>
+    </div>
+    <p class="trust-dis reveal d2">Institucije nisu povezane sa Iskrom. Koristimo javno dostupne smernice i istraživanja kao osnovu za edukativni pristup.</p>
+  </div>
+</section>
+
+<!-- EMPATHY -->
+<section class="section empathy reveal">
+  <div class="mtn mtn-o"></div>
+  <div class="wrap">
+    <div class="emp-grid">
+      <div class="emp-head">
+        <span class="eyebrow">Razumemo</span>
+        <h2 style="margin-top:16px">Prestanak je težak.<br /><span class="big">Ali nisi sam/a u tome.</span></h2>
+        <p>Nikotin nije jedini problem. Problem je jutarnja kafa, pauza na poslu, kafana, stres, dosada — i ona misao: „samo jednu“.</p>
+        <p class="cite">Većina ljudi ne padne zato što ne zna da treba da prestane. Padne kada poriv postane jači od plana. Iskra je napravljena baš za te trenutke.</p>
+      </div>
+
+      <div class="emp-cell emp-stat">
+        <div class="lab">Koliko pokušaja?</div>
+        <div class="emp-marks">
+          <span class="mk"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#BBB4AB" stroke-width="2" stroke-linecap="round"><rect x="3" y="10" width="13" height="4" rx="1.2"/><line x1="3.5" y1="6" x2="19" y2="17.5"/></svg></span>
+          <span class="mk"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#BBB4AB" stroke-width="2" stroke-linecap="round"><rect x="3" y="10" width="13" height="4" rx="1.2"/><line x1="3.5" y1="6" x2="19" y2="17.5"/></svg></span>
+          <span class="mk"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#BBB4AB" stroke-width="2" stroke-linecap="round"><rect x="3" y="10" width="13" height="4" rx="1.2"/><line x1="3.5" y1="6" x2="19" y2="17.5"/></svg></span>
+          <span class="mk"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#BBB4AB" stroke-width="2" stroke-linecap="round"><rect x="3" y="10" width="13" height="4" rx="1.2"/><line x1="3.5" y1="6" x2="19" y2="17.5"/></svg></span>
+          <span class="mk"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#BBB4AB" stroke-width="2" stroke-linecap="round"><rect x="3" y="10" width="13" height="4" rx="1.2"/><line x1="3.5" y1="6" x2="19" y2="17.5"/></svg></span>
+          <span class="mk"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#BBB4AB" stroke-width="2" stroke-linecap="round"><rect x="3" y="10" width="13" height="4" rx="1.2"/><line x1="3.5" y1="6" x2="19" y2="17.5"/></svg></span>
+          <span class="mk"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#BBB4AB" stroke-width="2" stroke-linecap="round"><rect x="3" y="10" width="13" height="4" rx="1.2"/><line x1="3.5" y1="6" x2="19" y2="17.5"/></svg></span>
+          <span class="mk"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#BBB4AB" stroke-width="2" stroke-linecap="round"><rect x="3" y="10" width="13" height="4" rx="1.2"/><line x1="3.5" y1="6" x2="19" y2="17.5"/></svg></span>
+          <span class="mk"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#BBB4AB" stroke-width="2" stroke-linecap="round"><rect x="3" y="10" width="13" height="4" rx="1.2"/><line x1="3.5" y1="6" x2="19" y2="17.5"/></svg></span>
+          <span class="mk win"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5Z"/></svg></span>
+        </div>
+        <div class="num"><em>8–10</em> puta</div>
+        <div class="sub">toliko prosečan pušač pokuša pre nego što trajno prestane. <b>Svaki pokušaj te uči.</b></div>
+      </div>
+
+      <div class="emp-cell emp-gauge">
+        <div class="gauge">
+          <svg viewBox="0 0 200 116">
+            <defs><linearGradient id="gg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#F0701F"/><stop offset="1" stop-color="#E8621A"/></linearGradient></defs>
+            <path d="M14 100 A 86 86 0 0 1 186 100" fill="none" stroke="#F0EDE6" stroke-width="16" stroke-linecap="round"/>
+            <path class="arc" d="M14 100 A 86 86 0 0 1 186 100" fill="none" stroke="url(#gg)" stroke-width="16" stroke-linecap="round"/>
+          </svg>
+          <div class="cap"><span class="n">3–5</span> <span class="u">MIN</span></div>
+        </div>
+        <div class="t">Toliko često traje najjači talas</div>
+        <div class="d">Ne moraš da pobediš ceo dan. Samo narednih nekoliko minuta.</div>
+      </div>
+
+      <div class="emp-cell emp-photo">
+        <image-slot id="emp-photo-1" shape="rect" placeholder="Dodaj fotografiju"></image-slot>
+        <div class="scrim"></div>
+        <div class="qm">“</div>
+        <div class="q">
+          <p>Mislila sam da ne mogu. Iskra me drži kad je najteže.</p>
+          <span>Marija, 34 — beta korisnica</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AUDIENCE — Za koga je Iskra -->
+<section class="section audience" id="zakoga">
+  <div class="wrap">
+    <div class="aud-copy reveal">
+      <span class="eyebrow">Za tebe je ako</span>
+      <h2>Iskra je za ljude koji stvarno žele da prestanu — ali znaju da nije dovoljno samo „odlučiti“.</h2>
+      <p class="lead">Ako se makar u jednom od ovih prepoznaješ, na pravom si mestu.</p>
+    </div>
+    <div class="aud-bento">
+      <div class="aud-card span3 reveal d1">
+        <div class="aud-body"><span class="aud-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E8621A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg></span><h3>Pokušavao si ranije</h3><p>Nije problem što si pao. Problem je što si svaki put ostao bez plana kad je postalo teško.</p></div>
+      </div>
+      <div class="aud-card span3 reveal d2">
+        <div class="aud-body"><span class="aud-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E8621A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h13v4a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4Z"/><path d="M17 10h2.2a2.3 2.3 0 0 1 0 4.6H17"/><path d="M7 3.5c0 1-.8 1.3-.8 2.3M11 3.5c0 1-.8 1.3-.8 2.3"/></svg></span><h3>Znaš svoje okidače</h3><p>Kafa, pauza, kafana, stres, posle jela. Cigareta se retko pojavi sama od sebe.</p></div>
+      </div>
+      <div class="aud-card span2 reveal d1">
+        <div class="aud-body"><span class="aud-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E8621A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/><path d="M3 3l18 18" stroke="#E8621A"/></svg></span><h3>Ne želiš predavanja</h3><p>Bez plašenja i moralizovanja. Samo konkretna pomoć kad ti se zapali.</p></div>
+      </div>
+      <div class="aud-card span2 reveal d2">
+        <div class="aud-body"><span class="aud-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E8621A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/></svg></span><h3>Hoćeš da vidiš napredak</h3><p>Dani bez cigarete, novac i cigarete koje nisi zapalio — sve na jednom mestu.</p></div>
+      </div>
+      <div class="aud-card span2 reveal d3">
+        <div class="aud-body"><span class="aud-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E8621A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><h3>Znaš da motivacija ne traje</h3><p>Zato Iskra računa na male korake svaki dan, ne samo na motivaciju.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRIO -->
+<section class="section" id="zasto">
+  <div class="wrap">
+    <div class="center reveal">
+      <span class="eyebrow">Tvoj saputnik</span>
+      <h2 class="h-sec" style="margin-top:20px">Sve što ti treba<br />na jednom mestu</h2>
+    </div>
+    <div class="feat-grid">
+      <div class="featc reveal d1" style="background:linear-gradient(180deg,#FEF0E8,#fff)">
+        <div class="ic" style="background:var(--ember)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg></div>
+        <h3>Za svaki poriv</h3>
+        <p>Šest alata koji te provedu kroz tih 3–5 minuta — disanje, voda, šetnja, tvoji razlozi.</p>
+        <img class="shot" src="mockups/water.png" alt="Poriv alati" />
+      </div>
+      <div class="featc reveal d2" style="background:linear-gradient(180deg,#E6F2E6,#fff)">
+        <div class="ic" style="background:var(--money)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/></svg></div>
+        <h3>Vidiš svaki dinar i dan</h3>
+        <p>Ušteđeni novac, odbijene cigarete i vraćeno vreme — sve raste pred tobom, svaki dan.</p>
+        <img class="shot" src="mockups/money.png" alt="Uštedine" />
+      </div>
+      <div class="featc reveal d3" style="background:linear-gradient(180deg,#F0EDF8,#fff)">
+        <div class="ic" style="background:var(--purple)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13 Q 8 7 12 13 Q 16 7 20 13"/></svg></div>
+        <h3>Bez osude</h3>
+        <p>Pad je deo puta. Beležimo sve bez krivice i nežno te vraćamo tvojim razlozima.</p>
+        <img class="shot" src="mockups/home.png" alt="Bez osude" />
+      </div>
+      <div class="featc reveal d1" style="background:linear-gradient(180deg,#FCEDF2,#fff)">
+        <div class="ic" style="background:var(--rose)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 6H4.5a2.5 2.5 0 0 0 2.5 4"/><path d="M17 6h2.5a2.5 2.5 0 0 1-2.5 4"/><path d="M9 20h6M10 16.5V20M14 16.5V20"/></svg></div>
+        <h3>Slavi svaku prekretnicu</h3>
+        <p>Desetine zdravstvenih i ličnih ciljeva koji se otključavaju kako napreduješ.</p>
+        <img class="shot" src="mockups/milestoni.png" alt="Milestoni" />
+      </div>
+      <div class="featc reveal d2" style="background:linear-gradient(180deg,#E6F4F1,#fff)">
+        <div class="ic" style="background:var(--teal)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5Z"/></svg></div>
+        <h3>Razumeš zašto, ne samo kako</h3>
+        <p>Kratki tekstovi o navici, porivima i oporavku — jasno i na srpskom.</p>
+        <img class="shot" src="mockups/knowledge.png" alt="Baza znanja" />
+      </div>
+      <div class="featc reveal d3" style="background:linear-gradient(180deg,#EAF2FA,#fff)">
+        <div class="ic" style="background:var(--sky)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4h6a2 2 0 0 1 2 2v0h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h1v0a2 2 0 0 1 2-2Z"/><path d="M9 4a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2"/><path d="M8 12l2 2 4-4"/></svg></div>
+        <h3>Plan skrojen za tebe</h3>
+        <p>Kratak upitnik napravi plan baš za tvoje navike, troškove i lične razloge.</p>
+        <img class="shot" src="mockups/onboarding.png" alt="Personalizovan plan" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STEPS -->
+<section class="section has-mtn" id="kako" style="background:var(--bg-cool)">
+  <div class="mtn mtn-o"></div>
+  <div class="wrap">
+    <div class="center reveal">
+      <span class="eyebrow">Kako radi</span>
+      <h2 class="h-sec" style="margin-top:20px">Tvoj put u tri koraka</h2>
+    </div>
+    <div class="bento">
+      <div class="bcol">
+      <div class="bcell s40 reveal d1">
+        <span class="bnum">1</span>
+        <h3>Napravi svoj plan</h3>
+        <p>Kratak kviz upozna Iskru s tobom — šta te najviše vraća cigareti.</p>
+        <div class="bviz">
+          <div class="plan-chips">
+            <div class="pchip sel" style="animation-delay:.05s"><span class="pc-l"><span class="pc-ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#E8621A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h13v4a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4Z"/><path d="M17 10h2.2a2.3 2.3 0 0 1 0 4.6H17"/></svg></span>Jutarnja kafa</span><span class="pc-r"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#E8621A" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></div>
+            <div class="pchip sel" style="animation-delay:.18s"><span class="pc-l"><span class="pc-ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#E8621A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 16a7 7 0 1 0-14 0"/><path d="M12 3v2M5 9l1.5 1M19 9l-1.5 1"/></svg></span>Stres na poslu</span><span class="pc-r"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#E8621A" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></div>
+            <div class="pchip" style="animation-delay:.31s"><span class="pc-l"><span class="pc-ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#BA7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11h12v3a5 5 0 0 1-10 0Z"/><path d="M9 4v3M13 4v3"/></svg></span>Kafana</span><span class="pc-r"></span></div>
+          </div>
+        </div>
+      </div>
+      <div class="bcell s60 reveal d2">
+        <span class="bnum">3</span>
+        <h3>Prebrodi svaki poriv</h3>
+        <p>Pritisneš „Imam poriv“ i biraš alat koji te vodi kroz tih par minuta.</p>
+        <div class="bviz">
+          <div class="pring">
+            <div class="ring">
+              <svg width="104" height="104" viewBox="0 0 104 104">
+                <circle cx="52" cy="52" r="46" fill="none" stroke="#F0EDE6" stroke-width="9"/>
+                <circle class="pring-arc" cx="52" cy="52" r="46" fill="none" stroke="#E8621A" stroke-width="9" stroke-linecap="round" stroke-dasharray="289" stroke-dashoffset="78"/>
+              </svg>
+              <div class="rt"><span class="rn">3:42</span><span class="ru">MINUTA</span></div>
+            </div>
+            <div class="ptools">
+              <div class="pt"><span class="pd" style="background:#2E8B80"></span>Dišem</div>
+              <div class="pt"><span class="pd" style="background:#4A8AC4"></span>Pijem vodu</div>
+              <div class="pt"><span class="pd" style="background:#E8621A"></span>Moji razlozi</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+
+      <div class="bcol">
+      <div class="bcell s60 reveal d2">
+        <span class="bnum">2</span>
+        <h3>Prati napredak</h3>
+        <p>Dani bez cigarete, novac i cigarete koje nisi zapalio.</p>
+        <div class="bviz">
+          <div class="bbars" id="bbars">
+            <div class="bbar"><div class="bar" data-h="20%"></div><div class="bv">400</div><div class="bl">dan</div></div>
+            <div class="bbar"><div class="bar" data-h="47%"></div><div class="bv">2.800</div><div class="bl">ned</div></div>
+            <div class="bbar"><div class="bar" data-h="66%"></div><div class="bv">12.000</div><div class="bl">mes</div></div>
+            <div class="bbar peak"><div class="bar" data-h="100%"></div><div class="bv">146k</div><div class="bl">god</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bcell s40 reveal d3">
+        <span class="bnum">★</span>
+        <h3>Slaviš svaku prekretnicu</h3>
+        <p>Dan 1. Prva nedelja. 30 dana. Male pobede koje mnogo znače kada ih vidiš svaki dan.</p>
+        <div class="bviz">
+          <div class="wk" id="wk">
+            <div class="d"><span class="dl">PON</span><span class="dc on"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></div>
+            <div class="d"><span class="dl">UTO</span><span class="dc on"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></div>
+            <div class="d"><span class="dl">SRE</span><span class="dc on"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></div>
+            <div class="d"><span class="dl">ČET</span><span class="dc on"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></div>
+            <div class="d"><span class="dl">PET</span><span class="dc on"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></div>
+            <div class="d"><span class="dl">SUB</span><span class="dc today">?</span></div>
+            <div class="d"><span class="dl">NED</span><span class="dc"></span></div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLKIT -->
+<section class="section toolkit" id="alati">
+  <div class="mtn mtn-w"></div>
+  <div class="wrap">
+    <div class="center reveal">
+      <span class="eyebrow">Poriv mod</span>
+      <h2 class="h-sec" style="margin-top:20px">Šest alata za trenutak<br />kad ti se najviše puši</h2>
+      <p class="lead" style="max-width:600px;margin:18px auto 0">Pritisneš „Imam poriv“ i biraš šta ti tog trenutka pomaže. Svaki alat te vodi kroz tih 3–5 minuta dok poriv ne prođe.</p>
+    </div>
+    <div class="tool-rail" id="toolRail">
+      <div class="tslide reveal d1" style="background:linear-gradient(160deg,#3A322B,#1A1714)">
+        <img class="ph" src="landing/tex-disem.jpg" alt="" /><div class="scrim"></div>
+        <div class="eyb">Alat 01</div><h3>Dišem</h3><p>Vođeno disanje koje smiri telo za jedan minut.</p>
+      </div>
+      <div class="tslide reveal d2" style="background:linear-gradient(160deg,#4E93CE,#235C8E)">
+        <img class="ph" src="landing/tex-voda.jpg" alt="" /><div class="scrim"></div>
+        <div class="eyb">Alat 02</div><h3>Pijem vodu</h3><p>Čaša vode i kratak ritual koji prekida automatsku naviku.</p>
+      </div>
+      <div class="tslide reveal d3" style="background:linear-gradient(160deg,#F0701F,#C24A1A)">
+        <img class="ph" src="landing/tex-razlozi.jpg" alt="" /><div class="scrim"></div>
+        <div class="eyb">Alat 03</div><h3>Moji razlozi</h3><p>Tvoje reči iz dana kada si bio odlučan, vraćene kad zatreba.</p>
+      </div>
+      <div class="tslide reveal d1" style="background:linear-gradient(160deg,#4E9A5E,#1A3A20)">
+        <img class="ph" src="landing/tex-setam.jpg" alt="" /><div class="scrim"></div>
+        <div class="eyb">Alat 04</div><h3>Šetam</h3><p>Kratak pokret menja stanje tela i izvlači te iz trenutka.</p>
+      </div>
+      <div class="tslide reveal d2" style="background:linear-gradient(160deg,#4B4B85,#1C1B35)">
+        <img class="ph" src="landing/tex-posmatram.jpg" alt="" /><div class="scrim"></div>
+        <div class="eyb">Alat 05</div><h3>Odlažem</h3><p>Ne moraš da kažeš „nikad“. Samo „ne narednih pet minuta“.</p>
+      </div>
+      <div class="tslide reveal d3" style="background:linear-gradient(160deg,#8166C8,#2D1F5E)">
+        <img class="ph" src="landing/tex-igram.jpg" alt="" /><div class="scrim"></div>
+        <div class="eyb">Alat 06</div><h3>Beležim</h3><p>Zabeleži šta je izazvalo poriv. Sledeći put ga prepoznaješ ranije.</p>
+      </div>
+    </div>
+    <div class="rail-nav">
+      <button id="railPrev" aria-label="Prethodni"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+      <button id="railNext" aria-label="Sledeći"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+    </div>
+    <p class="tool-more">Svaki poriv koji prebrodiš mozak pamti. Sledeći je malo lakši.</p>
+  </div>
+</section>
+
+<!-- SAVINGS / PROGRESS -->
+<section class="section savings" id="napredak">
+  <div class="wrap chart-wrap">
+    <div class="chart-copy reveal">
+      <span class="eyebrow">Tvoj napredak</span>
+      <h2 class="h-sec" style="margin-top:20px">Gledaj kako<br />sve raste</h2>
+      <p class="lead" style="margin-top:18px">Iskra pretvara apstinenciju u nešto opipljivo. Što duže izdržiš, to više raste — i ti to vidiš svaki dan.</p>
+      <div class="metric-pills" id="mpills">
+        <button class="mp active" data-m="money"><span class="d" style="background:#E6F2E6"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3A7A3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/></svg></span> Ušteđeni novac <svg class="ar" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3A7A3A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        <button class="mp" data-m="cig"><span class="d" style="background:#FBE9E7"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C24A43" stroke-width="2" stroke-linecap="round"><rect x="2.5" y="10" width="13" height="4" rx="1.2"/><line x1="3" y1="6" x2="19" y2="17.5"/></svg></span> Cigarete manje <svg class="ar" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C24A43" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        <button class="mp" data-m="time"><span class="d" style="background:#F0EDF8"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B52A8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span> Vraćeno vreme <svg class="ar" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B52A8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      </div>
+      <p class="note" id="chartNote">Projekcija za 20 cigareta dnevno po ceni od 400 RSD.</p>
+    </div>
+    <div class="chart reveal d1" id="chart">
+      <div class="col"><div class="bar" style="--h:84px"><div class="v"><b class="num">400</b><small>RSD</small></div></div><div class="xl">Dnevno</div></div>
+      <div class="col"><div class="bar" style="--h:150px"><div class="v"><b class="num">2.800</b><small>RSD</small></div></div><div class="xl">Nedeljno</div></div>
+      <div class="col"><div class="bar" style="--h:240px"><div class="v"><b class="num">12.000</b><small>RSD</small></div></div><div class="xl">Mesečno</div></div>
+      <div class="col peak"><div class="bar peak" style="--h:400px"><div class="v"><b class="num">146.000</b><small>RSD</small></div></div><div class="xl">Godišnje</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- KNOWLEDGE -->
+<section class="section" id="saznaj">
+  <div class="wrap">
+    <div class="center reveal">
+      <span class="eyebrow">Saznaj</span>
+      <h2 class="h-sec" style="margin-top:20px">Razumeš zašto,<br />ne samo kako</h2>
+      <p class="lead" style="max-width:560px;margin:18px auto 0">Kratki, jasni tekstovi o navici, porivima i oporavku — da znaš šta se dešava u tebi i zašto prolazi.</p>
+    </div>
+    <div class="krail reveal" id="krail">
+      <article class="kcard active" data-i="0">
+        <image-slot id="kb-1" shape="rect" placeholder="Slika članka"></image-slot>
+        <div class="scrim"></div>
+        <div class="tag">Telo</div>
+        <div class="kbody">
+          <h3>Šta se dešava u tvom telu prvih 48 sati bez nikotina</h3>
+          <div class="krow"><span class="read">Pročitaj <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span><span class="min">4 min čitanja</span></div>
+          <div class="prog"><i></i></div>
+        </div>
+      </article>
+      <article class="kcard" data-i="1">
+        <image-slot id="kb-2" shape="rect" placeholder="Slika članka"></image-slot>
+        <div class="scrim"></div>
+        <div class="tag">Okidači</div>
+        <div class="kbody">
+          <h3>Zašto kafa i cigareta idu zajedno i kako to razdvojiti</h3>
+          <div class="krow"><span class="read">Pročitaj <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span><span class="min">3 min čitanja</span></div>
+          <div class="prog"><i></i></div>
+        </div>
+      </article>
+      <article class="kcard" data-i="2">
+        <image-slot id="kb-3" shape="rect" placeholder="Slika članka"></image-slot>
+        <div class="scrim"></div>
+        <div class="tag">Kafana i društvo</div>
+        <div class="kbody">
+          <h3>Kako izaći bez cigarete kad svi oko tebe puše</h3>
+          <div class="krow"><span class="read">Pročitaj <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span><span class="min">4 min čitanja</span></div>
+          <div class="prog"><i></i></div>
+        </div>
+      </article>
+      <article class="kcard" data-i="3">
+        <image-slot id="kb-4" shape="rect" placeholder="Slika članka"></image-slot>
+        <div class="scrim"></div>
+        <div class="tag">Stres</div>
+        <div class="kbody">
+          <h3>Zašto ti se najviše puši kad si pod pritiskom</h3>
+          <div class="krow"><span class="read">Pročitaj <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span><span class="min">3 min čitanja</span></div>
+          <div class="prog"><i></i></div>
+        </div>
+      </article>
+    </div>
+    <div class="center reveal" style="margin-top:34px">
+      <a href="#" class="btn btn-ghost">Iskra Blog <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<!-- STAT BAND -->
+<section class="section">
+  <div class="wrap">
+    <div class="statband reveal">
+      <div class="tex"></div>
+      <div class="inner">
+        <div class="num"><span data-count="146000">0</span></div>
+        <div class="cap">dinara nazad u tvom džepu — svake godine</div>
+        <p class="sub">Toliko prosečan pušač u Srbiji može da potroši na cigarete za godinu dana. To je novac koji može da ostane tebi.</p>
+        <a href="#cta" class="btn">Hoću to nazad</a>
+        <p style="font-size:12px;color:rgba(255,255,255,.6);margin-top:18px">Računica je okvirna i zavisi od broja cigareta i cene paklice.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- JOINFLOW — Šta se dešava kada uđeš na listu -->
+<section class="section joinflow has-mtn" id="lista">
+  <div class="mtn mtn-o"></div>
+  <div class="wrap">
+    <div class="center reveal">
+      <span class="eyebrow">Kada se prijaviš</span>
+      <h2 class="h-sec" style="margin-top:20px">Bez pritiska.<br />Samo prvi red kada Iskra bude spremna.</h2>
+    </div>
+    <div class="jf-steps">
+      <div class="jf-step reveal d1"><div class="jf-num">1</div><h3>Uđeš na Early Access listu</h3><p>Ostaviš email i rezervišeš mesto među prvima koji će dobiti pristup.</p></div>
+      <div class="jf-step reveal d2"><div class="jf-num">2</div><h3>Dobijaš besplatni kviz</h3><p>Prvi korak je kratak upitnik koji ti pokazuje šta te najviše vraća cigareti.</p></div>
+      <div class="jf-step reveal d3"><div class="jf-num">3</div><h3>Dobijaš poziv kad beta bude spremna</h3><p>Javljamo ti se kada Iskra bude dostupna za prve korisnike u Srbiji — uz najpovoljniju početnu ponudu.</p></div>
+    </div>
+    <div class="jf-trust reveal">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9A938B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V8a5 5 0 0 1 10 0v3"/></svg>
+      Bez spama. Bez plaćanja unapred. Samo obaveštenje kada Iskra bude spremna.
+    </div>
+    <div class="jf-cta reveal d1">
+      <a href="#cta" class="btn btn-primary">Uđi na listu</a>
+      <a href="#cta" class="link">Prvo uradi kviz <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9530F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="section" style="background:var(--bg-cool)">
+  <div class="rev-head reveal">
+    <div class="rev-mark"><img src="assets/iskra-logo-sm.png" alt="" /></div>
+    <div class="rev-bignum"><span data-count="2596">0</span>+</div>
+    <div class="rev-bigcap">ljudi već čeka pristup Iskri</div>
+    <div class="rev-note">Prvi korisnici ulaze čim beta bude spremna. Primeri reakcija iz beta verzije — zamenićemo ih pravim ocenama nakon lansiranja.</div>
+  </div>
+  <div class="marquee reveal d1">
+    <div class="mrow r1" id="mrow1"></div>
+    <div class="mrow r2" id="mrow2"></div>
+  </div>
+</section>
+
+<!-- MECHANISM — Nije još jedna aplikacija za navike -->
+<section class="section mech" id="drugacije">
+  <div class="wrap center">
+    <span class="eyebrow">Zašto je drugačije</span>
+    <h2>Većina aplikacija broji dane.<br /><span class="accent">Iskra ti pomaže u trenutku kada ti se stvarno puši.</span></h2>
+    <p class="lead">Brojanje dana je korisno, ali nije dovoljno. Problem se ne dešava kad mirno gledaš statistiku — dešava se kad dođe poriv, stres, kafa, društvo ili ona jedna misao: „samo jednu“.</p>
+    <div class="mech-row">
+      <div class="mech-card reveal d1"><div class="pulse"></div><div class="ph">Pre poriva</div><h3>Iskra te priprema</h3><p>Zna tvoje okidače i unapred te naoruža planom za trenutke u kojima obično popustiš.</p></div>
+      <div class="mech-card reveal d2"><div class="pulse"></div><div class="ph">Tokom poriva</div><h3>Provede te kroz najteže</h3><p>Dobijaš alat od 3–5 minuta — disanje, vodu, šetnju — taman koliko traje poriv. I prođe.</p></div>
+      <div class="mech-card reveal d3"><div class="pulse"></div><div class="ph">Posle poriva</div><h3>Vraća te bez krivice</h3><p>Zabeležiš šta se desilo i nastaviš dalje. Bez osude — jer jedan trenutak ne poništava napredak.</p></div>
+    </div>
+    <div class="mech-cta reveal">
+      <a href="#cta" class="btn btn-primary">Uradi besplatni kviz</a>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section class="section compare">
+  <div class="mtn mtn-w"></div>
+  <div class="wrap">
+    <div class="center reveal">
+      <span class="eyebrow">Uporedi pristupe</span>
+      <h2 class="h-sec" style="margin-top:20px">Iskra naspram ostalih</h2>
+    </div>
+    <div class="ctable reveal d1">
+      <!-- header -->
+      <div class="ch ch-feat"></div>
+      <div class="ch hl">
+        <div class="logos"><span class="mk"><img src="assets/iskra-logo-sm.png" alt="" /></span></div>
+        <span class="nm">Iskra</span>
+      </div>
+      <div class="ch other">
+        <div class="logos"><div class="gen"><span class="a">🧘</span><span class="b">📿</span></div></div>
+        <span class="nm">Opšte „wellness“ aplikacije</span>
+      </div>
+      <div class="ch other">
+        <div class="logos"><div class="dot-p" style="width:54px;height:54px"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div></div>
+        <span class="nm">Saveti i video snimci</span>
+      </div>
+
+      <!-- rows -->
+      <div class="crow">
+        <div class="ccell feat"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="0.6" fill="currentColor"/></svg> Posvećeno baš prestanku pušenja</div>
+        <div class="ccell mark col-hl"><span class="dot-y"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></div>
+        <div class="ccell mark"><span class="dot-n"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="3" stroke-linecap="round"><path d="M6 12h12"/></svg></span></div>
+        <div class="ccell mark"><span class="dot-n"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="3" stroke-linecap="round"><path d="M6 12h12"/></svg></span></div>
+      </div>
+
+      <div class="crow">
+        <div class="ccell feat"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg> Alati za trenutni poriv</div>
+        <div class="ccell mark col-hl"><span class="dot-y"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></div>
+        <div class="ccell mark"><span class="dot-n"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="3" stroke-linecap="round"><path d="M6 12h12"/></svg></span></div>
+        <div class="ccell mark"><span class="dot-n"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="3" stroke-linecap="round"><path d="M6 12h12"/></svg></span></div>
+      </div>
+
+      <div class="crow">
+        <div class="ccell feat"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/></svg> Praćenje ušteđenog novca i zdravlja</div>
+        <div class="ccell mark col-hl"><span class="dot-y"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></div>
+        <div class="ccell mark"><span class="dot-n"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="3" stroke-linecap="round"><path d="M6 12h12"/></svg></span></div>
+        <div class="ccell mark"><span class="dot-n"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="3" stroke-linecap="round"><path d="M6 12h12"/></svg></span></div>
+      </div>
+
+      <div class="crow">
+        <div class="ccell feat"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5Z"/></svg> Baza znanja na srpskom</div>
+        <div class="ccell mark col-hl"><span class="dot-y"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></div>
+        <div class="ccell mark"><span class="dot-n"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="3" stroke-linecap="round"><path d="M6 12h12"/></svg></span></div>
+        <div class="ccell mark"><span class="dot-p"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></div>
+      </div>
+
+      <div class="crow">
+        <div class="ccell feat"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13 Q 8 7 12 13 Q 16 7 20 13"/></svg> Bez osude kada popustiš</div>
+        <div class="ccell mark col-hl"><span class="dot-y"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></div>
+        <div class="ccell mark"><span class="dot-n"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="3" stroke-linecap="round"><path d="M6 12h12"/></svg></span></div>
+        <div class="ccell mark"><span class="dot-n"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="3" stroke-linecap="round"><path d="M6 12h12"/></svg></span></div>
+      </div>
+
+      <div class="crow">
+        <div class="ccell feat"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Plan skrojen baš za tebe</div>
+        <div class="ccell mark col-hl"><span class="dot-y"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></div>
+        <div class="ccell mark"><span class="dot-p"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></div>
+        <div class="ccell mark"><span class="dot-n"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="3" stroke-linecap="round"><path d="M6 12h12"/></svg></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EARLY ACCESS -->
+<section class="section" id="cena">
+  <div class="wrap">
+    <div class="center reveal">
+      <span class="eyebrow">Early Access</span>
+      <h2 class="h-sec" style="margin-top:20px">Prvi korisnici dobijaju<br />najbolji pristup</h2>
+      <p class="lead" style="max-width:580px;margin:18px auto 0">Iskra uskoro ulazi u prvu beta verziju. Ljudi sa liste čekanja prvi dobijaju poziv, rani pristup i početnu ponudu pre javnog lansiranja.</p>
+    </div>
+    <div class="ea-grid reveal d1">
+      <div class="ea-card">
+        <div class="ea-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E8621A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg></div>
+        <h3>Rani pristup</h3>
+        <p>Prvi dobijaš poziv kada beta bude spremna.</p>
+      </div>
+      <div class="ea-card">
+        <div class="ea-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E8621A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v9H4v-9"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7Z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7Z"/></svg></div>
+        <h3>Početna ponuda</h3>
+        <p>Early Access korisnici dobijaju najpovoljniji pristup.</p>
+      </div>
+      <div class="ea-card">
+        <div class="ea-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E8621A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M22 4 12 14.01l-3-3"/></svg></div>
+        <h3>Uticaj na proizvod</h3>
+        <p>Tvoje povratne informacije pomažu da Iskra bude bolja za ljude iz Srbije.</p>
+      </div>
+    </div>
+    <div class="ea-cta reveal">
+      <a href="#cta" class="btn btn-primary">Uđi na listu</a>
+      <a href="#cta" class="link">Uradi besplatni kviz <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9530F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<!-- JOURNEY CTA -->
+<section class="section" style="padding-top:0">
+  <div class="wrap">
+    <div class="journey-card reveal">
+      <image-slot id="journey-photo" shape="rect" placeholder="Dodaj fotografiju"></image-slot>
+      <div class="scrim"></div>
+      <div class="jc">
+        <h2>Tvoj put<em>počinje danas.</em></h2>
+        <p>Pridruži se onima koji su rekli dosta — i počni svoju priču sa Iskrom, korak po korak.</p>
+        <a href="#cta" class="btn">Uđi na listu</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" id="pitanja">
+  <div class="wrap">
+    <div class="center reveal"><span class="eyebrow">Česta pitanja</span><h2 class="h-sec" style="margin-top:20px">Sve što te zanima</h2></div>
+    <div class="faq-list reveal d1">
+      <div class="faq"><button>Šta je tačno Iskra?<span class="ic"></span></button><div class="a"><p>Iskra je aplikacija koja pomaže kod odvikavanja od pušenja. Napravljena je za ljude kojima ne treba još jedno predavanje, nego konkretna podrška u trenutku kada im se stvarno zapali. Pratiš dane bez cigarete, novac koji ostaje kod tebe, cigarete koje nisi zapalio i okidače koji te najčešće vraćaju.</p></div></div>
+      <div class="faq"><button>Kada izlazi?<span class="ic"></span></button><div class="a"><p>Očekujemo prvu beta verziju uskoro, a javno lansiranje nakon toga. Ljudi sa liste čekanja dobijaju pristup prvi.</p></div></div>
+      <div class="faq"><button>Da li je aplikacija već dostupna?<span class="ic"></span></button><div class="a"><p>Još nije javno dostupna. Trenutno primamo prijave za Early Access listu. App Store i Google Play verzije su u pripremi.</p></div></div>
+      <div class="faq"><button>Koliko košta?<span class="ic"></span></button><div class="a"><p>Cena još nije javno objavljena. Early Access korisnici će dobiti početnu ponudu pre javnog lansiranja.</p></div></div>
+      <div class="faq"><button>Da li radi i za IQOS i druge nikotinske proizvode?<span class="ic"></span></button><div class="a"><p>Iskra je primarno napravljena za cigarete, ali mnogi principi važe i za IQOS i druge nikotinske navike. U prvoj verziji fokus je na cigaretama i najčešćim situacijama koje ljude vraćaju pušenju.</p></div></div>
+      <div class="faq"><button>Šta ako popustim i zapalim?<span class="ic"></span></button><div class="a"><p>Onda ne krećeš od nule. Iskra nije napravljena da te kazni kad padneš. Napravljena je da ti pomogne da razumeš šta se desilo, zabeležiš okidač i nastaviš dalje.</p></div></div>
+      <div class="faq"><button>Da li je Iskra medicinski tretman?<span class="ic"></span></button><div class="a"><p>Ne. Iskra nije zamena za lekara, terapiju ili medicinski tretman. Iskra je aplikacija za podršku, praćenje navika, edukaciju i pomoć u svakodnevnim trenucima kada ti se puši. Ako imaš ozbiljne zdravstvene probleme ili jaku nikotinsku zavisnost, najbolje je da se posavetuješ sa lekarom.</p></div></div>
+      <div class="faq"><button>Da li su moji podaci privatni?<span class="ic"></span></button><div class="a"><p>Da. Tvoj email koristimo za Early Access obaveštenja i tvoje rezultate ako uradiš kviz. Ne šaljemo spam i ne prodajemo tvoje podatke.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="foot" id="cta">
+  <div class="mtn mtn-w"></div>
+  <div class="wrap">
+    <div class="foot-cta reveal">
+      <span class="eyebrow">Uskoro</span>
+      <h2>Sledeća cigareta<br />ne mora da postoji.</h2>
+      <p>Uđi na listu čekanja i budi među prvima koji počinju put sa Iskrom.</p>
+      <form class="hero-form" id="form2">
+        <input type="email" placeholder="Tvoj email" required aria-label="Email" />
+        <button class="btn" type="submit">Prijavi se</button>
+      </form>
+      <a href="#cena" class="foot-quiz">Uradi besplatni kviz →</a>
+      <div class="hero-note ok" id="ok2" style="justify-content:center;color:#fff">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+        Na listi si. Vidimo se uskoro.
+      </div>
+    </div>
+    <div class="foot-top">
+      <div>
+        <a class="brand" href="#top"><span class="mk"><img src="assets/iskra-logo-sm.png" alt="" /></span>ISKRA</a>
+        <p class="desc">Topla, lična aplikacija za prestanak pušenja. Napravljeno u Srbiji, za Srbiju.</p>
+        <div class="foot-stores">
+          <span class="store" style="height:44px"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M16.5 1.6c.1 1-.3 2-1 2.8-.7.8-1.8 1.4-2.8 1.3-.1-1 .4-2 1-2.7.8-.8 1.9-1.4 2.8-1.4zM19.9 17c-.5 1.2-.8 1.7-1.5 2.8-1 1.5-2.3 3.3-4 3.3-1.5 0-1.9-1-3.9-1-2 0-2.4 1-3.9 1-1.7 0-3-1.7-3.9-3.1C-.1 16.7-.6 11 1.7 8c1.1-1.5 2.7-2.4 4.3-2.4 1.6 0 2.7 1 4 1 1.3 0 2-1 4-1 1.4 0 2.9.8 3.9 2.1-3.4 1.9-2.9 6.8 1.9 9.3z"/></svg><span><small>Uskoro</small><b>App Store</b></span></span>
+          <span class="store" style="height:44px"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M3 2.3 13.8 12 3 21.7c-.3-.2-.5-.6-.5-1.1V3.4c0-.5.2-.9.5-1.1z"/></svg><span><small>Uskoro</small><b>Google Play</b></span></span>
+        </div>
+      </div>
+      <div><h4>Proizvod</h4><ul><li><a href="#kako">Kako radi</a></li><li><a href="#alati">Alati za porive</a></li><li><a href="#napredak">Napredak</a></li><li><a href="#cena">Early Access</a></li></ul></div>
+      <div><h4>Iskra</h4><ul><li><a href="#zasto">O aplikaciji</a></li><li><a href="#saznaj">Baza znanja</a></li><li><a href="#pitanja">Česta pitanja</a></li><li><a href="#cta">Lista čekanja</a></li></ul></div>
+      <div><h4>Pravno</h4><ul><li><a href="#">Privatnost</a></li><li><a href="#">Uslovi korišćenja</a></li><li><a href="#">Kontakt</a></li></ul></div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Iskra · Napravljeno za Srbiju</span>
+      <div class="socials">
+        <a href="#" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#fff" stroke="none"/></svg></a>
+        <a href="#" aria-label="TikTok"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M16 3c.3 2.3 1.8 4 4 4.2v3c-1.5 0-2.9-.5-4-1.3v6.3a6 6 0 1 1-6-6c.3 0 .7 0 1 .1v3.2a2.8 2.8 0 1 0 2 2.7V3h3z"/></svg></a>
+        <a href="#" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M14 8h2V5h-2c-2 0-3 1.3-3 3.3V10H9v3h2v8h3v-8h2.2l.8-3H14V8.6c0-.4.3-.6.7-.6z"/></svg></a>
+      </div>
+    </div>
+    <div class="foot-mark" aria-hidden="true">ISKRA</div>
+  </div>
+</footer>
+
+<script src="frames/image-slot.js"></script>
+<script>
+  // sticky nav
+  const nav = document.getElementById('nav');
+  addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 20));
+
+  // reveal on scroll
+  const io = new IntersectionObserver((es) => {
+    es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // count-up
+  const fmt = n => n.toLocaleString('sr-RS').replace(/,/g, '.');
+  const counted = new WeakSet();
+  function runCount(el){
+    const target = +el.dataset.count;
+    const dur = 1500; const t0 = performance.now();
+    function tick(t){
+      const p = Math.min(1, (t - t0) / dur);
+      const e = 1 - Math.pow(1 - p, 3);
+      el.textContent = fmt(Math.round(target * e));
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  const cio = new IntersectionObserver((es) => {
+    es.forEach(e => { if (e.isIntersecting && !counted.has(e.target)) { counted.add(e.target); runCount(e.target); } });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('[data-count]').forEach(el => cio.observe(el));
+
+  // faq
+  document.querySelectorAll('.faq button').forEach(b => {
+    b.addEventListener('click', () => {
+      const f = b.parentElement, a = f.querySelector('.a'), open = f.classList.contains('open');
+      document.querySelectorAll('.faq.open').forEach(o => { o.classList.remove('open'); o.querySelector('.a').style.maxHeight = null; });
+      if (!open) { f.classList.add('open'); a.style.maxHeight = a.scrollHeight + 'px'; }
+    });
+  });
+
+  // waitlist forms
+  function wire(formId, okId){
+    const f = document.getElementById(formId);
+    f.addEventListener('submit', (e) => {
+      e.preventDefault();
+      f.style.display = 'none';
+      const ok = document.getElementById(okId);
+      if (ok) ok.style.display = 'flex';
+      const note = document.getElementById('note1'); if (formId === 'form1' && note) note.style.display = 'none';
+    });
+  }
+  wire('form1', 'ok1'); wire('form2', 'ok2');
+
+  // subtle hero parallax
+  const stage = document.getElementById('stage');
+  if (stage && matchMedia('(pointer:fine)').matches) {
+    addEventListener('mousemove', (e) => {
+      const dx = (e.clientX / innerWidth - .5), dy = (e.clientY / innerHeight - .5);
+      stage.querySelectorAll('.tile').forEach((t, i) => {
+        const f = (i + 1) * 6;
+        t.style.transform = `translate(${dx * f}px, ${dy * f}px)`;
+      });
+    });
+  }
+</script>
+<script>
+  // metric-switchable chart
+  (function(){
+    const M = {
+      money:{v:[400,2800,12000,146000],u:'RSD',grad:'linear-gradient(180deg,#4E9A4E,#3A7A3A)',col:'#3A7A3A',deep:'#2E6B2E',note:'Projekcija za 20 cigareta dnevno po ceni od 400 RSD.'},
+      cig:{v:[20,140,600,7300],u:'kom',grad:'linear-gradient(180deg,#D4605A,#C24A43)',col:'#C24A43',deep:'#A53A34',note:'Za prosečnu naviku od 20 cigareta dnevno.'},
+      time:{v:[4,26,110,1340],u:'h',grad:'linear-gradient(180deg,#7D68B8,#6B52A8)',col:'#6B52A8',deep:'#574191',note:'Vreme koje bi inače otišlo na pušenje — oko 11 min po cigareti.'}
+    };
+    const fmt = n => Math.round(n).toLocaleString('sr-RS').replace(/,/g,'.');
+    const chart = document.getElementById('chart');
+    if(!chart) return;
+    const nums = [...chart.querySelectorAll('.num')];
+    const units = [...chart.querySelectorAll('.v small')];
+    const peakBar = chart.querySelector('.bar.peak');
+    const peakXl = chart.querySelector('.col.peak .xl');
+    const note = document.getElementById('chartNote');
+    const pills = [...document.querySelectorAll('#mpills .mp')];
+    let cur = M.money.v.slice();
+    function animateTo(target){
+      const from = cur.slice(); const t0 = performance.now(); const dur = 700;
+      function tick(t){
+        const p = Math.min(1,(t-t0)/dur), e = 1-Math.pow(1-p,3);
+        nums.forEach((el,i)=>{ el.textContent = fmt(from[i]+(target[i]-from[i])*e); });
+        if(p<1) requestAnimationFrame(tick); else cur = target.slice();
+      }
+      requestAnimationFrame(tick);
+    }
+    function set(key){
+      const m = M[key];
+      pills.forEach(p=>p.classList.toggle('active', p.dataset.m===key));
+      units.forEach(u=>u.textContent = m.u);
+      peakBar.style.background = m.grad;
+      peakXl.style.color = m.deep;
+      note.textContent = m.note;
+      animateTo(m.v);
+    }
+    pills.forEach(p=>p.addEventListener('click',()=>set(p.dataset.m)));
+    // count up on first reveal
+    let done=false;
+    new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting&&!done){done=true;cur=[0,0,0,0];animateTo(M.money.v);}});},{threshold:.4}).observe(chart);
+  })();
+</script>
+<script>
+  // tool slider rail nav
+  (function(){
+    const rail = document.getElementById('toolRail');
+    if(!rail) return;
+    const step = () => { const c = rail.querySelector('.tslide'); return c ? c.offsetWidth + 20 : 320; };
+    const prev = document.getElementById('railPrev'), next = document.getElementById('railNext');
+    function go(dir){ rail.scrollBy({ left: dir*step(), behavior: 'auto' }); }
+    prev && prev.addEventListener('click', ()=> go(-1));
+    next && next.addEventListener('click', ()=> go(1));
+  })();
+</script>
+<script>
+  // knowledge expanding slider
+  (function(){
+    const rail = document.getElementById('krail');
+    if(!rail) return;
+    const cards = [...rail.querySelectorAll('.kcard')];
+    let active = 0, timer;
+    function show(i){
+      active = i;
+      cards.forEach((c,idx)=>{
+        c.classList.toggle('active', idx===i);
+        if(idx===i){ const bar=c.querySelector('.prog i'); bar.style.animation='none'; void bar.offsetWidth; bar.style.animation=''; }
+      });
+    }
+    function nextCard(){ show((active+1)%cards.length); }
+    function start(){ clearInterval(timer); timer=setInterval(nextCard,6000); }
+    cards.forEach((c,idx)=>{
+      c.addEventListener('mouseenter',()=>{ show(idx); start(); });
+      c.addEventListener('click',()=>{ show(idx); start(); });
+    });
+    let started=false;
+    new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting&&!started){started=true;show(0);start();}});},{threshold:.3}).observe(rail);
+  })();
+</script>
+<script>
+  // build testimonial marquee rows
+  (function(){
+    const data = [
+      {q:'Prvi put da mi nešto pomaže baš u trenutku kad mi se zapali. Tih pet minuta zaista prođe.', n:'Marija J.', c:'Beograd', a:'landing/av-w0.png'},
+      {q:'Najviše mi znači što me ne osuđuje kad pukne. Vratim se i nastavim dalje.', n:'Nenad S.', c:'Novi Sad', a:'landing/av-m0.png'},
+      {q:'Kad vidim koliko sam para uštedeo za mesec dana — to je motivacija koju nisam imao ranije.', n:'Dušan P.', c:'Niš', a:'landing/av-m1.png'},
+      {q:'Konačno na srpskom i napravljeno za nas. Kafana, kafa, stres — sve je tu.', n:'Ana T.', c:'Kragujevac', a:'landing/av-w1.png'},
+      {q:'Disanje me spasi svaki put kad mi dođe da zapalim uz kafu. Genijalno jednostavno.', n:'Ivana M.', c:'Subotica', a:'landing/av-w2.png'},
+      {q:'Brojač ušteđenih para je ono što me drži. Već planiram šta ću s tim novcem.', n:'Stefan R.', c:'Zrenjanin', a:'landing/av-m2.png'},
+      {q:'Probao sam sve, ovo je prvo što razume kako je to kod nas — društvo, kafana, stres.', n:'Miloš K.', c:'Čačak', a:'landing/av-m0.png'},
+      {q:'Lepo je videti napredak svaki dan. Male pobede, ali se skupljaju.', n:'Jelena P.', c:'Pančevo', a:'landing/av-w0.png'},
+    ];
+    const vf = `<svg class="vf" width="15" height="15" viewBox="0 0 24 24" fill="#E8621A"><path d="M12 1.6l2.6 1.9 3.2-.2 1 3 2.6 1.9-1 3 1 3-2.6 1.9-1 3-3.2-.2L12 22.4l-2.6-1.9-3.2.2-1-3L2.6 15.8l1-3-1-3 2.6-1.9 1-3 3.2.2z"/><path d="M8 12l2.5 2.5L16 9" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    const card = d => `<div class="rev"><div class="stars">★★★★★</div><p>„${d.q}“</p><div class="who"><img class="av" src="${d.a}" alt="" /><div><div class="nm">${d.n} ${vf}</div><span>${d.c}</span></div></div></div>`;
+    const row1 = data.slice(0,4), row2 = data.slice(4);
+    const fill = (arr) => (arr.map(card).join('') ).repeat(3);
+    document.getElementById('mrow1').innerHTML = fill(row1);
+    document.getElementById('mrow2').innerHTML = fill(row2);
+  })();
+</script>
+<script>
+  // bento savings bars fill on scroll
+  (function(){
+    const wrap = document.getElementById('bbars');
+    if(!wrap) return;
+    new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){
+      wrap.querySelectorAll('.bar').forEach((b,i)=> setTimeout(()=> b.style.height=b.dataset.h, i*120));
+    }});},{threshold:.4}).observe(wrap);
+  })();
+</script>
+</body>
+</html>

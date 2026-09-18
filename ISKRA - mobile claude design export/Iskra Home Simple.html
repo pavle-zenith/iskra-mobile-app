@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Iskra — Početna (simple)</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  /* Plain HTML/CSS copy of the Iskra home screen. No React, no build.
+     Everything is static except the SLOBODAN SI countdown, which ticks live.
+     Screen is 402x874 (iPhone 15 Pro) and scales to fill its container —
+     drop it in an iframe inside a mockup. ?island=0 hides the dynamic island. */
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden;background:#FDFCFA}
+  body{font-family:'Manrope',system-ui,sans-serif;color:#1A1A1A}
+  #stage{position:absolute;top:0;left:0;width:402px;height:874px;transform-origin:top left}
+  .screen{width:402px;height:874px;position:relative;overflow:hidden;background:#FDFCFA;display:flex;flex-direction:column}
+  ::-webkit-scrollbar{width:0;height:0;display:none}
+  *{scrollbar-width:none;-ms-overflow-style:none}
+  button{font-family:inherit;-webkit-tap-highlight-color:transparent}
+
+  /* chrome */
+  .island{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:126px;height:37px;border-radius:24px;background:#000;z-index:50}
+  .statusbar{position:absolute;top:0;left:0;right:0;z-index:10;height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 30px;font-size:15px;font-weight:600;letter-spacing:-.02em}
+  .sb-r{display:flex;align-items:center;gap:6px}
+  .homebar{position:absolute;bottom:0;left:0;right:0;z-index:60;height:34px;display:flex;justify-content:center;align-items:flex-end;padding-bottom:8px;pointer-events:none}
+  .homebar i{display:block;width:139px;height:5px;border-radius:100px;background:rgba(0,0,0,.25)}
+
+  .scroll{flex:1;overflow-y:auto;padding:58px 20px 10px}
+  .stack{display:flex;flex-direction:column;gap:12px}
+  .card{background:#fff;border:1px solid #ECE9E3;border-radius:18px;box-shadow:0 4px 14px rgba(26,22,15,.04),0 1px 2px rgba(26,22,15,.022)}
+
+  /* greeting */
+  .greet{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+  .gbtn{display:flex;align-items:center;gap:13px;background:none;border:none;padding:0;cursor:pointer;text-align:left}
+  .ring{width:52px;height:52px;border-radius:50%;padding:2.5px;background:linear-gradient(135deg,#F0701F,#E8621A)}
+  .ring>div{width:100%;height:100%;border-radius:50%;background:#FBEAE0;overflow:hidden}
+  .ring img{width:100%;height:100%;object-fit:cover;display:block}
+  .hi{font-size:14px;font-weight:500;color:#999;line-height:1.1}
+  .nm{font-size:24px;font-weight:700;letter-spacing:-.02em;line-height:1.15}
+  .streak{display:inline-flex;align-items:center;gap:5px;background:#FBEAE0;border-radius:999px;padding:8px 13px}
+  .streak span{font-size:14px;font-weight:700;color:#C9530F}
+
+  /* week tracker */
+  .week{position:relative;width:100%;text-align:left;cursor:pointer;display:block;border:none;border-radius:18px;padding:17px 16px 18px;overflow:hidden;background:linear-gradient(158deg,#F0701F 0%,#E8621A 58%,#D2581A 100%);box-shadow:0 8px 22px rgba(232,98,26,.22)}
+  .week .tex{position:absolute;inset:0;background:url("assets/canyon-tex-sm.png") center 45%/cover;opacity:.42;mix-blend-mode:soft-light;filter:saturate(.7);pointer-events:none}
+  .week .sheen{position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.10) 0%,rgba(80,40,10,.06) 45%,rgba(120,60,16,.20) 100%);pointer-events:none}
+  .week-top{position:relative;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+  .week-top b{font-size:15.5px;font-weight:700;color:#fff;letter-spacing:-.01em;text-shadow:0 1px 8px rgba(120,50,10,.35)}
+  .week-top s{text-decoration:none;font-size:12.5px;font-weight:700;color:rgba(255,255,255,.92);text-shadow:0 1px 8px rgba(120,50,10,.35)}
+  .days{position:relative;display:flex;justify-content:space-between}
+  .day{display:flex;flex-direction:column;align-items:center;gap:9px}
+  .day em{font-style:normal;font-size:11.5px;font-weight:700;color:#fff;text-shadow:0 1px 6px rgba(120,50,10,.4)}
+  .dot{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+  .dot.done{background:#fff;box-shadow:0 2px 6px rgba(120,50,10,.28)}
+  .dot.today{background:rgba(255,255,255,.22);border:2px solid #fff}
+  .dot.future{background:rgba(255,255,255,.16)}
+
+  /* countdown */
+  .cd{border-radius:18px;padding:15px 10px 17px;width:100%;display:block;cursor:pointer;background:#fff;border:1px solid #ECE9E3;box-shadow:0 4px 14px rgba(26,22,15,.04),0 1px 2px rgba(26,22,15,.022)}
+  .cd-h{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:13px}
+  .cd-h span{font-size:12px;font-weight:700;color:#E8621A;letter-spacing:.06em}
+  .cd-g{display:flex;align-items:stretch;justify-content:space-between}
+  .cd-c{flex:1;display:flex;flex-direction:column;align-items:center}
+  .cd-c b{font-size:33px;font-weight:700;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+  .cd-c i{font-style:normal;font-size:10px;font-weight:700;color:#999;letter-spacing:.06em;margin-top:7px}
+  .cd-d{width:1px;align-self:center;height:26px;background:#ECE9E3}
+
+  /* stat cards */
+  .stats{display:flex;gap:12px}
+  .stat{flex:1;border-radius:18px;padding:16px 16px 15px;text-align:left;cursor:pointer;display:block;width:100%;background:#fff;border:1px solid #ECE9E3;box-shadow:0 4px 14px rgba(26,22,15,.04),0 1px 2px rgba(26,22,15,.022)}
+  .chip{width:36px;height:36px;border-radius:11px;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+  .stat b{display:block;font-size:25px;font-weight:700;letter-spacing:-.02em;line-height:1}
+  .stat i{font-style:normal;display:block;font-size:12.5px;margin-top:6px;font-weight:600}
+
+  /* quote */
+  .quote{width:100%;text-align:left;cursor:pointer;border-radius:18px;padding:16px 16px 15px;display:flex;align-items:center;gap:13px;background:#fff;border:1px solid #ECE9E3;box-shadow:0 4px 14px rgba(26,22,15,.04),0 1px 2px rgba(26,22,15,.022)}
+  .quote .qt{flex:1;min-width:0}
+  .quote .q1{font-size:11.5px;font-weight:600;color:#999;margin-bottom:3px}
+  .quote .q2{font-size:15px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .quote .q3{font-size:12.5px;font-weight:500;color:#999;margin-top:6px}
+
+  /* progress section */
+  .sec{display:flex;flex-direction:column;gap:13px;margin-top:22px}
+  .sec-t{font-size:16px;font-weight:700;letter-spacing:-.01em}
+  .know{position:relative;overflow:hidden;width:100%;text-align:left;cursor:pointer;border:none;border-radius:20px;padding:20px;background:linear-gradient(150deg,#1F6B68 0%,#1A5C5A 100%);box-shadow:0 8px 22px rgba(26,92,90,.26)}
+  .know .tex{position:absolute;inset:0;background:url("assets/highland-tex-sm.png") center 38%/cover;opacity:.4;mix-blend-mode:soft-light;filter:saturate(.7);pointer-events:none}
+  .know .sheen{position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.08) 0%,rgba(8,40,38,.06) 45%,rgba(8,40,38,.22) 100%);pointer-events:none}
+  .know .bk{position:absolute;top:-18px;right:-22px;opacity:.08;pointer-events:none}
+  .rel{position:relative}
+  .know-top{display:flex;align-items:center;justify-content:space-between}
+  .pill{font-size:10px;font-weight:700;color:#fff;letter-spacing:.1em;background:rgba(255,255,255,.15);padding:4px 10px;border-radius:20px}
+  .know-min{font-size:12px;font-weight:500;color:rgba(255,255,255,.6)}
+  .know-h{font-size:18px;font-weight:600;color:#fff;line-height:1.4;margin-top:12px;letter-spacing:-.01em}
+  .know-x{font-size:13px;color:rgba(255,255,255,.7);line-height:1.5;margin-top:8px}
+  .know-b{display:flex;align-items:center;justify-content:space-between;margin-top:16px}
+  .tag{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:#fff;background:rgba(255,255,255,.15);padding:4px 10px;border-radius:12px}
+  .read{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:#fff}
+
+  .next{background:#F8FBFA;border:1px solid #E8EFEC;border-radius:18px;width:100%;padding:15px 16px 17px;box-shadow:0 4px 14px rgba(26,22,15,.04);cursor:pointer;text-align:left;display:block}
+  .next-r{display:flex;align-items:center;gap:13px;margin-bottom:14px}
+  .next-i{width:44px;height:44px;border-radius:13px;background:#E6F2EF;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+  .next-k{font-size:11px;font-weight:700;color:#2E8B80;letter-spacing:.05em;text-transform:uppercase;margin-bottom:3px}
+  .next-n{font-size:15px;font-weight:600;letter-spacing:-.01em}
+  .bar{width:100%;height:4px;border-radius:999px;background:#F1EDE6;overflow:hidden}
+  .bar>i{display:block;height:100%;border-radius:999px}
+
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .gcell{background:#fff;border:1px solid #ECE9E3;border-radius:14px;padding:15px 11px 13px;box-shadow:0 2px 8px rgba(26,22,15,.035);cursor:pointer;display:flex;flex-direction:column;align-items:center}
+  .gcell span{font-size:12px;font-weight:700;margin-top:9px;margin-bottom:12px}
+
+  .total{background:#fff;border:1px solid #ECE9E3;border-radius:16px;padding:18px;box-shadow:0 2px 8px rgba(26,22,15,.035);margin-top:3px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+  .total-l{display:flex;flex-direction:column;gap:8px}
+  .total-l span{font-size:12px;font-weight:500;color:#999}
+  .total-r{text-align:right}
+  .total-r b{display:block;font-size:20px;font-weight:500;letter-spacing:-.01em;white-space:nowrap}
+  .total-r i{font-style:normal;display:block;font-size:12px;font-weight:500;color:#999;margin-top:3px}
+
+  .slip{width:100%;height:52px;border-radius:16px;background:#fff;border:1.5px solid #ECE9E3;cursor:pointer;font-size:15px;font-weight:400;color:#999;margin-top:3px}
+  .slip-n{font-size:12px;color:#CCC;text-align:center;margin-top:1px}
+
+  /* footer */
+  .foot{flex-shrink:0;padding:8px 20px 0}
+  .poriv{width:100%;height:56px;border-radius:16px;border:none;cursor:pointer;background:linear-gradient(180deg,#F0701F 0%,#E8621A 100%);color:#fff;font-size:16.5px;font-weight:700;letter-spacing:.01em;display:flex;align-items:center;justify-content:center;gap:9px;box-shadow:0 8px 20px rgba(232,98,26,.32),0 2px 5px rgba(232,98,26,.25);transition:transform .12s ease,box-shadow .12s ease}
+  .poriv:active{transform:scale(.975);box-shadow:0 1px 3px rgba(232,98,26,.3)}
+  .nav{display:flex;align-items:center;justify-content:space-around;padding-top:11px;padding-bottom:28px;margin-top:9px;border-top:1px solid #ECE9E3}
+  .nav button{flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:4px 0}
+  .nav span{font-size:10.5px;font-weight:500;color:#999}
+  .nav .on span{font-weight:700;color:#C9530F}
+</style>
+</head>
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#E8621A"/>
+    <rect x="490" y="150" width="220" height="500" rx="42" fill="#FDFCFA"/>
+    <rect x="565" y="168" width="70" height="16" rx="8" fill="#1A1A1A"/>
+    <rect x="520" y="220" width="120" height="18" rx="9" fill="#1A1A1A"/>
+    <rect x="520" y="270" width="160" height="90" rx="18" fill="#FEF0E8"/>
+    <rect x="520" y="380" width="74" height="70" rx="16" fill="#F3EEE7"/>
+    <rect x="606" y="380" width="74" height="70" rx="16" fill="#F3EEE7"/>
+    <rect x="520" y="472" width="160" height="40" rx="20" fill="#E8621A"/>
+  </svg>
+</template>
+<body>
+<div id="stage">
+  <div class="screen">
+    <div class="island" id="island"></div>
+    <div class="statusbar">
+      <span>9:41</span>
+      <span class="sb-r">
+        <svg width="18" height="12" viewBox="0 0 18 12" fill="#000"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="none" stroke="#000" stroke-width="1.7" stroke-linecap="round"><path d="M1.5 4.2a10 10 0 0 1 14 0"/><path d="M4.3 7a6.2 6.2 0 0 1 8.4 0"/><circle cx="8.5" cy="10" r="1.1" fill="#000" stroke="none"/></svg>
+        <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".7" y=".7" width="21" height="10.6" rx="3" stroke="#000" stroke-opacity=".35"/><rect x="2.2" y="2.2" width="18" height="7.6" rx="1.9" fill="#000"/><path d="M23 4.2v3.6c.9-.3 1.4-.9 1.4-1.8S23.9 4.5 23 4.2Z" fill="#000" fill-opacity=".4"/></svg>
+      </span>
+    </div>
+
+    <div class="scroll">
+      <div class="greet">
+        <button class="gbtn">
+          <span class="ring"><div><img src="assets/avatar-pavle-sm.png" alt="Pavle" /></div></span>
+          <span>
+            <span class="hi" style="display:block">Zdravo,</span>
+            <span class="nm" style="display:block">Pavle</span>
+          </span>
+        </button>
+        <div class="streak">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8621A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5Z"/></svg>
+          <span>192</span>
+        </div>
+      </div>
+
+      <div class="stack">
+        <!-- week tracker -->
+        <button class="week">
+          <span class="tex"></span><span class="sheen"></span>
+          <span class="week-top"><b>Ova nedelja</b><s>5 / 7</s></span>
+          <span class="days" id="days"></span>
+        </button>
+
+        <!-- LIVE countdown -->
+        <button class="cd">
+          <span class="cd-h">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E8621A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg>
+            <span>SLOBODAN SI</span>
+          </span>
+          <span class="cd-g">
+            <span class="cd-c"><b id="t-d">192</b><i>DANA</i></span><span class="cd-d"></span>
+            <span class="cd-c"><b id="t-h">06</b><i>SATI</i></span><span class="cd-d"></span>
+            <span class="cd-c"><b id="t-m">18</b><i>MINUTA</i></span><span class="cd-d"></span>
+            <span class="cd-c"><b id="t-s">42</b><i>SEKUNDE</i></span>
+          </span>
+        </button>
+
+        <!-- stats -->
+        <div class="stats">
+          <button class="stat">
+            <span class="chip" style="background:#E1F1E1">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3A7A3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/><path d="m16.71 13.88.7.71-2.82 2.82"/></svg>
+            </span>
+            <b>112.000</b><i style="color:#3A7A3A">RSD uštedeno</i>
+          </button>
+          <button class="stat">
+            <span class="chip" style="background:#FBE9E7">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C24A43" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="13" width="13.5" height="4" rx="1.4"/><line x1="11.5" y1="13" x2="11.5" y2="17"/><path d="M18 8.5c.9.7.9 1.8 0 2.5"/><path d="M20.5 7c1.3 1 1.3 2.6 0 3.6"/><line x1="3" y1="4" x2="21" y2="20.5"/></svg>
+            </span>
+            <b>1.870</b><i style="color:#C24A43">cigareta odbijeno</i>
+          </button>
+        </div>
+
+        <!-- quote -->
+        <button class="quote">
+          <span class="chip" style="background:#FBEAE0;margin-bottom:0;flex-shrink:0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E8621A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"/><path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"/></svg>
+          </span>
+          <span class="qt">
+            <span class="q1" style="display:block">Quote dana #47</span>
+            <span class="q2" style="display:block">Lako je prestati pušiti. Prestajao sam...</span>
+            <span class="q3" style="display:block">— Mark Twain</span>
+          </span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#CFCBC4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+
+        <!-- Moj napredak -->
+        <div class="sec">
+          <div class="sec-t">Moj napredak</div>
+
+          <button class="know">
+            <span class="tex"></span><span class="sheen"></span>
+            <svg class="bk" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10.5 5 8 4.5 4.5 4.5V18C8 18 10.5 18.5 12 20M12 6.5C13.5 5 16 4.5 19.5 4.5V18C16 18 13.5 18.5 12 20M12 6.5V20"/></svg>
+            <span class="rel know-top"><span class="pill">DNEVNO ZNANJE</span><span class="know-min">3 min</span></span>
+            <span class="rel know-h" style="display:block">Zašto kafa i cigareta idu zajedno — i kako to razdvojiti.</span>
+            <span class="rel know-x" style="display:block">Uslovni refleks koji traje godinama može da se promeni. Evo kako...</span>
+            <span class="rel know-b">
+              <span class="tag">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h13v4a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4Z"/><path d="M17 10h2.2a2.3 2.3 0 0 1 0 4.6H17"/><path d="M7 3.5c0 1-.8 1.3-.8 2.3M11 3.5c0 1-.8 1.3-.8 2.3"/></svg>
+                Okidači
+              </span>
+              <span class="read">Čitaj danas
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </span>
+            </span>
+          </button>
+
+          <button class="next">
+            <span class="next-r">
+              <span class="next-i">
+                <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#2E8B80" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v8"/><path d="M9.5 9.5c-2 0-4 2-4 6 0 2 .5 4 2.2 4 1.3 0 1.8-1.1 1.8-2.6V11c0-.85-.7-1.5-1.5-1.5Z"/><path d="M14.5 9.5c2 0 4 2 4 6 0 2-.5 4-2.2 4-1.3 0-1.8-1.1-1.8-2.6V11c0-.85.7-1.5 1.5-1.5Z"/></svg>
+              </span>
+              <span style="flex:1;min-width:0">
+                <span class="next-k" style="display:block">Sledeći cilj</span>
+                <span class="next-n" style="display:block">Pluća počinju da se čiste</span>
+              </span>
+            </span>
+            <span class="bar"><i style="width:45%;background:#2E8B80"></i></span>
+          </button>
+
+          <div class="grid3" id="goals"></div>
+
+          <div class="total">
+            <div class="total-l">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12M6 22h12"/><path d="M6 2c0 4 3 5.5 6 8 3-2.5 6-4 6-8"/><path d="M6 22c0-4 3-5.5 6-8 3 2.5 6 4 6 8"/></svg>
+              <span>Na putu si već</span>
+            </div>
+            <div class="total-r"><b>192 dana 6 sati</b><i>od kada si počeo/la</i></div>
+          </div>
+
+          <button class="slip">Zapalio/la sam</button>
+          <div class="slip-n">Beležimo sve — bez osude.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="foot">
+      <button class="poriv">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg>
+        Imam poriv
+      </button>
+      <div class="nav">
+        <button class="on">
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#E8621A" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 3l9 6.5V20a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 20Z"/><path d="M9 21.5V13h6v8.5"/></svg>
+          <span>Početna</span>
+        </button>
+        <button>
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#BDBAB3" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22V4"/><path d="M4 4h11l-1.5 3.5L15 11H4"/></svg>
+          <span>Milestoni</span>
+        </button>
+        <button>
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#BDBAB3" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5Z"/></svg>
+          <span>Saznaj</span>
+        </button>
+        <button>
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#BDBAB3" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>Profil</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="homebar"><i></i></div>
+  </div>
+</div>
+
+<script>
+  var Q = new URLSearchParams(location.search);
+  if (Q.get('island') === '0') document.getElementById('island').style.display = 'none';
+
+  /* week days */
+  var DAYS = [['Pon','done'],['Uto','done'],['Sre','done'],['Čet','done'],['Pet','done'],['Sub','today'],['Ned','future']];
+  document.getElementById('days').innerHTML = DAYS.map(function (d) {
+    var inner = d[1] === 'done'
+      ? '<svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5 6 11l5.5-7" stroke="#E8621A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      : '';
+    return '<span class="day"><em>' + d[0] + '</em><span class="dot ' + d[1] + '">' + inner + '</span></span>';
+  }).join('');
+
+  /* category goals */
+  var ICON = {
+    zdravlje: '<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>',
+    pluca: '<path d="M12 4v8"/><path d="M9.5 9.5c-2 0-4 2-4 6 0 2 .5 4 2.2 4 1.3 0 1.8-1.1 1.8-2.6V11c0-.85-.7-1.5-1.5-1.5Z"/><path d="M14.5 9.5c2 0 4 2 4 6 0 2-.5 4-2.2 4-1.3 0-1.8-1.1-1.8-2.6V11c0-.85.7-1.5 1.5-1.5Z"/>',
+    ekologija: '<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6"/>',
+    finansije: '<circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/><path d="m16.71 13.88.7.71-2.82 2.82"/>',
+    telo: '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+    nikotin: '<circle cx="6" cy="7" r="2"/><circle cx="17.5" cy="8.5" r="2"/><circle cx="11" cy="17.5" r="2"/><path d="M7.9 6.4 15.6 8"/><path d="M7.2 8.7 9.8 15.6"/><path d="M16.2 10.2 12.5 15.8"/>'
+  };
+  var GOALS = [
+    ['zdravlje','Zdravlje','#D4547E',70],['pluca','Pluća','#4A8AC4',45],['ekologija','Ekologija','#3A7A3A',60],
+    ['finansije','Finansije','#2E8B80',80],['telo','Telo','#C4724A',50],['nikotin','Nikotin','#6B52A8',35]
+  ];
+  document.getElementById('goals').innerHTML = GOALS.map(function (g) {
+    return '<button class="gcell">'
+      + '<svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="' + g[2] + '" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">' + ICON[g[0]] + '</svg>'
+      + '<span style="color:' + g[2] + '">' + g[1] + '</span>'
+      + '<span class="bar"><i style="width:' + g[3] + '%;background:' + g[2] + '"></i></span>'
+      + '</button>';
+  }).join('');
+
+  /* the one live thing: the countdown */
+  var start = Date.now() - ((192 * 86400 + 6 * 3600 + 18 * 60 + 42) * 1000);
+  function p(n) { return n < 10 ? '0' + n : '' + n; }
+  function tick() {
+    var t = Math.floor((Date.now() - start) / 1000);
+    document.getElementById('t-d').textContent = Math.floor(t / 86400);
+    document.getElementById('t-h').textContent = p(Math.floor(t / 3600) % 24);
+    document.getElementById('t-m').textContent = p(Math.floor(t / 60) % 60);
+    document.getElementById('t-s').textContent = p(t % 60);
+  }
+  tick(); setInterval(tick, 1000);
+
+  /* scale 402x874 to fill the container */
+  function fit() {
+    var vw = window.innerWidth, vh = window.innerHeight, W = 402, H = 874;
+    var s = Q.get('fit') === 'contain' ? Math.min(vw / W, vh / H) : Math.max(vw / W, vh / H);
+    document.getElementById('stage').style.transform =
+      'translate(' + (vw - W * s) / 2 + 'px,' + (vh - H * s) / 2 + 'px) scale(' + s + ')';
+  }
+  window.addEventListener('resize', fit); fit();
+</script>
+</body>
+</html>

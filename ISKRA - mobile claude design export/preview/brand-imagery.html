@@ -1,0 +1,25 @@
+<!-- @dsCard group="Brand" -->
+<!DOCTYPE html><html lang="sr"><head><meta charset="UTF-8" />
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  html,body{margin:0}
+  body{background:var(--bg);font-family:var(--font);padding:22px 30px;display:flex;gap:14px}
+  .card{flex:1;position:relative;overflow:hidden;border-radius:18px;height:118px;display:flex;flex-direction:column;justify-content:flex-end;padding:16px;box-sizing:border-box}
+  .ember{background:var(--ember-grad);box-shadow:var(--shadow-ember)}
+  .teal{background:linear-gradient(150deg,#1F6B68,#1A5C5A)}
+  .tex{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0.5;mix-blend-mode:soft-light;filter:saturate(0.7)}
+  .t{position:relative;font:600 16px/1.3 var(--font);color:#fff}
+  .e{position:relative;font:700 10px/1 var(--font);letter-spacing:0.12em;color:rgba(255,255,255,0.85);margin-bottom:8px}
+</style></head>
+<body>
+  <div class="card ember">
+    <div class="tex" style="background-image:url('../assets/canyon-bg.png')"></div>
+    <span class="e">OVA NEDELJA</span>
+    <span class="t">Photo as soft-light texture</span>
+  </div>
+  <div class="card teal">
+    <div class="tex" style="background-image:url('../assets/canyon-bg.png')"></div>
+    <span class="e">DNEVNO ZNANJE</span>
+    <span class="t">Warm depth, text still leads</span>
+  </div>
+</body></html>

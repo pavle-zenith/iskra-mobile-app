@@ -1,0 +1,9 @@
+node_modules
+ios
+android
+.expo
+dist
+assets
+Iskra-Website
+package-lock.json
+*.md

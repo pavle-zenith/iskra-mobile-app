@@ -1,0 +1,20 @@
+<!-- @dsCard group="Components" -->
+<!DOCTYPE html><html lang="sr"><head><meta charset="UTF-8" />
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  html,body{margin:0}
+  body{background:var(--bg);font-family:var(--font);padding:22px 30px;display:flex;flex-direction:column;gap:14px}
+  .field{height:54px;border-radius:12px;border:1.5px solid var(--border-input);background:#fff;display:flex;align-items:center;padding:0 16px;font:400 16px/1 var(--font);color:var(--text-faint)}
+  .field.focus{border-color:var(--ember)}
+  .bar{height:6px;border-radius:999px;background:var(--faint);overflow:hidden}
+  .bar > div{height:100%;border-radius:999px}
+  .row{display:flex;align-items:center;gap:14px}
+  .lab{font:600 12px/1 var(--font);color:var(--text-sub);width:62px}
+</style></head>
+<body>
+  <div class="field">Tvoje ime</div>
+  <div class="field focus">Pavle</div>
+  <div class="row"><span class="lab">Zdravlje</span><div class="bar" style="flex:1"><div style="width:70%;background:#D4547E"></div></div></div>
+  <div class="row"><span class="lab">Finansije</span><div class="bar" style="flex:1"><div style="width:80%;background:#2E8B80"></div></div></div>
+  <div class="row"><span class="lab">Nikotin</span><div class="bar" style="flex:1"><div style="width:35%;background:#6B52A8"></div></div></div>
+</body></html>

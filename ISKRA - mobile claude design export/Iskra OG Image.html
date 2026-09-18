@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Iskra — OG Image</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ember:#E8621A; --ember-top:#F0701F; --ember-deep:#C9530F;
+    --ink:#1A1A1A; --muted:#6B6660; --faint:#9A938B;
+    --bg:#FDFCFA; --border:#ECE9E3;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{background:#0d0d0d;}
+  body{display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:'Manrope',sans-serif;}
+
+  /* fit-to-viewport stage */
+  .stage{position:relative;width:1200px;height:630px;overflow:hidden;}
+  @media (max-aspect-ratio:1200/630){ .stage{transform:scale(calc(100vw / 1200));transform-origin:center;} }
+  @media (min-aspect-ratio:1200/630){ .stage{transform:scale(calc(100vh / 630));transform-origin:center;} }
+
+  .og{
+    position:relative;width:1200px;height:630px;display:flex;
+    background:var(--bg);overflow:hidden;
+  }
+
+  /* ---------- LEFT ---------- */
+  .left{
+    flex:0 0 50%;display:flex;flex-direction:column;
+    padding:56px 60px 60px;position:relative;z-index:2;
+  }
+  .brand{display:flex;align-items:center;gap:14px;}
+  .brand .mk{
+    width:54px;height:54px;border-radius:15px;overflow:hidden;flex-shrink:0;
+    box-shadow:0 8px 20px rgba(232,98,26,.30);
+  }
+  .brand .mk img{width:100%;height:100%;display:block;}
+  .brand .wm{font-size:27px;font-weight:800;letter-spacing:.16em;color:var(--ink);}
+
+  .left-body{margin-top:auto;}
+  .stars{display:flex;gap:9px;margin-bottom:26px;}
+  .stars svg{display:block;filter:drop-shadow(0 3px 6px rgba(232,98,26,.22));}
+
+  h1{
+    font-size:58px;line-height:1.06;font-weight:600;letter-spacing:-.025em;
+    color:var(--ink);text-wrap:balance;
+  }
+  h1 .num{color:var(--ember);font-weight:800;}
+  .sub{
+    margin-top:24px;display:inline-flex;align-items:center;gap:10px;
+    font-size:18px;font-weight:600;color:var(--muted);
+  }
+  .sub .dot{width:7px;height:7px;border-radius:50%;background:var(--ember);}
+
+  /* ---------- RIGHT ---------- */
+  .right{
+    flex:0 0 50%;position:relative;overflow:hidden;
+    border-radius:34px 0 0 34px;
+    box-shadow:-30px 0 60px -30px rgba(40,24,12,.30);
+  }
+  .right .bg{
+    position:absolute;inset:0;
+    background:url("landing/hero-bg.jpg") center 38% / cover no-repeat;
+  }
+  .right .bg::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(135deg,rgba(240,112,31,.30) 0%,rgba(232,98,26,.10) 45%,rgba(40,24,12,.28) 100%);
+  }
+  .phone-wrap{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    z-index:2;
+  }
+  .phone{
+    width:312px;height:auto;display:block;
+    filter:drop-shadow(0 36px 60px rgba(30,16,6,.45)) drop-shadow(0 8px 18px rgba(30,16,6,.30));
+    transform:translateY(-20px);
+  }
+
+  /* floating rating chip */
+  .chip{
+    position:absolute;z-index:3;left:50%;bottom:34px;transform:translateX(-50%);
+    display:inline-flex;align-items:center;gap:11px;
+    background:rgba(255,255,255,.94);backdrop-filter:blur(10px);
+    padding:12px 20px;border-radius:999px;white-space:nowrap;
+    box-shadow:0 14px 34px rgba(30,16,6,.28);
+  }
+  .chip .cstars{display:flex;gap:3px;}
+  .chip .ctext{font-size:15px;font-weight:700;color:var(--ink);letter-spacing:-.01em;}
+  .chip .ctext span{color:var(--faint);font-weight:600;}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="og">
+    <!-- LEFT -->
+    <div class="left">
+      <div class="brand">
+        <span class="mk"><img src="assets/iskra-logo-sm.png" alt="Iskra logo" /></span>
+        <span class="wm">ISKRA</span>
+      </div>
+
+      <div class="left-body">
+        <div class="stars">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="#E8621A"><path d="M12 2.2l2.95 5.98 6.6.96-4.78 4.66 1.13 6.58L12 17.27l-5.9 3.1 1.13-6.58L2.45 9.14l6.6-.96z"/></svg>
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="#E8621A"><path d="M12 2.2l2.95 5.98 6.6.96-4.78 4.66 1.13 6.58L12 17.27l-5.9 3.1 1.13-6.58L2.45 9.14l6.6-.96z"/></svg>
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="#E8621A"><path d="M12 2.2l2.95 5.98 6.6.96-4.78 4.66 1.13 6.58L12 17.27l-5.9 3.1 1.13-6.58L2.45 9.14l6.6-.96z"/></svg>
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="#E8621A"><path d="M12 2.2l2.95 5.98 6.6.96-4.78 4.66 1.13 6.58L12 17.27l-5.9 3.1 1.13-6.58L2.45 9.14l6.6-.96z"/></svg>
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="#E8621A"><path d="M12 2.2l2.95 5.98 6.6.96-4.78 4.66 1.13 6.58L12 17.27l-5.9 3.1 1.13-6.58L2.45 9.14l6.6-.96z"/></svg>
+        </div>
+        <h1><span class="num">#1</span> Srpska aplikacija za prestanak pušenja</h1>
+        <div class="sub"><span class="dot"></span> Napravljeno u Srbiji, za Srbiju</div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="right">
+      <div class="bg"></div>
+      <div class="phone-wrap">
+        <img class="phone" src="mockups/home.png" alt="Iskra aplikacija" />
+      </div>
+      <div class="chip">
+        <span class="cstars">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#E8621A"><path d="M12 2.2l2.95 5.98 6.6.96-4.78 4.66 1.13 6.58L12 17.27l-5.9 3.1 1.13-6.58L2.45 9.14l6.6-.96z"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#E8621A"><path d="M12 2.2l2.95 5.98 6.6.96-4.78 4.66 1.13 6.58L12 17.27l-5.9 3.1 1.13-6.58L2.45 9.14l6.6-.96z"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#E8621A"><path d="M12 2.2l2.95 5.98 6.6.96-4.78 4.66 1.13 6.58L12 17.27l-5.9 3.1 1.13-6.58L2.45 9.14l6.6-.96z"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#E8621A"><path d="M12 2.2l2.95 5.98 6.6.96-4.78 4.66 1.13 6.58L12 17.27l-5.9 3.1 1.13-6.58L2.45 9.14l6.6-.96z"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#E8621A"><path d="M12 2.2l2.95 5.98 6.6.96-4.78 4.66 1.13 6.58L12 17.27l-5.9 3.1 1.13-6.58L2.45 9.14l6.6-.96z"/></svg>
+        </span>
+        <span class="ctext">2.596+ <span>na listi čekanja</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

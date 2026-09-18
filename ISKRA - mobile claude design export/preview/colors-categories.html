@@ -1,0 +1,20 @@
+<!-- @dsCard group="Colors" -->
+<!DOCTYPE html><html lang="sr"><head><meta charset="UTF-8" />
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  html,body{margin:0}
+  body{background:var(--bg);font-family:var(--font);padding:24px 30px}
+  .row{display:flex;gap:14px}
+  .cat{flex:1;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;display:flex;flex-direction:column;align-items:center;gap:10px;box-shadow:var(--shadow-sm)}
+  .chip{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+  .lab{font:700 13px/1 var(--font)}
+  .hex{font:500 11px/1 var(--font);color:var(--text-sub)}
+</style></head>
+<body>
+  <div class="row">
+    <div class="cat"><span class="chip" style="background:var(--cat-money-chip)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3A7A3A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/></svg></span><span class="lab" style="color:#3A7A3A">Novac</span><span class="hex">#3A7A3A</span></div>
+    <div class="cat"><span class="chip" style="background:var(--cat-cig-chip)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C24A43" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="13" width="13.5" height="4" rx="1.4"/><line x1="11.5" y1="13" x2="11.5" y2="17"/><line x1="3" y1="4" x2="21" y2="20.5"/></svg></span><span class="lab" style="color:#C24A43">Cigare</span><span class="hex">#C24A43</span></div>
+    <div class="cat"><span class="chip" style="background:var(--cat-health-chip)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3A7A3A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span><span class="lab" style="color:#3A7A3A">Zdravlje</span><span class="hex">#3A7A3A</span></div>
+  </div>
+  <div style="font:500 12px/1.4 var(--font);color:var(--text-sub);margin-top:14px;text-align:center">Cards stay white — color lives on the icon + its pastel chip.</div>
+</body></html>

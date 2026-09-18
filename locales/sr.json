@@ -1,0 +1,8 @@
+{
+  "ios": {
+    "CFBundleDisplayName": "Iskra"
+  },
+  "android": {
+    "app_name": "Iskra"
+  }
+}

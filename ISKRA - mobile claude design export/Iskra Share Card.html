@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Iskra — Deljiva kartica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: #E9E7E2;
+    background-image: radial-gradient(circle at 50% 0%, #F3F1EC, #E5E2DC);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; font-family: "Manrope", system-ui, sans-serif;
+  }
+  #stage { transform-origin: center center; }
+  ::-webkit-scrollbar { width: 0; height: 0; display: none; }
+  * { scrollbar-width: none; -ms-overflow-style: none; }
+
+  /* 9:16 story canvas, 1080×1920 */
+  #card {
+    position: relative; width: 1080px; height: 1920px; overflow: hidden;
+    background: #F7F6F3;
+    box-shadow: 0 30px 90px rgba(40,40,60,0.25);
+  }
+  #card .photo {
+    position: absolute; inset: 0;
+    background-image: url("assets/share-sky.webp");
+    background-size: cover; background-position: center;
+  }
+  /* warm wash — photo stays clearly visible */
+  #card .wash {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg,
+      rgba(255,252,248,0.75) 0%,
+      rgba(255,252,248,0.60) 50%,
+      rgba(255,252,248,0.80) 100%);
+  }
+  /* brand lockup — absolute top */
+  #card .brand {
+    position: absolute; top: 52px; left: 0; right: 0; z-index: 2;
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+  }
+  /* footer — absolute bottom */
+  #card .footer {
+    position: absolute; bottom: 52px; left: 0; right: 0; z-index: 2;
+    text-align: center; font-size: 24px; font-weight: 500;
+    letter-spacing: 4px; color: #999;
+  }
+  /* centered content block — middle 60% */
+  #card .content {
+    position: absolute; top: 20%; left: 0; right: 0; height: 60%; z-index: 1;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    box-sizing: border-box; padding: 0 80px;
+  }
+</style>
+</head>
+<body>
+  <div id="stage">
+    <div id="card">
+      <div class="photo"></div>
+      <div class="wash"></div>
+
+      <!-- brand -->
+      <div class="brand">
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="#E8621A"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5Z"></path></svg>
+        <div style="font-size:21px; font-weight:700; letter-spacing:6px; color:#E8621A;">ISKRA</div>
+      </div>
+
+      <!-- centered content -->
+      <div class="content">
+        <!-- achievement medallion -->
+        <div style="width:230px; height:230px; border-radius:50%; background:linear-gradient(160deg,#F0701F,#E8621A); display:flex; align-items:center; justify-content:center; box-shadow:0 0 100px rgba(232,98,26,0.40), 0 20px 50px rgba(232,98,26,0.22);">
+          <svg width="108" height="108" viewBox="0 0 24 24" fill="#fff"><path d="M12 2.4l2.95 6.0 6.6.96-4.78 4.66 1.13 6.58L12 18.5l-5.9 3.1 1.13-6.58L2.45 9.36l6.6-.96Z"></path></svg>
+        </div>
+
+        <!-- headline -->
+        <div style="margin-top:56px; font-size:168px; font-weight:800; color:#1A1A1A; letter-spacing:-4px; line-height:0.95; text-align:center;">30 dana</div>
+        <div style="font-size:108px; font-weight:300; font-style:italic; color:#E8621A; line-height:1.05; margin-top:6px; text-align:center;">slobode.</div>
+
+        <!-- stats pill -->
+        <div style="margin-top:60px; background:rgba(255,255,255,0.7); border-radius:28px; padding:30px 48px; text-align:center; box-shadow:0 8px 30px rgba(80,70,60,0.08);">
+          <div style="font-size:31px; font-weight:500; color:#666;">1.800 cigareta odbijeno</div>
+          <div style="font-size:31px; font-weight:500; color:#666; margin-top:8px;">18.000 RSD ostalo u džepu</div>
+        </div>
+
+        <!-- quote -->
+        <div style="margin-top:56px; font-size:38px; font-weight:500; font-style:italic; color:#1A1A1A; text-align:center; line-height:1.4;">Nije bilo lako. Bilo je vredno.</div>
+      </div>
+
+      <!-- footer -->
+      <div class="footer">ISKRA.APP</div>
+    </div>
+  </div>
+
+  <script>
+    function fit() {
+      const W = 1080, H = 1920, m = 40;
+      const s = Math.min((window.innerWidth - m) / W, (window.innerHeight - m) / H);
+      document.getElementById('stage').style.transform = `scale(${s})`;
+    }
+    window.addEventListener('resize', fit); fit();
+  </script>
+</body>
+</html>

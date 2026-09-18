@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Iskra — Home (embed)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  /* Bezel-free embed: the app SCREEN only, at 402x874, scaled to fill its container.
+     Drop this in an <iframe> sized to your mockup's screen area.
+     Query params:  ?island=0  hides the dynamic island (if your mockup draws its own)
+                    ?fit=contain  letterbox instead of fill  */
+  html, body { margin: 0; height: 100%; background: #FDFCFA; overflow: hidden; }
+  body { font-family: "Manrope", system-ui, sans-serif; }
+  #stage { position: absolute; top: 0; left: 0; width: 402px; height: 874px; transform-origin: top left; }
+  ::-webkit-scrollbar { width: 0; height: 0; display: none; }
+  * { scrollbar-width: none; -ms-overflow-style: none; }
+</style>
+</head>
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#E8621A"/>
+    <rect x="490" y="150" width="220" height="500" rx="42" fill="#FDFCFA"/>
+    <rect x="565" y="168" width="70" height="16" rx="8" fill="#1A1A1A"/>
+    <rect x="520" y="220" width="120" height="18" rx="9" fill="#1A1A1A"/>
+    <rect x="520" y="270" width="160" height="90" rx="18" fill="#FEF0E8"/>
+    <rect x="520" y="380" width="74" height="70" rx="16" fill="#F3EEE7"/>
+    <rect x="606" y="380" width="74" height="70" rx="16" fill="#F3EEE7"/>
+    <rect x="520" y="472" width="160" height="40" rx="20" fill="#E8621A"/>
+  </svg>
+</template>
+<body>
+  <div id="stage"><div id="root"></div></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script type="text/babel" src="frames/ios-frame.jsx"></script>
+  <script type="text/babel" src="screens/MoneyScreen.jsx"></script>
+  <script type="text/babel" src="screens/CigarettesScreen.jsx"></script>
+  <script type="text/babel" src="screens/KnowledgeScreen.jsx"></script>
+  <script type="text/babel" src="screens/TimeScreen.jsx"></script>
+  <script type="text/babel" src="screens/CategoryScreen.jsx"></script>
+  <script type="text/babel" src="screens/GoalsRoadmapScreen.jsx"></script>
+  <script type="text/babel" src="screens/QuoteScreen.jsx"></script>
+  <script type="text/babel" src="screens/SlipScreen.jsx"></script>
+  <script type="text/babel" src="screens/SlipReflectScreen.jsx"></script>
+  <script type="text/babel" src="screens/SlipRecapScreen.jsx"></script>
+  <script type="text/babel" src="screens/ProgressSheet.jsx"></script>
+  <script type="text/babel" src="screens/WaterScreen.jsx"></script>
+  <script type="text/babel" src="screens/BreathingScreen.jsx"></script>
+  <script type="text/babel" src="screens/RazloziScreen.jsx"></script>
+  <script type="text/babel" src="screens/SetamScreen.jsx"></script>
+  <script type="text/babel" src="screens/PosmatramScreen.jsx"></script>
+  <script type="text/babel" src="screens/PorivSuccessScreen.jsx"></script>
+  <script type="text/babel" src="screens/SettingsScreen.jsx"></script>
+  <script type="text/babel" src="screens/PorivEntry.jsx"></script>
+  <script type="text/babel" src="screens/PorivMode.jsx"></script>
+  <script type="text/babel" src="screens/HomeScreenV3_1.jsx"></script>
+  <script type="text/babel">
+    const Q = new URLSearchParams(location.search);
+    const SHOW_ISLAND = Q.get('island') !== '0';
+    const W = 402, H = 874;
+
+    /* Same internals as <IOSDevice>, minus the bezel: no rounded corners,
+       no outer shadow, no background gutter — so it sits flush in a mockup. */
+    function EmbedScreen({ children, dark = false }) {
+      return (
+        <div style={{
+          width: W, height: H, overflow: 'hidden', position: 'relative',
+          background: dark ? '#000' : '#F2F2F7',
+          fontFamily: '-apple-system, system-ui, sans-serif',
+          WebkitFontSmoothing: 'antialiased',
+        }}>
+          {SHOW_ISLAND && <div style={{
+            position: 'absolute', top: 11, left: '50%', transform: 'translateX(-50%)',
+            width: 126, height: 37, borderRadius: 24, background: '#000', zIndex: 50,
+          }} />}
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 }}>
+            <IOSStatusBar dark={dark} />
+          </div>
+          <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ flex: 1, overflow: 'auto' }}>{children}</div>
+          </div>
+          <div style={{
+            position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 60,
+            height: 34, display: 'flex', justifyContent: 'center', alignItems: 'flex-end',
+            paddingBottom: 8, pointerEvents: 'none',
+          }}>
+            <div style={{ width: 139, height: 5, borderRadius: 100, background: dark ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.25)' }} />
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(
+      <EmbedScreen><HomeScreenV3_1 /></EmbedScreen>
+    );
+
+    /* Fill the container. Same 402:874 aspect as an iPhone 15 Pro screen, so
+       "cover" is effectively exact; centers any rounding remainder. */
+    function fit() {
+      const vw = window.innerWidth, vh = window.innerHeight;
+      const mode = Q.get('fit') === 'contain' ? Math.min : Math.max;
+      const s = mode(vw / W, vh / H);
+      const st = document.getElementById('stage');
+      st.style.transform = `translate(${(vw - W * s) / 2}px, ${(vh - H * s) / 2}px) scale(${s})`;
+    }
+    window.addEventListener('resize', fit); fit();
+  </script>
+</body>
+</html>

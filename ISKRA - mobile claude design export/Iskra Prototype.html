@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Iskra — Prototip</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: #E9E7E2;
+    background-image: radial-gradient(circle at 50% 0%, #F3F1EC, #E5E2DC);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; font-family: "Manrope", system-ui, sans-serif;
+  }
+  #stage { transform-origin: center center; }
+  ::-webkit-scrollbar { width: 0; height: 0; display: none; }
+  * { scrollbar-width: none; -ms-overflow-style: none; }
+  @keyframes scrIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+  <div id="stage"><div id="root"></div></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script type="text/babel" src="frames/ios-frame.jsx"></script>
+  <script src="frames/image-slot.js"></script>
+  <script type="text/babel" src="screens/SplashScreen.jsx"></script>
+  <script type="text/babel" src="screens/OnboardingName.jsx"></script>
+  <script type="text/babel" src="screens/OnboardingGender.jsx"></script>
+  <script type="text/babel" src="screens/OnboardingProduct.jsx"></script>
+  <script type="text/babel" src="screens/OnboardingCigarettes.jsx"></script>
+  <script type="text/babel" src="screens/OnboardingPrice.jsx"></script>
+  <script type="text/babel" src="screens/OnboardingCost.jsx"></script>
+  <script type="text/babel" src="screens/OnboardingReasons.jsx"></script>
+  <script type="text/babel" src="screens/OnboardingReasonText.jsx"></script>
+  <script type="text/babel" src="screens/OnboardingReflection.jsx"></script>
+  <script type="text/babel" src="screens/OnboardingFears.jsx"></script>
+  <script type="text/babel" src="screens/OnboardingFearReflection.jsx"></script>
+  <script type="text/babel" src="screens/OnboardingTriggers.jsx"></script>
+  <script type="text/babel" src="screens/OnboardingTiming.jsx"></script>
+  <script type="text/babel" src="screens/OnboardingDate.jsx"></script>
+  <script type="text/babel" src="screens/OnboardingPreview.jsx"></script>
+  <script type="text/babel" src="screens/OnboardingPanic.jsx"></script>
+  <script type="text/babel" src="screens/OnboardingCommitment.jsx"></script>
+  <script type="text/babel" src="screens/OnboardingSummary.jsx"></script>
+  <script type="text/babel" src="screens/OnboardingNotifications.jsx"></script>
+  <script type="text/babel" src="screens/ReviewModal.jsx"></script>
+  <script type="text/babel" src="screens/Paywall.jsx"></script>
+  <script type="text/babel" src="screens/HomeScreenV3_1.jsx"></script>
+  <script type="text/babel" src="screens/SettingsScreen.jsx"></script>
+  <script type="text/babel" src="screens/PorivMode.jsx"></script>
+  <script type="text/babel" src="screens/PorivEntry.jsx"></script>
+  <script type="text/babel" src="screens/MoneyScreen.jsx"></script>
+  <script type="text/babel" src="screens/CigarettesScreen.jsx"></script>
+  <script type="text/babel" src="screens/KnowledgeScreen.jsx"></script>
+  <script type="text/babel" src="screens/TimeScreen.jsx"></script>
+  <script type="text/babel" src="screens/CategoryScreen.jsx"></script>
+  <script type="text/babel" src="screens/GoalsRoadmapScreen.jsx"></script>
+  <script type="text/babel" src="screens/QuoteScreen.jsx"></script>
+  <script type="text/babel" src="screens/SlipScreen.jsx"></script>
+  <script type="text/babel" src="screens/SlipReflectScreen.jsx"></script>
+  <script type="text/babel" src="screens/SlipRecapScreen.jsx"></script>
+  <script type="text/babel" src="screens/ProgressSheet.jsx"></script>
+  <script type="text/babel" src="screens/WaterScreen.jsx"></script>
+  <script type="text/babel" src="screens/BreathingScreen.jsx"></script>
+  <script type="text/babel" src="screens/RazloziScreen.jsx"></script>
+  <script type="text/babel" src="screens/SetamScreen.jsx"></script>
+  <script type="text/babel" src="screens/PosmatramScreen.jsx"></script>
+  <script type="text/babel" src="screens/IgramScreen.jsx"></script>
+  <script type="text/babel" src="screens/MilestoniScreen.jsx"></script>
+  <script type="text/babel" src="screens/PorivSuccessScreen.jsx"></script>
+
+  <script type="text/babel">
+    const KEY = 'iskra_proto_step_v2';
+
+    // Ordered flow. `dark` = inverted-background screens (white status bar).
+    const STEPS = [
+      'welcome', 'name', 'gender', 'product', 'cigarettes', 'price', 'cost',
+      'reasons', 'reasonText', 'reflection', 'fears', 'fearReflection', 'triggers', 'timing',
+      'date', 'preview', 'panic', 'commitment', 'summary',
+      'notifications', 'review', 'paywall', 'home',
+    ];
+    const DARK = new Set(['cost', 'reflection', 'fearReflection', 'preview', 'commitment', 'summary']);
+
+    function Flow() {
+      // Always start from the Welcome screen on each load (don't resume).
+      const [i, setI] = React.useState(0);
+
+      const step = STEPS[i];
+      const next = () => setI((v) => Math.min(STEPS.length - 1, v + 1));
+      const back = () => setI((v) => Math.max(0, v - 1));
+      const goHome = () => setI(STEPS.length - 1);
+
+      let content;
+      switch (step) {
+        case 'welcome': content = <SplashScreen onStart={next} onLogin={goHome} />; break;
+        case 'name': content = <OnboardingName onNext={next} onBack={back} />; break;
+        case 'gender': content = <OnboardingGender onNext={next} onBack={back} />; break;
+        case 'product': content = <OnboardingProduct onNext={next} onBack={back} />; break;
+        case 'cigarettes': content = <OnboardingCigarettes onNext={next} onBack={back} />; break;
+        case 'price': content = <OnboardingPrice onNext={next} onBack={back} />; break;
+        case 'cost': content = <OnboardingCost onNext={next} onBack={back} />; break;
+        case 'reasons': content = <OnboardingReasons onNext={next} onBack={back} />; break;
+        case 'reasonText': content = <OnboardingReasonText onNext={next} onBack={back} />; break;
+        case 'reflection': content = <OnboardingReflection onNext={next} onBack={back} />; break;
+        case 'fears': content = <OnboardingFears onNext={next} onBack={back} />; break;
+        case 'fearReflection': content = <OnboardingFearReflection onNext={next} onBack={back} />; break;
+        case 'triggers': content = <OnboardingTriggers onNext={next} onBack={back} />; break;
+        case 'timing': content = <OnboardingTiming onNext={next} onBack={back} />; break;
+        case 'date': content = <OnboardingDate onNext={next} onBack={back} />; break;
+        case 'preview': content = <OnboardingPreview onNext={next} onBack={back} />; break;
+        case 'panic': content = <OnboardingPanic onNext={next} onBack={back} />; break;
+        case 'commitment': content = <OnboardingCommitment onNext={next} onBack={back} />; break;
+        case 'summary': content = <OnboardingSummary onNext={next} onBack={back} />; break;
+        case 'notifications': content = <OnboardingNotifications onNext={next} onSkip={next} />; break;
+        case 'review': content = <ReviewModal onNext={next} onBack={back} />; break;
+        case 'paywall': content = <Paywall onBuy={goHome} onFree={goHome} />; break;
+        default: content = <HomeScreenV3_1 />;
+      }
+
+      return (
+        <IOSDevice dark={DARK.has(step)}>
+          <div key={step} style={{ height: '100%', animation: 'scrIn 0.28s ease both' }}>
+            {content}
+          </div>
+        </IOSDevice>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<Flow />);
+
+    function fit() {
+      const W = 402, H = 874, m = 28;
+      const s = Math.min((window.innerWidth - m) / W, (window.innerHeight - m) / H, 1);
+      document.getElementById('stage').style.transform = `scale(${s})`;
+    }
+    window.addEventListener('resize', fit); fit();
+  </script>
+</body>
+</html>

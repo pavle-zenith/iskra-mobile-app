@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Iskra — Tajmer</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:#FDFCFA;font-family:'Manrope',system-ui,sans-serif}
+  .card{width:100%;max-width:360px;background:#fff;border-radius:22px;padding:18px 18px 20px;box-shadow:0 2px 10px rgba(30,20,10,.05)}
+  .eyebrow{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:14px}
+  .eyebrow span{font-size:11px;font-weight:700;letter-spacing:.14em;color:#E8621A}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr)}
+  .cell{text-align:center;position:relative}
+  .cell+.cell::before{content:"";position:absolute;left:0;top:6px;bottom:10px;width:1px;background:#F0EBE4}
+  .num{font-size:31px;font-weight:600;color:#1A1A1A;letter-spacing:-.02em;line-height:1.1;font-variant-numeric:tabular-nums}
+  .lbl{margin-top:4px;font-size:9.5px;font-weight:600;letter-spacing:.1em;color:#A8A199}
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="eyebrow">
+      <svg width="11" height="13" viewBox="0 0 24 28" fill="#E8621A"><path d="M13 0C9 7 0 9 0 17a12 12 0 0 0 24 0c0-5-2-7-4-11-3 4-7 4-7 0 0-4 1-6-1-10z"/></svg>
+      <span>SLOBODAN SI</span>
+    </div>
+    <div class="grid">
+      <div class="cell"><div class="num" id="d">192</div><div class="lbl">DANA</div></div>
+      <div class="cell"><div class="num" id="h">06</div><div class="lbl">SATI</div></div>
+      <div class="cell"><div class="num" id="m">18</div><div class="lbl">MINUTA</div></div>
+      <div class="cell"><div class="num" id="s">42</div><div class="lbl">SEKUNDE</div></div>
+    </div>
+  </div>
+<script>
+  var start = Date.now() - ((192*86400 + 6*3600 + 18*60 + 42) * 1000);
+  function p(n){ return n < 10 ? '0' + n : '' + n; }
+  function tick(){
+    var t = Math.floor((Date.now() - start) / 1000);
+    document.getElementById('d').textContent = Math.floor(t / 86400);
+    document.getElementById('h').textContent = p(Math.floor(t / 3600) % 24);
+    document.getElementById('m').textContent = p(Math.floor(t / 60) % 60);
+    document.getElementById('s').textContent = p(t % 60);
+  }
+  tick(); setInterval(tick, 1000);
+</script>
+</body>
+</html>
