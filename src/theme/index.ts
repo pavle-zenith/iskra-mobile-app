@@ -30,6 +30,21 @@ export const color = {
   accentWash: palette.emberWash,
   /** White on ember is 3.18:1: large text (19pt bold, or 24pt) and icons only. */
   onAccent: palette.white,
+
+  /**
+   * The ember field: a full-bleed ember ground, the website's `.band`. What the design export
+   * calls a [DARK] screen is this, not a dark grey one: the onboarding AHA screens, the
+   * commitment ceremony and the summary.
+   *
+   * White text on it is 3.18:1, so on a field ONLY display type (24pt+) or 19pt bold may sit
+   * directly on the ember. Anything a person reads goes on a white plate, exactly as the site
+   * does it. `fieldPlate` is that plate, and text on it uses the normal ink roles.
+   */
+  field: palette.ember,
+  onField: palette.white,
+  fieldPlate: palette.surface,
+  /** Hairlines and inactive track on a field. Decoration only, never text. */
+  onFieldFaint: 'rgba(255, 255, 255, 0.32)',
 } as const;
 
 export type ColorRole = keyof typeof color;

@@ -1,5 +1,8 @@
 import { getDb, kvGet, kvSet } from './db';
-import { listCravings, logCraving, updateCraving } from './repo';
+import { deriveUserState } from '@/features/home/state';
+import { resolveAnchorTimeZone } from '@/lib/time/dayCount';
+
+import { getProfile, listCravings, logCraving, updateCraving, updateProfile } from './repo';
 import { drain, getSyncSnapshot, setSimulatedOffline } from './sync';
 
 /**
@@ -10,7 +13,7 @@ import { drain, getSyncSnapshot, setSimulatedOffline } from './sync';
  *   sqlite3 "$(xcrun simctl get_app_container booted com.iskraclub.iskra data)/Documents/SQLite/iskra.db" \
  *     "INSERT OR REPLACE INTO kv (key, value) VALUES ('dev.command', 'log')"
  *
- * Commands: offline | online | log | drain | resync | report. Every one goes through the same
+ * Commands: offline | online | log | drain | resync | report | state | profile. Every one goes through the same
  * repository and sync engine the app uses; nothing here is a shortcut around them.
  * `report` prints the app's own view of the data to the Metro log.
  */
@@ -44,6 +47,41 @@ async function run(command: string) {
         await updateCraving(craving.id, { strength: craving.strength });
       }
       return drain();
+    case 'profile': {
+      // Exercises the real onboarding write path: SQLite plus an outbox entry, no network.
+      const stamp = new Date().toISOString().slice(11, 19);
+      await updateProfile({ reasonText: `offline test ${stamp}` });
+      console.log(`[dev] profile reason_text set to offline test ${stamp}`);
+      return;
+    }
+    case 'state': {
+      const profile = await getProfile();
+      const state = deriveUserState({
+        quitDate: profile?.quitDate ? new Date(profile.quitDate) : null,
+        anchorTimeZone: resolveAnchorTimeZone(
+          profile?.quitTimeZone,
+          Intl.DateTimeFormat().resolvedOptions().timeZone,
+        ),
+        now: new Date(),
+        lastSlipAt: null,
+      });
+      console.log(
+        `[dev] state ${JSON.stringify({
+          userState: state,
+          onboardingCompleted: profile?.onboardingCompleted,
+          quitDate: profile?.quitDate,
+          quitTimeZone: profile?.quitTimeZone,
+          timing: profile?.timing,
+          name: profile?.name,
+          gender: profile?.gender,
+          reasons: profile?.reasons,
+          triggers: profile?.triggers,
+          committed: profile?.committed,
+          signature: profile?.signatureData ? 'present' : 'none',
+        })}`,
+      );
+      return;
+    }
     case 'report': {
       const [cravings, snapshot] = await Promise.all([listCravings(), getSyncSnapshot()]);
       console.log(

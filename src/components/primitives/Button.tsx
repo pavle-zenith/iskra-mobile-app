@@ -9,13 +9,17 @@ import { Text } from './Text';
 
 export type ButtonProps = Omit<PressableProps, 'children'> & {
   label: string;
-  variant?: 'primary' | 'secondary';
+  /** `onField` is the white button that sits on an ember ground, with an ember label. */
+  variant?: 'primary' | 'secondary' | 'onField';
   icon?: LucideIcon;
 };
 
 /**
  * Full-width action. Primary is ember with a 19pt bold white label: that size is what
  * makes white on ember (3.18:1) pass as WCAG large text. Do not shrink it.
+ *
+ * On an ember ground the button inverts, as on the website: white plate, ember label, which
+ * measures 3.18:1 the other way round and is read at the same 19pt bold.
  */
 export function Button({
   label,
@@ -26,15 +30,22 @@ export function Button({
   ...rest
 }: ButtonProps) {
   const primary = variant === 'primary';
-  const foreground = primary ? color.onAccent : color.text;
+  const onField = variant === 'onField';
+  const foreground = primary ? color.onAccent : onField ? color.accent : color.text;
 
   return (
     <Pressable
       haptic="light"
       accessibilityLabel={accessibilityLabel ?? label}
       rippleColor={primary ? rippleOnColor : undefined}
-      style={[styles.base, primary ? styles.primary : styles.secondary, style]}
-      pressedStyle={primary ? styles.primaryPressed : styles.secondaryPressed}
+      style={[
+        styles.base,
+        primary ? styles.primary : onField ? styles.onField : styles.secondary,
+        style,
+      ]}
+      pressedStyle={
+        primary ? styles.primaryPressed : onField ? styles.onFieldPressed : styles.secondaryPressed
+      }
       {...rest}
     >
       <View style={styles.content}>
@@ -67,6 +78,12 @@ const styles = StyleSheet.create({
   },
   secondaryPressed: {
     backgroundColor: color.well,
+  },
+  onField: {
+    backgroundColor: color.fieldPlate,
+  },
+  onFieldPressed: {
+    backgroundColor: color.accentTint,
   },
   content: {
     flexDirection: 'row',

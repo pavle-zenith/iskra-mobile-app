@@ -5,6 +5,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button, Text } from '@/components/primitives';
 import { getBoundUserId, getLastAuthError } from '@/data/auth';
+import { getProfile } from '@/data/repo';
+import { deriveUserState } from '@/features/home/state';
+import { resolveAnchorTimeZone } from '@/lib/time/dayCount';
 import { listCravings, logCraving, updateCraving, type CravingRow, type Synced } from '@/data/repo';
 import {
   drain,
@@ -33,6 +36,7 @@ function Harness() {
   const [userId, setUserId] = useState<string | null>(null);
   const [snapshot, setSnapshot] = useState<SyncSnapshot | null>(null);
   const [cravings, setCravings] = useState<Synced<CravingRow>[]>([]);
+  const [profileLine, setProfileLine] = useState('…');
   const [tick, setTick] = useState(0);
   const refresh = () => setTick((n) => n + 1);
 
@@ -46,12 +50,24 @@ function Harness() {
 
   useEffect(() => {
     let alive = true;
-    void Promise.all([getBoundUserId(), getSyncSnapshot(), listCravings()]).then(
-      ([nextUserId, nextSnapshot, nextCravings]) => {
+    void Promise.all([getBoundUserId(), getSyncSnapshot(), listCravings(), getProfile()]).then(
+      ([nextUserId, nextSnapshot, nextCravings, profile]) => {
         if (!alive) return;
         setUserId(nextUserId);
         setSnapshot(nextSnapshot);
         setCravings(nextCravings);
+        const state = deriveUserState({
+          quitDate: profile?.quitDate ? new Date(profile.quitDate) : null,
+          anchorTimeZone: resolveAnchorTimeZone(
+            profile?.quitTimeZone,
+            Intl.DateTimeFormat().resolvedOptions().timeZone,
+          ),
+          now: new Date(),
+          lastSlipAt: null,
+        });
+        setProfileLine(
+          `${state} · onboarding ${profile?.onboardingCompleted ? 'done' : 'open'} · quit ${profile?.quitDate ?? 'unset'}`,
+        );
       },
     );
     return () => {
@@ -83,6 +99,7 @@ function Harness() {
         />
         <Line label="last error" value={snapshot?.lastError ?? '—'} />
         <Line label="network" value={offline ? 'SIMULATED OFFLINE' : 'real'} />
+        <Line label="user state" value={profileLine} />
       </View>
 
       <Button

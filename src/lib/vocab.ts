@@ -18,20 +18,32 @@ export const CRAVING_OUTCOMES = ['survived', 'slipped'] as const;
 export type CravingOutcome = (typeof CRAVING_OUTCOMES)[number];
 
 /**
- * `cravings.trigger` and `slips.trigger`: what was happening when the urge or the slip came.
- * Keys from the design export's PorivEntry and SlipReflectScreen, which share one set.
- * No server CHECK; this list is the only guard.
+ * Triggers: the situations a craving or a slip happens in. ONE list, used by
+ * `cravings.trigger`, `slips.trigger` AND `profiles.triggers[]`, in display order.
  *
- * Not the same list as `profiles.triggers[]` (onboarding habits). That set is decided in M2:
- * the export's OnboardingTriggers screen and ONBOARDING_COPY_BRIEF.md disagree on its keys.
+ * One list is the point. It is what will eventually let the app say "you told us it was
+ * coffee, but your cravings come under stress": that comparison only exists if what someone
+ * answered in onboarding and what they logged in Beležim share keys.
+ *
+ * `posao` and `kafana` come from the website's own hero copy („pauza na poslu", „kafana") and
+ * had no key before. `kafana` deliberately overlaps `okolina` and `alkohol`: someone sitting in
+ * a kafana should not have to decide which one it was.
+ *
+ * Server CHECKs: cravings_trigger_check and slips_trigger_check
+ * (supabase/migrations/20260921120100_...). Keep equal.
+ *
+ * Not the quiz's four drivers (stress, habit, social, nicotine). Those are motivations and
+ * they order the personal plan; triggers are situations and they tag events.
  */
 export const TRIGGER_KEYS = [
   'kafa',
   'budjenje',
+  'posao',
+  'kafana',
   'okolina',
+  'alkohol',
   'stres',
   'jelo',
-  'alkohol',
   'dosada',
   'drugo',
 ] as const;

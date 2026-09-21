@@ -192,6 +192,51 @@ suite('RLS isolation (live Supabase)', () => {
     });
   });
 
+  describe('quiz_submissions, the website lead table', () => {
+    // It holds real email addresses. The app must never touch it, and the publishable key
+    // must not be a way in. Since M2 the table has no policies at all: only the website's
+    // server routes reach it, with the service role, which bypasses RLS.
+    const probe = () => `rls-probe-${uuid()}@example.invalid`;
+
+    it('cannot be read, with or without a session', async () => {
+      for (const client of [a.client, newClient()]) {
+        const { data, error } = await client.from('quiz_submissions').select('email').limit(1);
+        expect(error).toBeNull();
+        expect(data).toEqual([]);
+      }
+    });
+
+    it('cannot be inserted into', async () => {
+      for (const client of [a.client, newClient()]) {
+        const { error } = await client.from('quiz_submissions').insert({ email: probe() });
+        expect(error?.code).toBe('42501');
+      }
+    });
+
+    it('cannot be updated', async () => {
+      // Nothing is visible to update, so a successful call must still change zero rows.
+      for (const client of [a.client, newClient()]) {
+        const { data, error } = await client
+          .from('quiz_submissions')
+          .update({ name: 'tampered' })
+          .neq('email', '')
+          .select();
+        if (error) expect(error.code).toBe('42501');
+        else expect(data ?? []).toEqual([]);
+      }
+    });
+
+    it('cannot be deleted from', async () => {
+      const { data, error } = await a.client
+        .from('quiz_submissions')
+        .delete()
+        .neq('email', '')
+        .select();
+      if (error) expect(error.code).toBe('42501');
+      else expect(data ?? []).toEqual([]);
+    });
+  });
+
   describe('a client with no session at all', () => {
     const stranger = () => newClient();
 

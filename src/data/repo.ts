@@ -3,6 +3,12 @@ import type { SQLiteDatabase } from 'expo-sqlite';
 
 import { mergeEnqueue, type OutboxOp, type SyncTable } from '@/lib/sync/queue';
 import {
+  toProfile,
+  toProfilePayload,
+  type LocalProfileRow,
+  type Profile,
+} from '@/lib/sync/profileRow';
+import {
   isCravingOutcome,
   isStrength,
   isToolKey,
@@ -304,5 +310,91 @@ export async function bindProfileToUser(userId: string): Promise<void> {
     await ensureLocalProfile(tx);
     await tx.runAsync('UPDATE profiles SET remote_id = ? WHERE id = ?', userId, PROFILE_ID);
     await enqueue(tx, 'profiles', PROFILE_ID, 'insert_ignore', {});
+  });
+}
+
+export type ProfilePatch = Partial<{
+  name: string | null;
+  gender: string | null;
+  product: string | null;
+  cigarettesPerDay: number | null;
+  cigarettesPerPack: number | null;
+  packPriceRsd: number | null;
+  quitDate: string | null;
+  quitTimeZone: string | null;
+  reasons: string[];
+  reasonText: string | null;
+  fears: string[];
+  triggers: string[];
+  timing: string | null;
+  onboardingCompleted: boolean;
+  committed: boolean;
+  signatureData: string | null;
+  pushToken: string | null;
+}>;
+
+/** How each patch field lands in SQLite: column name plus the value it stores. */
+const PROFILE_COLUMNS: { [K in keyof Required<ProfilePatch>]: [string, (v: never) => unknown] } = {
+  name: ['name', (v: string | null) => v],
+  gender: ['gender', (v: string | null) => v],
+  product: ['product', (v: string | null) => v],
+  cigarettesPerDay: ['cigarettes_per_day', (v: number | null) => v],
+  cigarettesPerPack: ['cigarettes_per_pack', (v: number | null) => v],
+  packPriceRsd: ['pack_price_rsd', (v: number | null) => v],
+  quitDate: ['quit_date', (v: string | null) => v],
+  quitTimeZone: ['quit_time_zone', (v: string | null) => v],
+  reasons: ['reasons', (v: string[]) => JSON.stringify(v)],
+  reasonText: ['reason_text', (v: string | null) => v],
+  fears: ['fears', (v: string[]) => JSON.stringify(v)],
+  triggers: ['triggers', (v: string[]) => JSON.stringify(v)],
+  timing: ['timing', (v: string | null) => v],
+  onboardingCompleted: ['onboarding_completed', (v: boolean) => (v ? 1 : 0)],
+  committed: ['committed', (v: boolean) => (v ? 1 : 0)],
+  signatureData: ['signature_data', (v: string | null) => v],
+  pushToken: ['push_token', (v: string | null) => v],
+};
+
+export async function getProfile(): Promise<Profile | null> {
+  await ensureLocalProfile();
+  const row = await getDb().getFirstAsync<LocalProfileRow>(
+    'SELECT * FROM profiles WHERE id = ?',
+    PROFILE_ID,
+  );
+  return row ? toProfile(row) : null;
+}
+
+/**
+ * Writes answers as they are given. Onboarding calls this on every step, so a force-quit at
+ * step 11 loses nothing, and the profile syncs itself whenever there is signal.
+ */
+export async function updateProfile(patch: ProfilePatch): Promise<void> {
+  const entries = Object.entries(patch).filter(([, value]) => value !== undefined);
+  if (entries.length === 0) return;
+
+  await write(async (tx) => {
+    await ensureLocalProfile(tx);
+    const assignments: string[] = [];
+    const values: unknown[] = [];
+    for (const [key, value] of entries) {
+      const mapping = PROFILE_COLUMNS[key as keyof ProfilePatch];
+      if (!mapping) continue;
+      const [column, serialize] = mapping;
+      assignments.push(`${column} = ?`);
+      values.push((serialize as (v: unknown) => unknown)(value));
+    }
+    assignments.push('updated_at = ?');
+    values.push(new Date().toISOString());
+
+    await tx.runAsync(
+      `UPDATE profiles SET ${assignments.join(', ')} WHERE id = ?`,
+      ...(values as (string | number | null)[]),
+      PROFILE_ID,
+    );
+
+    const row = await tx.getFirstAsync<LocalProfileRow>(
+      'SELECT * FROM profiles WHERE id = ?',
+      PROFILE_ID,
+    );
+    if (row) await enqueue(tx, 'profiles', PROFILE_ID, 'upsert', toProfilePayload(row));
   });
 }

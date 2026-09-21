@@ -4,6 +4,8 @@ Read these before writing anything:
 
 - `PRODUCT.md`: why, for whom, and what must never happen. Decides anything the roadmap leaves open
 - `ROADMAP.md`: what to build and when. Milestones M0 to M9
+- `docs/M2-copy-todo.md`: the Serbian copy Pavle still owes. Missing copy renders as
+  `«TODO(copy): …»`; never fill one in yourself
 - `SCREENS.md`: what each screen is, the reworked onboarding order, and the nine places
   the design export contradicts the current spec. Read it before M2 or M3. The export in
   `ISKRA - mobile claude design export/` is reference, not instruction: SCREENS.md says
@@ -71,10 +73,28 @@ are SQL files in `supabase/migrations/`, applied to the project, then `npm run g
 - **Dev harness:** `iskra://dev` (dev builds only). A test script can drive the spine without
   the UI through the `dev.command` key in the app's SQLite; see `src/data/devCommands.ts`
 
+## Onboarding (M2)
+
+- **Seventeen counted steps** in `SCREENS.md` Part 3 order, not the export's `STEPS`. The order
+  and the progress numbers live in `src/lib/onboarding/steps.ts`, which is pure and tested
+- **One route per step** (`src/app/onboarding/[step].tsx`), so back is the platform's own gesture
+- **Every answer is written as it is given.** `OnboardingProvider` calls `updateProfile`, which
+  writes SQLite plus an outbox entry. Force-quit on step 11 resumes on step 11
+- **Copy comes from `src/features/onboarding/copy.ts`**, transcribed from the copy brief, which
+  wins over the export's screen files. Never write, translate or paraphrase a Serbian string
+- **Gendered words go through `g(token, gender)`.** Never a slash, never masculine-by-default;
+  a form that does not exist yet renders a marker. See `docs/M2-copy-todo.md`
+- **The panic demo writes no `cravings` row.** A test enforces it: that table is the only honest
+  measure of whether Iskra works
+- **The ember field is the [DARK] screen.** `color.field` with white display type only; anything
+  readable sits on a `Plate`, because white on ember is 3.18:1
+- **Notifications: permission only.** The app sends nothing until the rule in ROADMAP Part 4 exists
+
 ## Layout
 
 ```
 src/app/                  routes (Expo Router); dev.tsx is the dev-only data harness
+src/app/onboarding/       splash plus one dynamic route for the seventeen steps
 src/components/primitives Text, Pressable, Button, Icon
 src/features/<name>/      feature code (poriv, napredak, ...)
 src/data/                 drivers: SQLite, repo, sync engine, auth, Supabase client
