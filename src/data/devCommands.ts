@@ -12,6 +12,7 @@ import {
   logCraving,
   updateCraving,
   updateProfile,
+  updateSlip,
 } from './repo';
 import { drain, getSyncSnapshot, setSimulatedOffline } from './sync';
 
@@ -70,6 +71,28 @@ async function run(command: string) {
       console.log(`[dev] poriv ${JSON.stringify(updated)}`);
       return;
     }
+    case 'poriv:twice': {
+      // Two endings on one craving, as a double tap on the slip link would produce.
+      const rows = await listCravings();
+      const open = findResumable(rows, new Date());
+      if (!open) return console.warn('[dev] no open craving');
+      const row = rows.find((candidate) => candidate.id === open.id);
+      if (!row) return;
+      const first = await finishCraving(row, 'slipped');
+      const second = await finishCraving(row, 'slipped');
+      console.log(`[dev] twice first=${!!first} second=${!!second}`);
+      return;
+    }
+    case 'poriv:note': {
+      // The one optional tap after a slip. It must land on the slips row too.
+      const row = (await listCravings())[0];
+      if (!row) return console.warn('[dev] no craving');
+      await updateCraving(row.id, { trigger: 'kafa' });
+      const slip = (await listSlips())[0];
+      if (slip) await updateSlip(slip.id, { trigger: 'kafa' });
+      console.log('[dev] noted kafa on both rows');
+      return;
+    }
     case 'poriv:report': {
       const [cravings, slips, profile] = await Promise.all([
         listCravings(),
@@ -89,6 +112,9 @@ async function run(command: string) {
             }),
           ),
           slips: slips.map(({ id, trigger }) => ({ id: id.slice(0, 8), trigger })),
+          outbox: await getDb().getAllAsync<{ table_name: string; version: number }>(
+            'SELECT table_name, version FROM outbox ORDER BY table_name',
+          ),
           quitDate: profile?.quitDate,
         })}`,
       );

@@ -83,7 +83,7 @@ export function RazloziScreen() {
           <Text variant="body" color="textMuted">
             {tools.razlozi.lead}
           </Text>
-          <Text variant="title">{`„${words}"`}</Text>
+          <Text variant="title">{`„${words}“`}</Text>
         </>
       ) : null}
 

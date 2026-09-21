@@ -91,10 +91,22 @@ describe('survivedOn', () => {
       at('2026-10-05T11:30:00.000Z'),
       at('2026-10-04T09:00:00.000Z', { outcome: 'survived' }),
     ];
-    expect(survivedOn(rows, NOW)).toBe(2);
+    expect(survivedOn(rows, NOW, 'Europe/Belgrade')).toBe(2);
   });
 
   it('is zero when nothing happened', () => {
-    expect(survivedOn([], NOW)).toBe(0);
+    expect(survivedOn([], NOW, 'Europe/Belgrade')).toBe(0);
+  });
+
+  it('counts the day in the anchor zone, not the device one', () => {
+    // 23:30 UTC on the 4th is already the 5th in Belgrade. Someone who travels must not see
+    // Success say "Danas" about a different day than the one Home is counting.
+    const lateNight = [at('2026-10-04T23:30:00.000Z', { outcome: 'survived' })];
+    expect(survivedOn(lateNight, NOW, 'Europe/Belgrade')).toBe(1);
+    expect(survivedOn(lateNight, NOW, 'UTC')).toBe(0);
+  });
+
+  it('ignores a row whose timestamp will not parse', () => {
+    expect(survivedOn([at('not a date', { outcome: 'survived' })], NOW, 'UTC')).toBe(0);
   });
 });

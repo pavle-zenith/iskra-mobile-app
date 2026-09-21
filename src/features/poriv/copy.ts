@@ -1,4 +1,3 @@
-import { missingCopy } from '@/lib/i18n/missingCopy';
 import { plural } from '@/lib/i18n/plural';
 
 /**
@@ -44,10 +43,10 @@ export const mode = {
   /** Shown in Mode after Beležim saves. */
   noted: 'Zabeleženo.',
   /**
-   * The X's screen-reader label. The brief gives no word for it and an agent may not invent
-   * Serbian, so it renders a marker. docs/M3-copy-todo.md carries it.
+   * The X's screen-reader label. Approved 21.09.2026: it closes Mode without saying how the
+   * craving ended, which "otkaži" would misdescribe, because the craving is not cancelled.
    */
-  close: missingCopy('Mode, oznaka za X'),
+  close: 'Zatvori',
 } as const;
 
 export const tools = {

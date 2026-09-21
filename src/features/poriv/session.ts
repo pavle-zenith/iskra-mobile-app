@@ -1,4 +1,6 @@
 import type { CravingRow } from '@/data/repo';
+import { calendarDateIn } from '@/lib/time/dayCount';
+import type { ToolKey } from '@/lib/vocab';
 
 /**
  * The rules of a craving session, kept pure so they can be tested without a screen or a
@@ -68,10 +70,28 @@ export function remainingLabel(createdAt: string, now: Date, totalMs = CRAVING_T
   return `${minutes}:${String(seconds).padStart(2, '0')}`;
 }
 
-/** Cravings that ended in `survived` on a given local calendar day. */
-export function survivedOn(rows: readonly CravingRow[], day: Date): number {
-  const target = day.toDateString();
-  return rows.filter(
-    (row) => row.outcome === 'survived' && new Date(row.created_at).toDateString() === target,
-  ).length;
+/**
+ * Cravings that ended in `survived` on a given calendar day, counted in the profile's anchor
+ * time zone. The device's own day is not good enough: the day counter is anchored to
+ * `profiles.quit_time_zone`, and someone who travels would see Success say "Danas" for a
+ * different day than Home counts.
+ */
+export function survivedOn(rows: readonly CravingRow[], day: Date, anchorTimeZone: string): number {
+  const target = calendarDateIn(day, anchorTimeZone);
+  return rows.filter((row) => {
+    if (row.outcome !== 'survived') return false;
+    const at = new Date(row.created_at);
+    if (Number.isNaN(at.getTime())) return false;
+    const date = calendarDateIn(at, anchorTimeZone);
+    return date.year === target.year && date.month === target.month && date.day === target.day;
+  }).length;
+}
+
+/**
+ * Whether opening this tool is worth a write. `tool_used` holds the last tool opened, so
+ * re-rendering the same tool must not rewrite the row: that bumps the outbox version and
+ * sends a network upsert, in a loop, mid-craving and on battery.
+ */
+export function shouldRecordTool(craving: CravingRow | null, tool: ToolKey): boolean {
+  return !!craving && craving.tool_used !== tool;
 }

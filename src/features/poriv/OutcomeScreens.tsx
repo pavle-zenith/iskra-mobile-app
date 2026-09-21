@@ -4,7 +4,8 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button, Text } from '@/components/primitives';
-import { listCravings } from '@/data/repo';
+import { getProfile, listCravings } from '@/data/repo';
+import { resolveAnchorTimeZone } from '@/lib/time/dayCount';
 import type { TriggerKey } from '@/lib/vocab';
 import { color, space } from '@/theme';
 
@@ -51,8 +52,11 @@ function OutcomeShell({
 function OptionalTrigger({ question }: { question: string }) {
   const { craving, note } = usePorivSession();
   const [chosen, setChosen] = useState<TriggerKey | null>(craving?.trigger ?? null);
+  // Whether Beležim had already answered this before the screen opened. Captured once, so a
+  // tap here does not make the chips vanish under the thumb with nothing to show for it.
+  const [askedAlready] = useState(() => !!craving?.trigger);
 
-  if (craving?.trigger) return null;
+  if (askedAlready) return null;
 
   return (
     <View style={styles.optional}>
@@ -74,9 +78,16 @@ export function SuccessScreen() {
 
   useEffect(() => {
     let alive = true;
-    void listCravings().then((rows) => {
-      if (alive) setToday(survivedOn(rows, new Date()));
-    });
+    void (async () => {
+      const [rows, profile] = await Promise.all([listCravings(), getProfile()]);
+      if (!alive) return;
+      // The same anchor zone Home counts days in, so "Danas" means one day in the app.
+      const zone = resolveAnchorTimeZone(
+        profile?.quitTimeZone,
+        Intl.DateTimeFormat().resolvedOptions().timeZone,
+      );
+      setToday(survivedOn(rows, new Date(), zone));
+    })();
     return () => {
       alive = false;
     };

@@ -20,7 +20,7 @@ export function Ring({
   progress,
   label,
   caption,
-  size = 136,
+  size = 116,
 }: {
   progress: number;
   label: string;
@@ -56,11 +56,11 @@ export function Ring({
         />
       </Svg>
       <View style={styles.ringCentre} pointerEvents="none">
-        {/* Display type, so white on ember clears 3.18:1 as WCAG large text. */}
+        {/* Both large text by WCAG: display, and 19pt bold. White on ember is only 3.18:1. */}
         <Text variant="display" style={styles.onField}>
           {label}
         </Text>
-        <Text variant="bodyLarge" style={[styles.onField, styles.ringCaption]}>
+        <Text variant="action" style={[styles.onField, styles.ringCaption]}>
           {caption}
         </Text>
       </View>
@@ -68,7 +68,11 @@ export function Ring({
   );
 }
 
-/** A tool on the Mode grid: the site's painted panel, its glyph on its tint, its label. */
+/**
+ * A tool on the Mode grid: the site's painted panel behind its glyph and label, rather than
+ * above them. Six separate texture blocks pushed two of the six tools under the fold, and
+ * someone mid-craving should not have to scroll to find a third of the product.
+ */
 export function ToolTile({ tool, onPress }: { tool: PorivTool; onPress: () => void }) {
   const { color: toolTone, tint } = toolColor[tool.key];
   const stacked = useWindowDimensions().fontScale > STACK_CARD_ABOVE_FONT_SCALE;
@@ -139,30 +143,33 @@ const styles = StyleSheet.create({
   },
   ringCaption: { opacity: 0.85 },
   card: {
-    flexGrow: 1,
-    flexBasis: '40%',
-    padding: 6,
+    flex: 1,
     borderRadius: radius.card,
     backgroundColor: color.surface,
     borderWidth: 1,
     borderColor: color.line,
-    // Well past the 64pt Mode floor: this is a hand that is shaking.
-    minHeight: 108,
+    overflow: 'hidden',
+    justifyContent: 'center',
+    // The floor, not the size: the row it sits in decides that. 64pt is the Mode minimum,
+    // because this is a hand that is shaking.
+    minHeight: 64,
   },
+  // The painted panel, behind the label rather than stacked above it. Low enough that ink on
+  // it still reads at a glance.
   texture: {
-    width: '100%',
-    height: 54,
-    borderRadius: radius.card - 6,
-    backgroundColor: color.well,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    opacity: 0.3,
   },
   cardLabelRow: {
-    flexGrow: 1,
     flexDirection: 'row',
     alignItems: 'center',
     gap: space.xs,
-    paddingHorizontal: 6,
-    paddingTop: space.xs,
-    paddingBottom: 4,
+    paddingHorizontal: space.sm,
+    paddingVertical: space.xs,
   },
   cardLabelStacked: {
     flexDirection: 'column',

@@ -184,6 +184,38 @@ export async function updateCraving(id: string, input: CravingInput): Promise<Cr
   return updated;
 }
 
+/**
+ * Writes the outcome, but only if the craving does not already have one. Returns null when it
+ * did, which makes ending a craving idempotent however many times it is called.
+ *
+ * The check and the write share one exclusive transaction, so two taps landing together
+ * cannot both pass it. A second outcome would be a false fact about someone's relapse.
+ */
+export async function completeCraving(
+  id: string,
+  input: { outcome: CravingOutcome; durationSeconds: number },
+): Promise<CravingRow | null> {
+  validateCraving(input);
+  let updated: CravingRow | null = null;
+  await write(async (tx) => {
+    const current = await tx.getFirstAsync<CravingRow>('SELECT * FROM cravings WHERE id = ?', id);
+    if (!current || current.outcome !== null) return;
+    updated = {
+      ...current,
+      outcome: input.outcome,
+      duration_seconds: input.durationSeconds,
+    };
+    await tx.runAsync(
+      'UPDATE cravings SET duration_seconds = ?, outcome = ? WHERE id = ?',
+      updated.duration_seconds,
+      updated.outcome,
+      id,
+    );
+    await enqueue(tx, 'cravings', id, 'upsert', cravingPayload(updated));
+  });
+  return updated;
+}
+
 export async function listCravings(): Promise<Synced<CravingRow>[]> {
   const rows = await getDb().getAllAsync<CravingRow & { pending: number }>(
     `SELECT c.id, c.strength, c.trigger, c.tool_used, c.duration_seconds, c.outcome, c.created_at,
@@ -218,6 +250,39 @@ export async function logSlip(input: { trigger?: TriggerKey | null; notes?: stri
     await enqueue(tx, 'slips', row.id, 'upsert', row);
   });
   return row;
+}
+
+/**
+ * Adds the trigger to a slip after the fact: the one optional tap on the slip screen. The
+ * craving and the slip must agree, because comparing them is the whole point of one shared
+ * trigger vocabulary.
+ */
+export async function updateSlip(
+  id: string,
+  input: { trigger?: TriggerKey | null; notes?: string | null },
+): Promise<SlipRow | null> {
+  if (input.trigger != null) assertVocab(isTriggerKey(input.trigger), 'trigger', input.trigger);
+  let updated: SlipRow | null = null;
+  await write(async (tx) => {
+    const current = await tx.getFirstAsync<SlipRow>(
+      'SELECT id, trigger, notes, created_at FROM slips WHERE id = ?',
+      id,
+    );
+    if (!current) return;
+    updated = {
+      ...current,
+      trigger: input.trigger !== undefined ? input.trigger : current.trigger,
+      notes: input.notes !== undefined ? input.notes : current.notes,
+    };
+    await tx.runAsync(
+      'UPDATE slips SET trigger = ?, notes = ? WHERE id = ?',
+      updated.trigger,
+      updated.notes,
+      id,
+    );
+    await enqueue(tx, 'slips', id, 'upsert', updated);
+  });
+  return updated;
 }
 
 export async function listSlips(): Promise<SlipRow[]> {

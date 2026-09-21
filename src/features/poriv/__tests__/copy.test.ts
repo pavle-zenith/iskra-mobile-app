@@ -36,17 +36,9 @@ function everyString(): string[] {
   ];
 }
 
-/**
- * The only Serbian M3 still owes. An agent may not invent a word for the X, so it renders a
- * marker instead; docs/M3-copy-todo.md carries it. This list is pinned so it cannot quietly
- * grow: a new marker fails here until someone writes it down.
- */
-const OWED = [mode.close];
-
 describe('M3 copy', () => {
-  it('owes exactly one string, and it is the one on the list', () => {
-    const markers = everyString().filter(hasMissingCopy);
-    expect(markers).toEqual(OWED);
+  it('owes nothing: every M3 string is approved and in place', () => {
+    expect(everyString().filter(hasMissingCopy)).toEqual([]);
   });
 
   it('renders identically whatever the gender, because none of it is gendered', () => {

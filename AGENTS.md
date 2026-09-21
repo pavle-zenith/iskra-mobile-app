@@ -71,6 +71,9 @@ are SQL files in `supabase/migrations/`, applied to the project, then `npm run g
   in `profiles.quit_time_zone`, never hours / 24. Nothing else computes a day count
 - **Slips never touch `quit_date`.** The total smoke-free time does not reset
 - **Queue logic is pure** (`src/lib/sync/queue.ts`, unit-tested); `src/data/` holds the drivers
+- **Every write goes through `serialiseWrite()`** in `src/data/db.ts`. expo-sqlite holds an
+  exclusive lock for the length of a transaction, and any other write issued during one fails
+  with "database is locked", at the user. Never add a write that bypasses it
 - **Dev harness:** `iskra://dev` (dev builds only). A test script can drive the spine without
   the UI through the `dev.command` key in the app's SQLite; see `src/data/devCommands.ts`
 
@@ -109,6 +112,17 @@ are SQL files in `supabase/migrations/`, applied to the project, then `npm run g
   closes, so a kill mid-tool still records it. One column, one value; no schema change
 - **The outcome is never guessed.** The X leaves `outcome` null: the craving happened and we
   do not know how it ended. Do not ask on exit, do not assume survived
+- **Ending a craving is idempotent.** `completeCraving()` checks and writes in one transaction,
+  so a double tap cannot record two endings or two slips. A second slip would be a false fact
+  about someone's relapse. UI guards use a ref, not state: two taps in one frame both pass state
+- **Session callbacks never depend on the craving row.** They read it from a ref, so their
+  identity is stable. A callback that changes on every write re-runs the effects that call it,
+  which once had the tool route rewriting the row on every render, pushing upserts in a loop
+- **A trigger logged after a slip lands on both rows.** `cravings` and `slips` share one
+  vocabulary so they can be compared; a slip with a null trigger cannot be
+- **Mode never scrolls.** The tools grid is three rows that divide the leftover height, so all
+  six tools and the slip link are on screen at any phone size. Someone mid-craving must not
+  have to go looking for a third of the product
 - **A craving resumes for 15 minutes.** `findResumable()` in `src/features/poriv/session.ts`;
   the gate checks once per launch, so closing with the X does not bounce back into Mode
 - **A slip writes its own row and never touches `quit_date`.** The total does not reset
