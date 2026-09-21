@@ -3,8 +3,9 @@ import { useEffect, useState } from 'react';
 import { View } from 'react-native';
 
 import { getProfile } from '@/data/repo';
-import { FoundationsScreen } from '@/features/foundations/FoundationsScreen';
+import { HomeScreen } from '@/features/home/HomeScreen';
 import { resumeOnboardingTarget } from '@/features/onboarding/OnboardingProvider';
+import { resumableCraving } from '@/features/poriv/PorivSession';
 import type { StepId } from '@/lib/onboarding/steps';
 import { color } from '@/theme';
 
@@ -12,24 +13,47 @@ import { color } from '@/theme';
  * The gate. `profiles.onboarding_completed` decides whether someone is still being set up,
  * and an unfinished flow reopens on the step it was left on, answers intact.
  *
- * Both reads come from SQLite, so this never waits on the network.
+ * A craving left open outranks both: killed mid-craving, the app comes back into Mode with
+ * the timer still running. That check happens once per launch, so closing Mode with the X
+ * returns here and stays here.
+ *
+ * Every read comes from SQLite, so this never waits on the network.
  */
 type Target =
-  { kind: 'loading' } | { kind: 'onboarding'; splash: boolean; step: StepId } | { kind: 'home' };
+  | { kind: 'loading' }
+  | { kind: 'onboarding'; splash: boolean; step: StepId }
+  | { kind: 'poriv' }
+  | { kind: 'home' };
+
+/** Cold-start only: a resumed craving must not fight the X. */
+let resumeChecked = false;
 
 export default function IndexRoute() {
   const [target, setTarget] = useState<Target>({ kind: 'loading' });
 
   useEffect(() => {
     let alive = true;
-    void Promise.all([getProfile(), resumeOnboardingTarget()]).then(([profile, resume]) => {
+    void (async () => {
+      const [profile, resume] = await Promise.all([getProfile(), resumeOnboardingTarget()]);
       if (!alive) return;
-      setTarget(
-        profile?.onboardingCompleted
-          ? { kind: 'home' }
-          : { kind: 'onboarding', splash: resume.splash, step: resume.step },
-      );
-    });
+
+      if (!profile?.onboardingCompleted) {
+        setTarget({ kind: 'onboarding', splash: resume.splash, step: resume.step });
+        return;
+      }
+
+      if (!resumeChecked) {
+        resumeChecked = true;
+        const open = await resumableCraving();
+        if (!alive) return;
+        if (open) {
+          setTarget({ kind: 'poriv' });
+          return;
+        }
+      }
+
+      setTarget({ kind: 'home' });
+    })();
     return () => {
       alive = false;
     };
@@ -37,6 +61,8 @@ export default function IndexRoute() {
 
   // Paper, not a spinner: the first frame is the app's own ground, whatever happens next.
   if (target.kind === 'loading') return <View style={{ flex: 1, backgroundColor: color.bg }} />;
+
+  if (target.kind === 'poriv') return <Redirect href="/poriv" />;
 
   if (target.kind === 'onboarding') {
     return target.splash ? (
@@ -46,5 +72,5 @@ export default function IndexRoute() {
     );
   }
 
-  return <FoundationsScreen />;
+  return <HomeScreen />;
 }

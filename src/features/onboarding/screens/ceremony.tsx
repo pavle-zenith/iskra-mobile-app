@@ -9,8 +9,9 @@ import { drain } from '@/data/sync';
 import { updateProfile } from '@/data/repo';
 import { color, radius, space } from '@/theme';
 
-import { FieldScreen, Plate, ProgressBar, Prompt, QuestionScreen } from '../components';
+import { FieldScreen, GlyphChip, Plate, ProgressBar, Prompt, QuestionScreen } from '../components';
 import { annualCigarettes, annualCostRsd, copy, costEquivalent, formatRsd, REASONS } from '../copy';
+import { MILESTONE_DOTS, REASON_GLYPHS, STAT_GLYPHS } from '../glyphs';
 import { useOnboarding } from '../OnboardingProvider';
 import { SignaturePad } from '../SignaturePad';
 
@@ -56,7 +57,7 @@ export function PanicStep() {
 }
 
 export function CommitmentStep() {
-  const { draft, answer, goNext, goBack, canAdvanceFrom, gender } = useOnboarding();
+  const { draft, answer, goNext, goBack, canAdvanceFrom } = useOnboarding();
 
   return (
     <FieldScreen
@@ -76,7 +77,7 @@ export function CommitmentStep() {
       </Text>
 
       <View style={styles.pledges}>
-        {copy.commitment.pledges(gender).map((pledge) => (
+        {copy.commitment.pledges.map((pledge) => (
           <View key={pledge} style={styles.pledgeRow}>
             <View style={styles.pledgeTick} />
             <Text variant="body" style={[styles.onField, styles.pledgeText]}>
@@ -90,6 +91,11 @@ export function CommitmentStep() {
         value={draft.signatureData ?? null}
         onChange={(path) => void answer({ signatureData: path ?? undefined, committed: !!path })}
       />
+
+      {/* Says what actually happens to the signature: it is kept, in profiles.signature_data. */}
+      <Text variant="caption" style={[styles.onField, styles.centered, styles.finePrint]}>
+        {copy.commitment.finePrint}
+      </Text>
     </FieldScreen>
   );
 }
@@ -155,21 +161,28 @@ export function SummaryStep() {
   const annual = annualCostRsd(copyContext);
   const quitDate = draft.quitDate ? new Date(draft.quitDate) : null;
 
-  const stats: { label: string; value: string }[] = [
+  const stats = [
     {
       label: copy.summary.statLabels.quitDate,
       value: quitDate
         ? `${quitDate.getDate()}. ${copy.date.months[quitDate.getMonth()]?.toLowerCase() ?? ''}`
         : '',
+      glyph: STAT_GLYPHS.quitDate,
     },
-    { label: copy.summary.statLabels.perDay, value: String(copyContext.cigarettesPerDay) },
+    {
+      label: copy.summary.statLabels.perDay,
+      value: String(copyContext.cigarettesPerDay),
+      glyph: STAT_GLYPHS.perDay,
+    },
     {
       label: copy.summary.statLabels.packPrice,
       value: `${formatRsd(copyContext.packPriceRsd)} ${copy.cost.currency}`,
+      glyph: STAT_GLYPHS.packPrice,
     },
     {
       label: copy.summary.statLabels.perYear,
       value: formatRsd(annualCigarettes(copyContext)),
+      glyph: STAT_GLYPHS.perYear,
     },
   ];
 
@@ -181,11 +194,7 @@ export function SummaryStep() {
       <Text variant="caption" style={styles.eyebrow}>
         {copy.summary.eyebrow}
       </Text>
-      <Prompt
-        title={copy.summary.header(copyContext)}
-        sub={copy.summary.sub(copyContext.gender)}
-        field
-      />
+      <Prompt title={copy.summary.header(copyContext)} sub={copy.summary.sub} field />
 
       <Plate style={{ gap: space.xxs }}>
         <Text variant="body" color="textMuted">
@@ -202,6 +211,7 @@ export function SummaryStep() {
       <View style={styles.statGrid}>
         {stats.map((stat) => (
           <Plate key={stat.label} style={styles.stat}>
+            <GlyphChip glyph={stat.glyph} size={36} />
             <Text variant="label">{stat.value}</Text>
             <Text variant="caption" color="textMuted">
               {stat.label}
@@ -210,14 +220,18 @@ export function SummaryStep() {
         ))}
       </View>
 
-      <Plate style={{ gap: space.xs }}>
+      <Plate style={{ gap: space.xxs }}>
         <Text variant="label">{copy.summary.milestonesTitle}</Text>
-        {copy.summary.milestones.map((milestone) => (
-          <View key={milestone.time} style={styles.milestone}>
+        {copy.summary.milestones.map((milestone, index) => (
+          <View
+            key={milestone.time}
+            style={[styles.milestone, index > 0 ? styles.milestoneDivided : null]}
+          >
+            <View style={[styles.dot, { backgroundColor: MILESTONE_DOTS[index] }]} />
             <Text variant="caption" color="textMuted" style={styles.milestoneTime}>
               {milestone.time}
             </Text>
-            <Text variant="body" style={styles.milestoneText}>
+            <Text variant="caption" style={styles.milestoneText}>
               {milestone.text}
             </Text>
           </View>
@@ -225,13 +239,22 @@ export function SummaryStep() {
       </Plate>
 
       {(draft.reasons?.length ?? 0) > 0 ? (
-        <Plate style={{ gap: space.xs }}>
+        <Plate style={{ gap: space.xxs }}>
           <Text variant="label">{copy.summary.reasonsTitle}</Text>
-          {(draft.reasons ?? []).map((key) => (
-            <Text key={key} variant="body" color="textSoft">
-              {REASONS.find((reason) => reason.key === key)?.label ?? key}
-            </Text>
-          ))}
+          {(draft.reasons ?? []).map((key, index) => {
+            const glyph = REASON_GLYPHS[key];
+            return (
+              <View
+                key={key}
+                style={[styles.reasonRow, index > 0 ? styles.milestoneDivided : null]}
+              >
+                {glyph ? <Icon as={glyph.icon} size={20} color={glyph.color} /> : null}
+                <Text variant="body" color="textSoft">
+                  {REASONS.find((reason) => reason.key === key)?.label ?? key}
+                </Text>
+              </View>
+            );
+          })}
         </Plate>
       ) : null}
 
@@ -326,11 +349,24 @@ const styles = StyleSheet.create({
   pledgeText: { flex: 1 },
   processing: { gap: space.md, paddingVertical: space.lg },
   processingRow: { gap: space.xxs },
-  statGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: space.xs },
-  stat: { flexGrow: 1, flexBasis: '45%', gap: 2 },
-  milestone: { flexDirection: 'row', gap: space.sm },
-  milestoneTime: { width: 72 },
+  statGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm },
+  stat: { flexGrow: 1, flexBasis: '44%', gap: space.xxs, padding: space.md },
+  milestone: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.sm,
+    paddingVertical: space.xs + 2,
+  },
+  milestoneDivided: { borderTopWidth: 1, borderTopColor: color.line },
+  milestoneTime: { width: 66 },
   milestoneText: { flex: 1 },
+  dot: { width: 8, height: 8, borderRadius: 4 },
+  reasonRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.sm,
+    paddingVertical: space.xs + 2,
+  },
   finePrint: { opacity: 0.8 },
   sample: {
     flexDirection: 'row',

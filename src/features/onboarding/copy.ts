@@ -10,7 +10,7 @@
  * `[var]` slots take profile data. `[g:token]` slots go through `g()`, which never produces a
  * slash and never defaults to masculine.
  */
-import { g, missingCopy, type GenderCode } from './gender';
+import { g, type GenderCode } from './gender';
 
 export type ProductKey = 'cigarete' | 'iqos';
 
@@ -94,7 +94,6 @@ const EQUIVALENT_BANDS: readonly { max: number; headline: string; alts: readonly
   {
     max: Number.POSITIVE_INFINITY,
     headline: '= polovni auto, svake godine',
-    // The third alternate needs [g:odlagao], so it is only offered where a form exists.
     alts: ['= više od godinu dana kirije'],
   },
 ];
@@ -122,7 +121,7 @@ export function productNounGenitive(product: ProductKey): string {
 }
 
 export function productNounAccusative(product: ProductKey): string {
-  return product === 'iqos' ? missingCopy('productNoun za IQOS, akuzativ') : 'cigarete';
+  return product === 'iqos' ? 'štapiće' : 'cigarete';
 }
 
 // --- option lists ----------------------------------------------------------
@@ -148,12 +147,7 @@ export const FEARS: readonly (Option & { listLabel: string })[] = [
   { key: 'kilaza', label: 'Dobitak na kilaži', listLabel: 'kilaža' },
 ];
 
-/**
- * Triggers: the ten keys of src/lib/vocab.ts, shared with cravings and slips.
- *
- * TODO(copy): these ten labels are proposals from the M2 planning session, not approved copy.
- * Pavle confirms them before ship. docs/M2-copy-todo.md carries the list.
- */
+/** Triggers: the ten keys of src/lib/vocab.ts, shared with cravings and slips. */
 export const TRIGGERS: readonly Option[] = [
   { key: 'kafa', label: 'Uz kafu' },
   { key: 'budjenje', label: 'Posle buđenja' },
@@ -183,7 +177,6 @@ export type ReflectionCard = { key: string; title: string; body: string; takeawa
 
 /** One card per chosen reason, in selection order (brief sections 3a and 7.2). */
 export function reasonCard(key: string, ctx: CopyContext): ReflectionCard | null {
-  const gender = ctx.gender;
   switch (key) {
     case 'zdravlje':
       return {
@@ -196,7 +189,7 @@ export function reasonCard(key: string, ctx: CopyContext): ReflectionCard | null
       return {
         key,
         title: 'Porodica',
-        body: 'Pasivni dim utiče na sve oko tebe — najviše na decu.',
+        body: 'Pasivni dim utiče na sve oko tebe, a najviše na decu.',
         takeaway: 'Oni su razlog koji se ne dovodi u pitanje.',
       };
     case 'pare':
@@ -211,7 +204,7 @@ export function reasonCard(key: string, ctx: CopyContext): ReflectionCard | null
         key,
         title: 'Fizička forma',
         body: 'Već posle nedelju dana pluća rade lakše, a izdržljivost raste.',
-        takeaway: `Vratićeš dah koji si ${g('mislio', gender)} da je nestao.`,
+        takeaway: 'Vratićeš dah za koji ti se činilo da je nestao.',
       };
     case 'sloboda':
       return {
@@ -224,7 +217,7 @@ export function reasonCard(key: string, ctx: CopyContext): ReflectionCard | null
       return {
         key,
         title: 'Pritisak okoline',
-        body: `Možda si ${g('poceo', gender)} zbog drugih. Ali prestaješ zbog sebe.`,
+        body: 'Možda je počelo zbog drugih. Ali prestaješ zbog sebe.',
         takeaway: 'Ovo je tvoja odluka, ni za koga drugog.',
       };
     default:
@@ -233,20 +226,20 @@ export function reasonCard(key: string, ctx: CopyContext): ReflectionCard | null
 }
 
 /** One card per chosen fear (brief section 3b). No cap: the screen scrolls (section 7.4). */
-export function fearCard(key: string, gender: GenderCode): ReflectionCard | null {
+export function fearCard(key: string): ReflectionCard | null {
   switch (key) {
     case 'porivi':
       return {
         key,
         title: 'Jaki porivi',
-        body: 'Svaki poriv traje između 3 i 5 minuta, pa prolazi sam — uvek.',
+        body: 'Svaki poriv traje između 3 i 5 minuta i prođe sam od sebe. Uvek.',
         takeaway: 'Iskra ima alat za tačno taj trenutak.',
       };
     case 'stres':
       return {
         key,
         title: 'Stres bez cigarete',
-        body: 'Nikotin ne smanjuje stres — samo nakratko gasi apstinenciju koju je sam izazvao.',
+        body: 'Nikotin ne smanjuje stres. Samo nakratko gasi apstinenciju koju je sam izazvao.',
         takeaway: 'Pravo olakšanje dolazi posle 3 nedelje.',
       };
     case 'kafana':
@@ -254,13 +247,13 @@ export function fearCard(key: string, gender: GenderCode): ReflectionCard | null
         key,
         title: 'Kafana i društvo',
         body: 'Društvene situacije su čest okidač. Imaćeš plan za svaku od njih.',
-        takeaway: `Nećeš biti ${g('sam', gender)} u tome.`,
+        takeaway: 'Tu smo i za te večeri.',
       };
     case 'neuspeh':
       return {
         key,
         title: 'Strah od neuspeha',
-        body: `Prosečna osoba pokuša više puta pre nego što ${g('prestao', gender)} zauvek. Pokušaj nije neuspeh.`,
+        body: 'Prosečna osoba pokuša više puta pre nego što prestane zauvek. Pokušaj nije neuspeh.',
         takeaway: 'Ovaj put imaš pomoć uz sebe.',
       };
     case 'razdrazljivost':
@@ -274,7 +267,7 @@ export function fearCard(key: string, gender: GenderCode): ReflectionCard | null
       return {
         key,
         title: 'Dobitak na kilaži',
-        body: 'Apetit se može vratiti — ali to se kontroliše malim navikama, ne nikotinom.',
+        body: 'Apetit se može vratiti, ali to se kontroliše malim navikama, ne nikotinom.',
         takeaway: 'Brinemo i o tome, korak po korak.',
       };
     default:
@@ -324,7 +317,9 @@ export const copy = {
 
   cigarettes: {
     question: (ctx: CopyContext) =>
-      `Koliko ${productNounGenitive(ctx.product)} dnevno si ${g('pusio', ctx.gender)}?`,
+      ctx.gender === 'x'
+        ? `Koliko ${productNounGenitive(ctx.product)} ti je dnevno išlo?`
+        : `Koliko ${productNounGenitive(ctx.product)} dnevno si ${g('pusio', ctx.gender)}?`,
     sub: 'Koristimo ovo da izračunamo tvoje uštedine.',
     unit: (ctx: CopyContext) => `${productNounGenitive(ctx.product)} dnevno`,
     note: 'Prosek u Srbiji je oko 15 dnevno.',
@@ -349,12 +344,14 @@ export const copy = {
 
   cost: {
     eyebrow: 'TVOJI PODACI',
-    lead: (ctx: CopyContext) =>
-      ctx.alreadyQuit
-        ? `Godišnje si ${g('trosio', ctx.gender)} na ${productNounAccusative(ctx.product)}`
-        : `Godišnje trošiš na ${productNounAccusative(ctx.product)}`,
+    lead: (ctx: CopyContext) => {
+      if (!ctx.alreadyQuit) return `Godišnje trošiš na ${productNounAccusative(ctx.product)}`;
+      return ctx.gender === 'x'
+        ? `Godišnje ti je na ${productNounAccusative(ctx.product)} odlazilo`
+        : `Godišnje si ${g('trosio', ctx.gender)} na ${productNounAccusative(ctx.product)}`;
+    },
     currency: 'RSD',
-    closing: 'Iskra ti vraća taj novac — dan po dan.',
+    closing: 'Iskra ti vraća taj novac, dan po dan.',
     cta: 'Nastavi',
   },
 
@@ -362,7 +359,9 @@ export const copy = {
     eyebrow: 'PROBA',
     header: 'Hajde da vežbamo jedan trenutak.',
     body: (gender: GenderCode) =>
-      `Zatvori oči. Zamisli da ti se sada puši. Kad budeš ${g('spreman', gender)} — pritisni.`,
+      gender === 'x'
+        ? 'Zatvori oči. Zamisli da ti se sada puši. Kad osetiš da možeš, pritisni.'
+        : `Zatvori oči. Zamisli da ti se sada puši. Kad budeš ${g('spreman', gender)}, pritisni.`,
     button: 'Imam poriv',
     footer: 'Svaki poriv traje 3 do 5 minuta. Iskra te provede kroz njega.',
   },
@@ -390,7 +389,7 @@ export const copy = {
 
   fears: {
     question: 'Šta te brine kod prestanka?',
-    sub: (gender: GenderCode) => `Budi ${g('iskren', gender)}. Tu smo da pomognemo.`,
+    sub: 'Odgovori iskreno. Tu smo da pomognemo.',
     cta: 'Nastavi',
   },
 
@@ -414,12 +413,16 @@ export const copy = {
     options: (gender: GenderCode): readonly Option[] => [
       { key: 'odmah', label: 'Odmah', sub: 'Počinjemo danas' },
       { key: 'uskoro', label: 'Uskoro', sub: 'Izaberi datum' },
-      { key: 'vec_prestao', label: `Već sam ${g('prestao', gender)}`, sub: 'Nastavljam niz' },
+      {
+        key: 'vec_prestao',
+        label: gender === 'x' ? 'Već ne pušim' : `Već sam ${g('prestao', gender)}`,
+        sub: 'Nastavljam niz',
+      },
     ],
   },
 
   date: {
-    question: (gender: GenderCode) => `Koji datum si ${g('izabrao', gender)}?`,
+    question: 'Koji je tvoj datum?',
     sub: 'Možeš ga promeniti kasnije.',
     footnote: 'Postavljanje konkretnog datuma povećava šanse za uspeh.¹',
     // The citation exists only in the export's screen file, not in the brief.
@@ -449,7 +452,7 @@ export const copy = {
     savingsCaption: 'ušteđeno za godinu dana',
     healthTitle: 'Plućna funkcija +30%',
     healthCaption: (ctx: CopyContext) => `u prvih 90 dana bez ${productNounGenitive(ctx.product)}`,
-    freedomTitle: (gender: GenderCode) => capitalize(g('slobodan', gender)) + ' od nikotina',
+    freedomTitle: 'Sloboda od nikotina',
     freedomCaption: 'mozak se vraća u prirodno stanje',
     cta: 'Jedva čekam',
   },
@@ -458,22 +461,24 @@ export const copy = {
     wordmark: 'ISKRA',
     header: (name: string) => `${name}, sklapamo dogovor.`,
     // The brief's four pledges (screen 18), which win over the export's different set.
-    pledges: (gender: GenderCode): readonly string[] => [
-      `Biću ${g('strpljiv', gender)} prema sebi.`,
-      `Neću se ${g('predao', gender)} posle jednog teškog dana.`,
+    // Pledges 1 and 2 are Pavle's genderless rewrites: the second also fixed a grammar bug.
+    pledges: [
+      'Imaću strpljenja sa sobom.',
+      'Neću odustati posle jednog teškog dana.',
       'Vraćaću se svojim razlozima.',
       'Dajem sebi pravo na novi početak.',
-    ],
+    ] as readonly string[],
     signatureHint: 'Potpiši se ovde',
     clear: 'Obriši',
     cta: 'Potpisujem',
+    // Replaces the export's "Potpis se ne čuva", which was untrue: it is in profiles.signature_data.
+    finePrint: '* Potpis ostaje u tvom profilu, kao podsetnik samo za tebe.',
   },
 
   processing: {
     /**
      * Ported from the website quiz's LoadingStage, which is the precedent the M2 brief names.
      * The strings are the site's own approved Serbian, reused verbatim for the same job.
-     * TODO(copy): Pavle confirms that quiz copy may speak for the app's onboarding too.
      */
     header: 'Analiziramo tvoje odgovore…',
     steps: [
@@ -491,9 +496,11 @@ export const copy = {
 
   summary: {
     eyebrow: 'TVOJ PLAN',
-    header: (ctx: CopyContext) => `${ctx.name}, ${g('spreman', ctx.gender)} si.`,
-    sub: (gender: GenderCode) =>
-      `Na osnovu svega što si nam ${g('rekao', gender)}, ovo je tvoje putovanje.`,
+    header: (ctx: CopyContext) =>
+      ctx.gender === 'x'
+        ? `${ctx.name}, sve je spremno.`
+        : `${ctx.name}, ${g('spreman', ctx.gender)} si.`,
+    sub: 'Na osnovu tvojih odgovora, ovo je tvoje putovanje.',
     savingsTitle: 'Uštedine tokom godine',
     milestonesTitle: 'Šta te čeka',
     reasonsTitle: 'Tvoji razlozi',
@@ -510,8 +517,8 @@ export const copy = {
       { time: '48 sati', text: 'Ukus i miris se vraćaju' },
       { time: '1 nedelja', text: 'Disanje postaje lakše' },
       { time: '1 mesec', text: 'Pluća rade bolje' },
-      // TODO(copy): reads as an incomplete phrase, presumably "srčanog udara". Pavle confirms.
-      { time: '1 godina', text: 'Rizik od srčanog prepolovljen' },
+      // Pavle's wording: coronary heart disease overall, which is what the finding supports.
+      { time: '1 godina', text: 'Rizik od bolesti srca upola manji' },
     ] as const,
     closing: 'Iskra je tu svaki put kad bude teško.',
     cta: 'Počinjemo',
@@ -520,7 +527,7 @@ export const copy = {
 
   notifications: {
     header: 'Iskra je najkorisnija kad si tu.',
-    sub: 'Šaljemo samo ono što je važno — nikad spam.',
+    sub: 'Šaljemo samo ono što je važno. Nikad spam.',
     /**
      * Examples of what Iskra would send. The notification catalogue and the rule that a push
      * reads state before it speaks are still undecided (ROADMAP Part 4), so these are shown,
@@ -528,10 +535,10 @@ export const copy = {
      */
     samples: [
       {
-        title: 'Dan 8 — streak ide dalje',
+        title: 'Dan 8 bez cigarete',
         body: 'Već 8 dana bez cigarete. Pluća ti se zahvaljuju.',
       },
-      { title: 'Za 2 sata: novi milestone', body: 'Cirkulacija se poboljšava. Oseti razliku.' },
+      { title: 'Za 2 sata: nova prekretnica', body: 'Cirkulacija se poboljšava. Oseti razliku.' },
       {
         title: 'Vuče te? Otvori Iskru.',
         body: 'Poriv prolazi za 5 minuta. Klikni i prođi kroz njega.',

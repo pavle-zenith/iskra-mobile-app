@@ -18,7 +18,7 @@ import {
   type TriggerKey,
 } from '@/lib/vocab';
 
-import { getDb } from './db';
+import { getDb, serialiseWrite } from './db';
 import { requestSync } from './syncSignal';
 
 /**
@@ -90,7 +90,9 @@ async function enqueue(tx: Tx, table: SyncTable, rowId: string, op: OutboxOp, pa
 }
 
 async function write(task: (tx: Tx) => Promise<void>) {
-  await getDb().withExclusiveTransactionAsync(task);
+  // Queued, because the sync engine and the key-value store write to the same file and an
+  // overlapping write fails with "database is locked" (see serialiseWrite).
+  await serialiseWrite(() => getDb().withExclusiveTransactionAsync(task));
   requestSync('local-write');
 }
 

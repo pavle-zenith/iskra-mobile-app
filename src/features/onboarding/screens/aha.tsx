@@ -14,6 +14,7 @@ import {
   reasonCard,
   REASONS,
 } from '../copy';
+import { FEAR_GLYPHS, REASON_GLYPHS } from '../glyphs';
 import { useOnboarding } from '../OnboardingProvider';
 
 /**
@@ -83,7 +84,7 @@ export function ReflectionStep() {
       <Prompt title={header} sub={copy.reflection.sub} field />
       {chosen.map((key) => {
         const card = reasonCard(key, copyContext);
-        return card ? <ReflectionPlate key={key} card={card} /> : null;
+        return card ? <ReflectionPlate key={key} card={card} glyph={REASON_GLYPHS[key]} /> : null;
       })}
     </FieldScreen>
   );
@@ -101,15 +102,15 @@ export function FearReflectionStep() {
     >
       <Prompt title={copy.fearReflection.header} sub={copy.fearReflection.sub} field />
       {chosen.map((key) => {
-        const card = fearCard(key, gender);
-        return card ? <ReflectionPlate key={key} card={card} /> : null;
+        const card = fearCard(key);
+        return card ? <ReflectionPlate key={key} card={card} glyph={FEAR_GLYPHS[key]} /> : null;
       })}
     </FieldScreen>
   );
 }
 
 export function PreviewStep() {
-  const { goNext, goBack, copyContext, gender } = useOnboarding();
+  const { goNext, goBack, copyContext } = useOnboarding();
   const annual = annualCostRsd(copyContext);
 
   return (
@@ -140,7 +141,7 @@ export function PreviewStep() {
       </Plate>
 
       <Plate style={styles.card}>
-        <Text variant="title">{copy.preview.freedomTitle(gender)}</Text>
+        <Text variant="title">{copy.preview.freedomTitle}</Text>
         <Text variant="body" color="textMuted">
           {copy.preview.freedomCaption}
         </Text>

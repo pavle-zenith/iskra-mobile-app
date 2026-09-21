@@ -7,6 +7,7 @@ import { progressFor, type StepId } from '@/lib/onboarding/steps';
 import { color, minTarget, radius, space } from '@/theme';
 
 import { copy, type ReflectionCard } from './copy';
+import type { Glyph } from './glyphs';
 
 /**
  * The shells every onboarding screen is built from.
@@ -178,6 +179,24 @@ export function Prompt({
 }
 
 /**
+ * A glyph on a rounded square of its own tint, as on the website. `size` is the square;
+ * the glyph is a little over half of it. Never rendered without its label beside or under it,
+ * because glyph-on-tint is as low as 2.78:1 and the words carry the meaning.
+ */
+export function GlyphChip({ glyph, size = 40 }: { glyph: Glyph; size?: number }) {
+  return (
+    <View
+      style={[
+        styles.chip,
+        { width: size, height: size, borderRadius: radius.badge, backgroundColor: glyph.tint },
+      ]}
+    >
+      <Icon as={glyph.icon} size={Math.round(size * 0.55)} color={glyph.color} />
+    </View>
+  );
+}
+
+/**
  * The export's selected state, reused everywhere: a chosen option inverts to an ember fill
  * with white text. Unselected is a white card with a hairline border.
  */
@@ -219,17 +238,23 @@ export function ChoiceCard({
   );
 }
 
-/** Multi-select, same inverted pattern, laid out as a wrapping grid. */
+/**
+ * Multi-select, laid out as a wrapping two-column grid. Given a glyph it becomes the export's
+ * tile: the icon on top in its own colour, the label centred under it, and room around both.
+ * Selected inverts the whole tile to ember, and the glyph goes white on it (3.18:1).
+ */
 export function ChoicePill({
   label,
   selected,
   onPress,
   disabled,
+  glyph,
 }: {
   label: string;
   selected: boolean;
   onPress: () => void;
   disabled?: boolean;
+  glyph?: Glyph;
 }) {
   return (
     <Pressable
@@ -239,9 +264,19 @@ export function ChoicePill({
       accessibilityLabel={label}
       onPress={onPress}
       disabled={disabled}
-      style={[styles.pill, selected ? styles.choiceSelected : styles.choiceIdle]}
+      style={[
+        glyph ? styles.tile : styles.pill,
+        selected ? styles.choiceSelected : styles.choiceIdle,
+        disabled && !selected ? styles.choiceDisabled : null,
+      ]}
     >
-      <Text variant="label" style={selected ? { color: color.onAccent } : undefined}>
+      {glyph ? (
+        <Icon as={glyph.icon} size={26} color={selected ? color.onAccent : glyph.color} />
+      ) : null}
+      <Text
+        variant={glyph ? 'tile' : 'label'}
+        style={[glyph ? styles.tileLabel : null, selected ? { color: color.onAccent } : null]}
+      >
         {label}
       </Text>
     </Pressable>
@@ -259,10 +294,11 @@ export function Plate({
   return <View style={[styles.plate, style]}>{children}</View>;
 }
 
-/** The reflection card: title, body, and the ember takeaway line. */
-export function ReflectionPlate({ card }: { card: ReflectionCard }) {
+/** The reflection card: glyph, title, body, and the ember takeaway line. */
+export function ReflectionPlate({ card, glyph }: { card: ReflectionCard; glyph?: Glyph }) {
   return (
     <Plate style={{ gap: space.xs }}>
+      {glyph ? <GlyphChip glyph={glyph} /> : null}
       <Text variant="label">{card.title}</Text>
       <Text variant="body" color="textSoft">
         {card.body}
@@ -322,6 +358,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: color.accent,
   },
+  choiceDisabled: { opacity: 0.45 },
   choiceText: { gap: 2 },
   pill: {
     borderRadius: radius.control,
@@ -331,9 +368,23 @@ const styles = StyleSheet.create({
     flexBasis: '45%',
     justifyContent: 'center',
   },
+  /** The export's 104pt tile: glyph, gap, centred label, with air on every side. */
+  tile: {
+    borderRadius: radius.card,
+    minHeight: 104,
+    paddingVertical: space.md,
+    paddingHorizontal: space.sm,
+    flexGrow: 1,
+    flexBasis: '45%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: space.xs + 2,
+  },
+  tileLabel: { textAlign: 'center' },
+  chip: { alignItems: 'center', justifyContent: 'center' },
   plate: {
     backgroundColor: color.fieldPlate,
     borderRadius: radius.card,
-    padding: space.md,
+    padding: space.lg,
   },
 });

@@ -3,10 +3,12 @@ import { StyleSheet, TextInput, View } from 'react-native';
 
 import { Pressable, Text } from '@/components/primitives';
 import { MAX_REASONS } from '@/lib/onboarding/steps';
+import type { TriggerKey } from '@/lib/vocab';
 import { color, fontFamily, minTarget, radius, space, textVariants } from '@/theme';
 
 import { ChoiceCard, ChoicePill, Prompt, QuestionScreen } from '../components';
 import { copy, FEARS, REASONS, TRIGGERS } from '../copy';
+import { FEAR_GLYPHS, REASON_GLYPHS, TRIGGER_GLYPHS } from '../glyphs';
 import { useOnboarding } from '../OnboardingProvider';
 import { Calendar, NumberField, Stepper, TextArea } from '../inputs';
 
@@ -186,6 +188,7 @@ export function ReasonsStep() {
           <ChoicePill
             key={reason.key}
             label={reason.label}
+            glyph={REASON_GLYPHS[reason.key]}
             selected={chosen.includes(reason.key)}
             disabled={full && !chosen.includes(reason.key)}
             onPress={() => toggle(reason.key)}
@@ -233,7 +236,7 @@ export function ReasonTextStep() {
 }
 
 export function FearsStep() {
-  const { draft, answer, goNext, goBack, canAdvanceFrom, gender } = useOnboarding();
+  const { draft, answer, goNext, goBack, canAdvanceFrom } = useOnboarding();
   const chosen = draft.fears ?? [];
 
   return (
@@ -246,12 +249,13 @@ export function FearsStep() {
         onPress: () => void goNext('fears'),
       }}
     >
-      <Prompt title={copy.fears.question} sub={copy.fears.sub(gender)} />
+      <Prompt title={copy.fears.question} sub={copy.fears.sub} />
       <View style={styles.pills}>
         {FEARS.map((fear) => (
           <ChoicePill
             key={fear.key}
             label={fear.label}
+            glyph={FEAR_GLYPHS[fear.key]}
             selected={chosen.includes(fear.key)}
             onPress={() =>
               void answer({
@@ -287,6 +291,7 @@ export function TriggersStep() {
           <ChoicePill
             key={trigger.key}
             label={trigger.label}
+            glyph={TRIGGER_GLYPHS[trigger.key as TriggerKey]}
             selected={chosen.includes(trigger.key)}
             onPress={() =>
               void answer({
@@ -328,7 +333,7 @@ export function TimingStep() {
 }
 
 export function DateStep() {
-  const { draft, answer, goNext, goBack, canAdvanceFrom, gender } = useOnboarding();
+  const { draft, answer, goNext, goBack, canAdvanceFrom } = useOnboarding();
   const selected = draft.quitDate ? new Date(draft.quitDate) : null;
 
   const pick = (date: Date) => {
@@ -351,7 +356,7 @@ export function DateStep() {
         onPress: () => void goNext('date'),
       }}
     >
-      <Prompt title={copy.date.question(gender)} sub={copy.date.sub} />
+      <Prompt title={copy.date.question} sub={copy.date.sub} />
       <Calendar value={selected} onChange={pick} />
       <View style={{ gap: 2 }}>
         <Text variant="caption" color="textMuted">

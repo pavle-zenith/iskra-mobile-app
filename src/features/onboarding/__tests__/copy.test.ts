@@ -9,7 +9,10 @@ import {
   TRIGGERS,
   type CopyContext,
 } from '../copy';
-import { GENDER_TOKENS, g, hasMissingCopy, missingCopy, TOKENS_MISSING_REWRITE } from '../gender';
+import { GENDER_TOKENS, g, hasMissingCopy, missingCopy, type GenderCode } from '../gender';
+
+const REASON_KEYS = ['zdravlje', 'porodica', 'pare', 'forma', 'sloboda', 'pritisak'] as const;
+const FEAR_KEYS = ['porivi', 'stres', 'kafana', 'neuspeh', 'razdrazljivost', 'kilaza'] as const;
 
 const ctx = (over: Partial<CopyContext> = {}): CopyContext => ({
   name: 'Pavle',
@@ -86,36 +89,111 @@ describe('the no-slash rule', () => {
     }
   });
 
-  it('marks every token that still owes a genderless rewrite', () => {
-    // 24 today. Zero is the goal; docs/M2-copy-todo.md is the list Pavle works from.
-    expect(TOKENS_MISSING_REWRITE).toHaveLength(24);
-    for (const token of TOKENS_MISSING_REWRITE) {
+  it('marks any gendered word reached without a branched sentence', () => {
+    // The safety net. There is no genderless Serbian word, so `x` never has a form: a screen
+    // supplies a whole sentence instead. A marker means someone forgot that branch.
+    for (const token of GENDER_TOKENS) {
       expect(hasMissingCopy(g(token, 'x'))).toBe(true);
     }
   });
 });
 
-describe('screens read in all three genders', () => {
-  it('renders male and female copy with no placeholder', () => {
-    for (const gender of ['m', 'f'] as const) {
-      const c = ctx({ gender });
-      expect(hasMissingCopy(copy.cigarettes.question(c))).toBe(false);
-      expect(hasMissingCopy(copy.fears.sub(gender))).toBe(false);
-      expect(hasMissingCopy(copy.summary.header(c))).toBe(false);
-      expect(hasMissingCopy(copy.date.question(gender))).toBe(false);
-      expect(copy.commitment.pledges(gender).some(hasMissingCopy)).toBe(false);
+/**
+ * The acceptance for M2: every string anyone can read, in all three genders, with no marker
+ * and no slash. Pavle's answers (21.09.2026) rewrote the sentences that could not do this.
+ */
+describe('every onboarding string, in every gender', () => {
+  const genders: readonly GenderCode[] = ['m', 'f', 'x'];
+
+  const allStrings = (gender: GenderCode): string[] => {
+    const c = ctx({ gender });
+    const cards = [...REASON_KEYS.map((k) => reasonCard(k, c)), ...FEAR_KEYS.map(fearCard)];
+    return [
+      copy.splash.line1,
+      copy.splash.line2(gender),
+      copy.name.question,
+      copy.gender.question,
+      copy.product.question,
+      copy.cigarettes.question(c),
+      copy.price.question,
+      copy.cost.lead(c),
+      copy.cost.lead({ ...c, alreadyQuit: true }),
+      copy.cost.closing,
+      copy.panic.header,
+      copy.panic.body(gender),
+      copy.reasons.question,
+      copy.reasonText.question,
+      copy.reflection.sub,
+      copy.fears.question,
+      copy.fears.sub,
+      copy.fearReflection.header,
+      copy.fearReflection.cta(gender),
+      copy.triggers.question,
+      copy.timing.question,
+      ...copy.timing.options(gender).map((option) => `${option.label} ${option.sub ?? ''}`),
+      copy.date.question,
+      copy.preview.header,
+      copy.preview.healthCaption(c),
+      copy.preview.freedomTitle,
+      copy.commitment.header(c.name),
+      ...copy.commitment.pledges,
+      copy.commitment.finePrint,
+      copy.processing.header,
+      copy.summary.header(c),
+      copy.summary.sub,
+      ...copy.summary.milestones.map((milestone) => milestone.text),
+      copy.notifications.sub,
+      ...copy.notifications.samples.map((sample) => `${sample.title} ${sample.body}`),
+      ...cards.flatMap((card) => (card ? [card.title, card.body, card.takeaway] : [])),
+    ];
+  };
+
+  it.each(genders)('reads clean for %s, with no marker', (gender) => {
+    for (const line of allStrings(gender)) {
+      expect({ gender, line, missing: hasMissingCopy(line) }).toEqual({
+        gender,
+        line,
+        missing: false,
+      });
     }
   });
 
-  it('uses the rewrites the brief does supply, so those lines are clean when unset', () => {
-    expect(hasMissingCopy(copy.splash.line2('x'))).toBe(false);
+  it.each(genders)('never shows a slash or a parenthesised hedge for %s', (gender) => {
+    for (const line of allStrings(gender)) {
+      expect(line).not.toMatch(/\//);
+      expect(line).not.toMatch(/\(a\)|\(na\)|\(la\)/);
+    }
+  });
+
+  it.each(genders)('carries no em dash for %s, which PRODUCT.md bans', (gender) => {
+    for (const line of allStrings(gender)) {
+      expect(line).not.toMatch(/\u2014/);
+    }
+  });
+
+  it('gives an unset gender its own sentence, never the masculine one', () => {
+    const male = ctx({ gender: 'm' });
+    const unset = ctx({ gender: 'x' });
+    expect(copy.cigarettes.question(unset)).not.toBe(copy.cigarettes.question(male));
+    expect(copy.summary.header(unset)).not.toBe(copy.summary.header(male));
+    expect(copy.panic.body('x')).not.toBe(copy.panic.body('m'));
+    expect(copy.timing.options('x')[2]?.label).not.toBe(copy.timing.options('m')[2]?.label);
+    expect(copy.cost.lead({ ...unset, alreadyQuit: true })).not.toBe(
+      copy.cost.lead({ ...male, alreadyQuit: true }),
+    );
+  });
+});
+
+describe('the sentences that branch for an unset gender', () => {
+  it('keeps the two rewrites the brief supplied itself', () => {
+    expect(copy.splash.line2('x')).toBe('Iskra ti pomaže da to i ostvariš.');
     expect(copy.fearReflection.cta('x')).toBe('Idemo dalje');
   });
 
-  it('shows a marker, never a slash, where a rewrite is still owed', () => {
-    const question = copy.cigarettes.question(ctx({ gender: 'x' }));
-    expect(hasMissingCopy(question)).toBe(true);
-    expect(question).not.toMatch(/\//);
+  it('keeps the product noun in the branched sentences, so IQOS still reads right', () => {
+    const iqos = ctx({ gender: 'x', product: 'iqos' });
+    expect(copy.cigarettes.question(iqos)).toContain('štapića');
+    expect(copy.cost.lead({ ...iqos, alreadyQuit: true })).toContain('štapiće');
   });
 });
 
@@ -128,12 +206,8 @@ describe('reflection cards mirror the selection', () => {
   });
 
   it('has a card for every reason and every fear', () => {
-    for (const key of ['zdravlje', 'porodica', 'pare', 'forma', 'sloboda', 'pritisak']) {
-      expect(reasonCard(key, ctx())).not.toBeNull();
-    }
-    for (const key of ['porivi', 'stres', 'kafana', 'neuspeh', 'razdrazljivost', 'kilaza']) {
-      expect(fearCard(key, 'f')).not.toBeNull();
-    }
+    for (const key of REASON_KEYS) expect(reasonCard(key, ctx())).not.toBeNull();
+    for (const key of FEAR_KEYS) expect(fearCard(key)).not.toBeNull();
   });
 
   it('keeps cigarette nouns out of what an IQOS user reads', () => {

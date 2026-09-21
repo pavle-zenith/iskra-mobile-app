@@ -26,6 +26,7 @@ export type TextVariant =
   | 'bodyLarge'
   | 'body'
   | 'bodyStrong'
+  | 'tile'
   | 'label'
   | 'action'
   | 'caption';
@@ -85,6 +86,17 @@ export const textVariants: Record<TextVariant, VariantSpec> = {
     fontSize: 17,
     lineHeight: 25,
     maxFontSizeMultiplier: 2,
+  },
+  /**
+   * The centred label under a glyph in a tile: the reasons, fears and triggers grids. Smaller
+   * than `label` because it sits under an icon that already carries half the meaning, and
+   * because a Serbian option can run to three words ("Dosada i čekanje").
+   */
+  tile: {
+    fontFamily: fontFamily.bodySemiBold,
+    fontSize: 14,
+    lineHeight: 18,
+    maxFontSizeMultiplier: 1.6,
   },
   /** Icon-plus-one-word labels. The Poriv tools are read at a glance, not studied. */
   label: {

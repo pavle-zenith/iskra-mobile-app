@@ -5,93 +5,41 @@
  * Three rules, in order:
  *   1. Never a slash. "prestao/la" is banned by PRODUCT.md, whatever the design export does.
  *   2. Never masculine by default. An unset gender is not a man.
- *   3. Never invent Serbian. A form that does not exist yet renders as a visible marker and
- *      goes on the list in docs/M2-copy-todo.md for Pavle.
+ *   3. Never invent Serbian. A form that does not exist yet renders as a visible marker.
  *
- * So `muško` and `žensko` read correctly today. `drugo` and unset need a genderless rewrite
- * per token, which the copy brief asks for but never supplies: it only offers the slash form,
- * which rule 1 forbids. Those are the markers.
+ * A word-level genderless form does not exist in Serbian: a rewrite changes the sentence around
+ * the word, not the word itself ("Budi iskren" becomes "Odgovori iskreno"). So Pavle's answers
+ * (21.09.2026) took most sentences genderless outright, which deleted their tokens, and branched
+ * the rest: the five tokens below keep `m` and `f`, and every sentence that uses one supplies its
+ * own `x` sentence, the way `splash.line2` always has.
  *
- * Forms are verbatim from ONBOARDING_COPY_BRIEF.md section 2.
+ * `x` is therefore always null here, and `g(token, 'x')` returns a marker. That is the safety
+ * net, not the plan: a marker on screen means someone added a gendered sentence without an `x`
+ * branch. A new token is only ever added together with the screen that needs it.
  */
+import { missingCopy } from '@/lib/i18n/missingCopy';
 import { GENDERS, type Gender } from '@/lib/vocab';
 
 export type GenderCode = 'm' | 'f' | 'x';
 
-export type GenderToken =
-  | 'prestao'
-  | 'pusio'
-  | 'poceo'
-  | 'spreman'
-  | 'siguran'
-  | 'slobodan'
-  | 'posvecen'
-  | 'izdrzao'
-  | 'zapalio'
-  | 'odoleo'
-  | 'rekao'
-  | 'hteo'
-  | 'mogao'
-  | 'zavrsio'
-  | 'vratio'
-  | 'preziveo'
-  | 'sam'
-  | 'mislio'
-  | 'iskren'
-  | 'izabrao'
-  | 'strpljiv'
-  | 'predao'
-  | 'trosio'
-  | 'odlagao';
+export type GenderToken = 'prestao' | 'pusio' | 'spreman' | 'hteo' | 'trosio';
 
 type Forms = {
   m: string;
   f: string;
-  /** The genderless rewrite. `null` means Pavle still owes one; never a slash. */
-  x: string | null;
+  /** Always null: there is no genderless word, only a genderless sentence. Never a slash. */
+  x: null;
 };
 
 const TOKENS: Record<GenderToken, Forms> = {
   prestao: { m: 'prestao', f: 'prestala', x: null },
   pusio: { m: 'pušio', f: 'pušila', x: null },
-  poceo: { m: 'počeo', f: 'počela', x: null },
   spreman: { m: 'spreman', f: 'spremna', x: null },
-  siguran: { m: 'siguran', f: 'sigurna', x: null },
-  slobodan: { m: 'slobodan', f: 'slobodna', x: null },
-  posvecen: { m: 'posvećen', f: 'posvećena', x: null },
-  izdrzao: { m: 'izdržao', f: 'izdržala', x: null },
-  zapalio: { m: 'zapalio', f: 'zapalila', x: null },
-  odoleo: { m: 'odoleo', f: 'odolela', x: null },
-  rekao: { m: 'rekao', f: 'rekla', x: null },
   hteo: { m: 'hteo', f: 'htela', x: null },
-  mogao: { m: 'mogao', f: 'mogla', x: null },
-  zavrsio: { m: 'završio', f: 'završila', x: null },
-  vratio: { m: 'vratio', f: 'vratila', x: null },
-  preziveo: { m: 'preživeo', f: 'preživela', x: null },
-  sam: { m: 'sam', f: 'sama', x: null },
-  // Footnote tokens: introduced in the brief's prose, never added to its table.
-  mislio: { m: 'mislio', f: 'mislila', x: null },
-  iskren: { m: 'iskren', f: 'iskrena', x: null },
-  izabrao: { m: 'izabrao', f: 'izabrala', x: null },
-  strpljiv: { m: 'strpljiv', f: 'strpljiva', x: null },
-  predao: { m: 'predao', f: 'predala', x: null },
-  // The brief writes these two without diacritics; Pavle to confirm `trošio` / `trošila`.
-  trosio: { m: 'trosio', f: 'trosila', x: null },
-  odlagao: { m: 'odlagao', f: 'odlagala', x: null },
+  trosio: { m: 'trošio', f: 'trošila', x: null },
 };
 
 export const GENDER_TOKENS = Object.keys(TOKENS) as GenderToken[];
-
-/** Tokens with no genderless rewrite yet. Empty is the goal; see docs/M2-copy-todo.md. */
-export const TOKENS_MISSING_REWRITE = GENDER_TOKENS.filter((token) => TOKENS[token].x === null);
-
-/**
- * A missing Serbian string, rendered so nobody mistakes it for copy. Loud on purpose: it is
- * meant to be impossible to miss in review, and it can never read as a slash or as masculine.
- */
-export function missingCopy(what: string): string {
-  return `«TODO(copy): ${what}»`;
-}
 
 export function genderCode(gender: Gender | string | null | undefined): GenderCode {
   if (gender === 'muško') return 'm';
@@ -105,15 +53,12 @@ export function genderFromCode(code: GenderCode): Gender | null {
   return GENDERS[2];
 }
 
-/** The gender-correct form, or a marker when the genderless rewrite is still owed. */
+/** The gender-correct form. For `x` it marks: the caller owes a branched sentence. */
 export function g(token: GenderToken, gender: GenderCode): string {
   const forms = TOKENS[token];
   if (gender === 'm') return forms.m;
   if (gender === 'f') return forms.f;
-  return forms.x ?? missingCopy(`${token} (genderless)`);
+  return missingCopy(`${token} (x sentence)`);
 }
 
-/** True when a string still carries a placeholder, so screens can be checked in a test. */
-export function hasMissingCopy(value: string): boolean {
-  return value.includes('«TODO(copy)');
-}
+export { hasMissingCopy, missingCopy } from '@/lib/i18n/missingCopy';

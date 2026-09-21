@@ -2,7 +2,17 @@ import { getDb, kvGet, kvSet } from './db';
 import { deriveUserState } from '@/features/home/state';
 import { resolveAnchorTimeZone } from '@/lib/time/dayCount';
 
-import { getProfile, listCravings, logCraving, updateCraving, updateProfile } from './repo';
+import { finishCraving } from '@/features/poriv/outcome';
+import { findResumable } from '@/features/poriv/session';
+
+import {
+  getProfile,
+  listCravings,
+  listSlips,
+  logCraving,
+  updateCraving,
+  updateProfile,
+} from './repo';
 import { drain, getSyncSnapshot, setSimulatedOffline } from './sync';
 
 /**
@@ -13,7 +23,8 @@ import { drain, getSyncSnapshot, setSimulatedOffline } from './sync';
  *   sqlite3 "$(xcrun simctl get_app_container booted com.iskraclub.iskra data)/Documents/SQLite/iskra.db" \
  *     "INSERT OR REPLACE INTO kv (key, value) VALUES ('dev.command', 'log')"
  *
- * Commands: offline | online | log | drain | resync | report | state | profile. Every one goes through the same
+ * Commands: offline | online | log | drain | resync | report | state | profile |
+ * poriv:start | poriv:survive | poriv:slip | poriv:report. Every one goes through the same
  * repository and sync engine the app uses; nothing here is a shortcut around them.
  * `report` prints the app's own view of the data to the Metro log.
  */
@@ -41,6 +52,48 @@ async function run(command: string) {
     }
     case 'drain':
       return drain();
+    case 'poriv:start': {
+      // Exactly what Home does before it navigates to Mode.
+      const craving = await logCraving();
+      console.log(`[dev] poriv started ${craving.id}`);
+      return;
+    }
+    case 'poriv:survive':
+    case 'poriv:slip': {
+      // The same finishCraving() the "Prošlo je" button and the slip link call.
+      const open = findResumable(await listCravings(), new Date());
+      if (!open) return console.warn('[dev] no open craving');
+      const rows = await listCravings();
+      const row = rows.find((candidate) => candidate.id === open.id);
+      if (!row) return console.warn('[dev] open craving vanished');
+      const updated = await finishCraving(row, command === 'poriv:slip' ? 'slipped' : 'survived');
+      console.log(`[dev] poriv ${JSON.stringify(updated)}`);
+      return;
+    }
+    case 'poriv:report': {
+      const [cravings, slips, profile] = await Promise.all([
+        listCravings(),
+        listSlips(),
+        getProfile(),
+      ]);
+      console.log(
+        `[dev] poriv report ${JSON.stringify({
+          cravings: cravings.map(
+            ({ id, tool_used, duration_seconds, outcome, trigger, strength }) => ({
+              id: id.slice(0, 8),
+              tool_used,
+              duration_seconds,
+              outcome,
+              trigger,
+              strength,
+            }),
+          ),
+          slips: slips.map(({ id, trigger }) => ({ id: id.slice(0, 8), trigger })),
+          quitDate: profile?.quitDate,
+        })}`,
+      );
+      return;
+    }
     case 'resync':
       // As if a push succeeded but its response was lost: queue every craving again.
       for (const craving of await listCravings()) {

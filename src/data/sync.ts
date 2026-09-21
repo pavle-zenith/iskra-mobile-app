@@ -13,7 +13,7 @@ import {
 } from '@/lib/sync/queue';
 
 import { ensureSignedIn } from './auth';
-import { getDb, kvGet, kvSet } from './db';
+import { getDb, kvGet, kvSet, serialiseWrite } from './db';
 import { supabase } from './supabase';
 import { onSyncRequested } from './syncSignal';
 
@@ -161,20 +161,24 @@ async function drainOnce(): Promise<void> {
 
     if (result.ok) {
       // Only if nobody re-enqueued a newer snapshot while this one was in flight.
-      await db.runAsync('DELETE FROM outbox WHERE id = ? AND version = ?', entry.id, entry.version);
+      await serialiseWrite(() =>
+        db.runAsync('DELETE FROM outbox WHERE id = ? AND version = ?', entry.id, entry.version),
+      );
       continue;
     }
 
     const update = afterFailure(entry, result.failure, Date.now());
-    await db.runAsync(
-      `UPDATE outbox SET attempts = ?, next_attempt_at = ?, dead_at = ?, last_error = ?
-       WHERE id = ? AND version = ?`,
-      update.attempts,
-      update.nextAttemptAt,
-      update.deadAt,
-      update.lastError,
-      entry.id,
-      entry.version,
+    await serialiseWrite(() =>
+      db.runAsync(
+        `UPDATE outbox SET attempts = ?, next_attempt_at = ?, dead_at = ?, last_error = ?
+         WHERE id = ? AND version = ?`,
+        update.attempts,
+        update.nextAttemptAt,
+        update.deadAt,
+        update.lastError,
+        entry.id,
+        entry.version,
+      ),
     );
     lastError = `${entry.table}: ${update.lastError}`;
 

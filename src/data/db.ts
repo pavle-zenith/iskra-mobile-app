@@ -127,6 +127,27 @@ export function getDb(): SQLiteDatabase {
   return database;
 }
 
+let writeQueue: Promise<unknown> = Promise.resolve();
+
+/**
+ * Serialises every write to the database, wherever it comes from.
+ *
+ * expo-sqlite holds an exclusive lock for the length of a transaction, and any other write
+ * issued while one is open fails with "database is locked". Until M3 that overlap was rare;
+ * now it is routine, because a craving row is written while the outbox drains and while the
+ * key-value store is touched. Nothing may throw at someone mid-craving, so every writer
+ * queues here. Reads are untouched: WAL lets them run alongside.
+ */
+export function serialiseWrite<T>(task: () => Promise<T>): Promise<T> {
+  const run = writeQueue.then(task, task);
+  // The queue must survive a failed write, so the next one still runs.
+  writeQueue = run.then(
+    () => undefined,
+    () => undefined,
+  );
+  return run;
+}
+
 export async function kvGet(key: string): Promise<string | null> {
   const row = await getDb().getFirstAsync<{ value: string | null }>(
     'SELECT value FROM kv WHERE key = ?',
@@ -136,9 +157,11 @@ export async function kvGet(key: string): Promise<string | null> {
 }
 
 export async function kvSet(key: string, value: string | null): Promise<void> {
-  await getDb().runAsync(
-    'INSERT INTO kv (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value',
-    key,
-    value,
+  await serialiseWrite(() =>
+    getDb().runAsync(
+      'INSERT INTO kv (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value',
+      key,
+      value,
+    ),
   );
 }
