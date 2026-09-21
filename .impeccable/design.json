@@ -1,0 +1,808 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-18T16:56:47.047Z",
+  "title": "Design System: Iskra",
+  "extensions": {
+    "colorMeta": {
+      "ember": {
+        "role": "primary",
+        "displayName": "Ember",
+        "canonical": "#ec691c",
+        "oklch": "oklch(67.2% 0.181 45.3)",
+        "tonalRamp": [
+          "#190500",
+          "#411600",
+          "#6e2a01",
+          "#9e4103",
+          "#d25700",
+          "#fe7932",
+          "#ffb594",
+          "#ffe9e0"
+        ]
+      },
+      "ember-hover": {
+        "role": "primary",
+        "displayName": "Ember Pressed",
+        "canonical": "#df5f13",
+        "oklch": "oklch(63.8% 0.177 44.5)",
+        "tonalRamp": [
+          "#190500",
+          "#411600",
+          "#6f2900",
+          "#9f3f01",
+          "#d25705",
+          "#fc7a38",
+          "#feb696",
+          "#feeae1"
+        ]
+      },
+      "ember-tint": {
+        "role": "primary",
+        "displayName": "Ember Tint",
+        "canonical": "#fdede2",
+        "oklch": "oklch(95.6% 0.023 57.0)",
+        "tonalRamp": [
+          "#120903",
+          "#2e221a",
+          "#4c3f36",
+          "#6c5e55",
+          "#8d7f75",
+          "#b1a298",
+          "#d5c6bb",
+          "#fbebe0"
+        ]
+      },
+      "ember-wash": {
+        "role": "primary",
+        "displayName": "Ember Wash",
+        "canonical": "#f9dcc8",
+        "oklch": "oklch(91.3% 0.042 56.7)",
+        "tonalRamp": [
+          "#170600",
+          "#341f10",
+          "#533c2c",
+          "#745b4a",
+          "#967c6a",
+          "#ba9f8c",
+          "#dfc3af",
+          "#ffeadc"
+        ]
+      },
+      "tool-disem": {
+        "role": "secondary",
+        "displayName": "Dišem Teal",
+        "canonical": "#2e8b80",
+        "oklch": "oklch(58.0% 0.088 184.0)",
+        "tonalRamp": [
+          "#000f0c",
+          "#022c27",
+          "#044d46",
+          "#087167",
+          "#389388",
+          "#5fb7ab",
+          "#84dccf",
+          "#b8fff4"
+        ]
+      },
+      "tool-disem-tint": {
+        "role": "secondary",
+        "displayName": "Dišem Tint",
+        "canonical": "#e2f1ee",
+        "oklch": "oklch(94.6% 0.016 182.7)",
+        "tonalRamp": [
+          "#040d0c",
+          "#1c2826",
+          "#394543",
+          "#576462",
+          "#788683",
+          "#9aa9a6",
+          "#becdca",
+          "#e3f2ef"
+        ]
+      },
+      "tool-voda": {
+        "role": "secondary",
+        "displayName": "Pijem vodu Blue",
+        "canonical": "#3f86c4",
+        "oklch": "oklch(60.3% 0.119 247.6)",
+        "tonalRamp": [
+          "#000c1b",
+          "#002745",
+          "#014474",
+          "#1965a0",
+          "#4087c5",
+          "#64abec",
+          "#9dcffe",
+          "#e2f0ff"
+        ]
+      },
+      "tool-voda-tint": {
+        "role": "secondary",
+        "displayName": "Pijem vodu Tint",
+        "canonical": "#e4eef8",
+        "oklch": "oklch(94.5% 0.017 248.0)",
+        "tonalRamp": [
+          "#060c12",
+          "#1f262d",
+          "#3b434b",
+          "#5a626b",
+          "#7b838c",
+          "#9da6b0",
+          "#c1cad4",
+          "#e6f0fa"
+        ]
+      },
+      "tool-razlozi": {
+        "role": "secondary",
+        "displayName": "Moji razlozi Ember",
+        "canonical": "#ec691c",
+        "oklch": "oklch(67.2% 0.181 45.3)",
+        "tonalRamp": [
+          "#190500",
+          "#411600",
+          "#6e2a01",
+          "#9e4103",
+          "#d25700",
+          "#fe7932",
+          "#ffb594",
+          "#ffe9e0"
+        ]
+      },
+      "tool-razlozi-tint": {
+        "role": "secondary",
+        "displayName": "Moji razlozi Tint",
+        "canonical": "#fdede2",
+        "oklch": "oklch(95.6% 0.023 57.0)",
+        "tonalRamp": [
+          "#120903",
+          "#2e221a",
+          "#4c3f36",
+          "#6c5e55",
+          "#8d7f75",
+          "#b1a298",
+          "#d5c6bb",
+          "#fbebe0"
+        ]
+      },
+      "tool-setam": {
+        "role": "secondary",
+        "displayName": "Šetam Green",
+        "canonical": "#3f8d52",
+        "oklch": "oklch(57.9% 0.118 149.3)",
+        "tonalRamp": [
+          "#001003",
+          "#012e10",
+          "#025020",
+          "#22733a",
+          "#48965a",
+          "#6cba7c",
+          "#90df9f",
+          "#c8ffd1"
+        ]
+      },
+      "tool-setam-tint": {
+        "role": "secondary",
+        "displayName": "Šetam Tint",
+        "canonical": "#e4f1e6",
+        "oklch": "oklch(94.5% 0.020 150.1)",
+        "tonalRamp": [
+          "#060e07",
+          "#1e2820",
+          "#3b453c",
+          "#59655b",
+          "#7a867c",
+          "#9da99f",
+          "#c0cdc2",
+          "#e6f3e8"
+        ]
+      },
+      "tool-odlazem": {
+        "role": "secondary",
+        "displayName": "Odlažem Indigo",
+        "canonical": "#55559a",
+        "oklch": "oklch(48.3% 0.109 281.5)",
+        "tonalRamp": [
+          "#0a002f",
+          "#201857",
+          "#3a387a",
+          "#58589d",
+          "#787ac2",
+          "#999de8",
+          "#bfc3ff",
+          "#ebedfe"
+        ]
+      },
+      "tool-odlazem-tint": {
+        "role": "secondary",
+        "displayName": "Odlažem Tint",
+        "canonical": "#e9e9f4",
+        "oklch": "oklch(93.7% 0.015 286.1)",
+        "tonalRamp": [
+          "#0b0a11",
+          "#24242c",
+          "#41414a",
+          "#606069",
+          "#81818b",
+          "#a4a4ae",
+          "#c8c8d3",
+          "#ededf8"
+        ]
+      },
+      "tool-belezim": {
+        "role": "secondary",
+        "displayName": "Beležim Violet",
+        "canonical": "#7a5cc4",
+        "oklch": "oklch(55.5% 0.156 294.0)",
+        "tonalRamp": [
+          "#0f002a",
+          "#2e0063",
+          "#4a268b",
+          "#6849af",
+          "#896cd5",
+          "#ab8ffc",
+          "#ccbeff",
+          "#efecff"
+        ]
+      },
+      "tool-belezim-tint": {
+        "role": "secondary",
+        "displayName": "Beležim Tint",
+        "canonical": "#eee8f8",
+        "oklch": "oklch(94.0% 0.022 302.9)",
+        "tonalRamp": [
+          "#0d0913",
+          "#27232e",
+          "#443f4c",
+          "#645e6c",
+          "#857f8e",
+          "#a8a2b1",
+          "#ccc6d5",
+          "#f1ebfb"
+        ]
+      },
+      "money": {
+        "role": "tertiary",
+        "displayName": "Money Green",
+        "canonical": "#3a7a3a",
+        "oklch": "oklch(52.1% 0.117 143.7)",
+        "tonalRamp": [
+          "#001001",
+          "#002f03",
+          "#0a510f",
+          "#317232",
+          "#549453",
+          "#76b875",
+          "#9add98",
+          "#cbffc9"
+        ]
+      },
+      "money-deep": {
+        "role": "tertiary",
+        "displayName": "Money Green Deep",
+        "canonical": "#2f6630",
+        "oklch": "oklch(45.9% 0.102 144.0)",
+        "tonalRamp": [
+          "#001001",
+          "#012f04",
+          "#174f1a",
+          "#397039",
+          "#5a925a",
+          "#7db67c",
+          "#a0db9f",
+          "#cbffc9"
+        ]
+      },
+      "money-tint": {
+        "role": "tertiary",
+        "displayName": "Money Green Tint",
+        "canonical": "#e6f0e6",
+        "oklch": "oklch(94.5% 0.017 145.4)",
+        "tonalRamp": [
+          "#070d07",
+          "#202720",
+          "#3d453d",
+          "#5b645b",
+          "#7c857c",
+          "#9fa89f",
+          "#c3ccc3",
+          "#e8f2e8"
+        ]
+      },
+      "health": {
+        "role": "tertiary",
+        "displayName": "Health Rose",
+        "canonical": "#c2446f",
+        "oklch": "oklch(57.3% 0.165 2.8)",
+        "tonalRamp": [
+          "#1d0009",
+          "#4a0020",
+          "#7c003a",
+          "#a72958",
+          "#ce4f79",
+          "#f6739b",
+          "#ffafc3",
+          "#fee8ed"
+        ]
+      },
+      "health-deep": {
+        "role": "tertiary",
+        "displayName": "Health Rose Deep",
+        "canonical": "#a93a60",
+        "oklch": "oklch(51.7% 0.149 2.8)",
+        "tonalRamp": [
+          "#1d0009",
+          "#4a0020",
+          "#7b053b",
+          "#a13259",
+          "#c8567a",
+          "#ef799c",
+          "#feafc3",
+          "#fee8ed"
+        ]
+      },
+      "health-tint": {
+        "role": "tertiary",
+        "displayName": "Health Rose Tint",
+        "canonical": "#fbe7ee",
+        "oklch": "oklch(94.6% 0.024 354.3)",
+        "tonalRamp": [
+          "#13070c",
+          "#2e2026",
+          "#4d3d43",
+          "#6d5c62",
+          "#8f7d83",
+          "#b29fa6",
+          "#d7c3ca",
+          "#fce8ef"
+        ]
+      },
+      "time": {
+        "role": "tertiary",
+        "displayName": "Time Violet",
+        "canonical": "#6b52a8",
+        "oklch": "oklch(50.6% 0.133 294.6)",
+        "tonalRamp": [
+          "#100029",
+          "#2d085d",
+          "#492d80",
+          "#674ea4",
+          "#8870c9",
+          "#ab93f0",
+          "#ccbefe",
+          "#efecfe"
+        ]
+      },
+      "time-deep": {
+        "role": "tertiary",
+        "displayName": "Time Violet Deep",
+        "canonical": "#58438f",
+        "oklch": "oklch(44.3% 0.121 293.6)",
+        "tonalRamp": [
+          "#0f002a",
+          "#2b0f58",
+          "#47317b",
+          "#66519f",
+          "#8673c4",
+          "#a996ea",
+          "#cbbffe",
+          "#efecfe"
+        ]
+      },
+      "time-tint": {
+        "role": "tertiary",
+        "displayName": "Time Violet Tint",
+        "canonical": "#ece7f6",
+        "oklch": "oklch(93.6% 0.021 301.1)",
+        "tonalRamp": [
+          "#0d0913",
+          "#27232e",
+          "#44404c",
+          "#635f6b",
+          "#84808d",
+          "#a7a2b0",
+          "#cbc6d5",
+          "#f1ecfb"
+        ]
+      },
+      "negative": {
+        "role": "tertiary",
+        "displayName": "Verdict Red",
+        "canonical": "#c24a43",
+        "oklch": "oklch(57.0% 0.155 26.5)",
+        "tonalRamp": [
+          "#1f0001",
+          "#4d0004",
+          "#80010b",
+          "#a8312d",
+          "#cf564e",
+          "#f77a6f",
+          "#feb3aa",
+          "#fee9e6"
+        ]
+      },
+      "negative-tint": {
+        "role": "tertiary",
+        "displayName": "Verdict Red Tint",
+        "canonical": "#fde4e1",
+        "oklch": "oklch(93.8% 0.028 25.9)",
+        "tonalRamp": [
+          "#150706",
+          "#31201e",
+          "#503c3a",
+          "#705b59",
+          "#937c7a",
+          "#b69f9c",
+          "#dbc3c0",
+          "#fee9e6"
+        ]
+      },
+      "negative-ink": {
+        "role": "tertiary",
+        "displayName": "Verdict Red Ink",
+        "canonical": "#9f3129",
+        "oklch": "oklch(47.7% 0.147 28.1)",
+        "tonalRamp": [
+          "#1f0000",
+          "#4d0102",
+          "#7e0b0b",
+          "#a4362d",
+          "#cb5a4e",
+          "#f37d70",
+          "#feb3a9",
+          "#ffe9e5"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "#fdfcfa",
+        "oklch": "oklch(99.1% 0.003 84.6)",
+        "tonalRamp": [
+          "#0c0b0a",
+          "#262523",
+          "#434240",
+          "#62615f",
+          "#838280",
+          "#a6a5a3",
+          "#cac9c7",
+          "#efeeec"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Card White",
+        "canonical": "#ffffff",
+        "oklch": "oklch(100.0% 0.000 89.9)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "well": {
+        "role": "neutral",
+        "displayName": "Well",
+        "canonical": "#f6f2ec",
+        "oklch": "oklch(96.3% 0.009 78.3)",
+        "tonalRamp": [
+          "#0d0b07",
+          "#272520",
+          "#45413d",
+          "#64615c",
+          "#85827c",
+          "#a8a49f",
+          "#ccc8c3",
+          "#f2eee8"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Warm Line",
+        "canonical": "#e8e1d8",
+        "oklch": "oklch(91.3% 0.014 74.4)",
+        "tonalRamp": [
+          "#0f0a05",
+          "#29241d",
+          "#47413a",
+          "#666058",
+          "#888179",
+          "#aaa49b",
+          "#cfc8bf",
+          "#f4ede4"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#191512",
+        "oklch": "oklch(19.9% 0.009 59.1)",
+        "tonalRamp": [
+          "#0e0a08",
+          "#282421",
+          "#46413d",
+          "#65605c",
+          "#86817d",
+          "#a9a4a0",
+          "#cec8c4",
+          "#f3ede9"
+        ]
+      },
+      "ink-soft": {
+        "role": "neutral",
+        "displayName": "Soft Ink",
+        "canonical": "#3b3530",
+        "oklch": "oklch(33.4% 0.012 62.2)",
+        "tonalRamp": [
+          "#0f0a06",
+          "#29241f",
+          "#47413c",
+          "#66605a",
+          "#88817b",
+          "#aba39d",
+          "#cfc8c1",
+          "#f5ede6"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted",
+        "canonical": "#6b6660",
+        "oklch": "oklch(51.3% 0.011 72.6)",
+        "tonalRamp": [
+          "#0e0a06",
+          "#29241f",
+          "#46413c",
+          "#65605a",
+          "#87817b",
+          "#a9a49e",
+          "#cec8c1",
+          "#f3ede6"
+        ]
+      },
+      "white": {
+        "role": "neutral",
+        "displayName": "White (on colour)",
+        "canonical": "#ffffff",
+        "oklch": "oklch(100.0% 0.000 89.9)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The single question at the top of a screen. Host Grotesk SemiBold 40/46, -0.8 tracking, system text size capped at 1.3x."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "In the ramp, not yet rendered. Host Grotesk SemiBold 28/33, -0.4 tracking, cap 1.4x."
+      },
+      "heading": {
+        "displayName": "Heading",
+        "purpose": "Section headings and the two-tone heading (ink line, ember line). Smallest size where ember on paper passes as large text. Cap 1.5x."
+      },
+      "body-large": {
+        "displayName": "Body Large",
+        "purpose": "Lede paragraph under the display question, in Soft Ink. Cap 2.0x."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Default variant of the Text primitive; not yet rendered. Cap 2.0x."
+      },
+      "body-strong": {
+        "displayName": "Body Strong",
+        "purpose": "In the ramp, not yet rendered. Cap 2.0x."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Icon-plus-one-word labels on tool cards and segments. Cap 1.6x."
+      },
+      "action": {
+        "displayName": "Action",
+        "purpose": "Button labels. 19pt bold is WCAG large text, which lets white sit on ember. Cap 1.5x."
+      },
+      "caption": {
+        "displayName": "Caption",
+        "purpose": "In the ramp, not yet rendered. Cap 2.0x."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "press-in",
+        "value": "90ms, Easing.out(Easing.quad) (CSS approx. cubic-bezier(0.25, 0.46, 0.45, 0.94))",
+        "purpose": "iOS touch-down: Pressable scales to 0.97."
+      },
+      {
+        "name": "press-out",
+        "value": "220ms, Easing.out(Easing.exp) (CSS approx. cubic-bezier(0.19, 1, 0.22, 1))",
+        "purpose": "iOS release: Pressable returns to scale 1."
+      },
+      {
+        "name": "segment-slide",
+        "value": "260ms, Easing.out(Easing.exp) (CSS approx. cubic-bezier(0.19, 1, 0.22, 1))",
+        "purpose": "Segmented control: the selected fill slides and recolours on the UI thread."
+      },
+      {
+        "name": "reduce-motion",
+        "value": "scale -> opacity 0.7; slide -> jump",
+        "purpose": "With Reduce Motion on, the press scale becomes a dim and the segment fill jumps."
+      },
+      {
+        "name": "android-ripple",
+        "value": "foreground ripple, rgba(25, 21, 18, 0.12); #ffffff33 on coloured fills",
+        "purpose": "Android press feedback in place of the iOS scale."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "segmented-stack",
+        "value": "fontScale > 1.05"
+      },
+      {
+        "name": "tool-card-stack",
+        "value": "fontScale > 1.2"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The single voice of action: full-width ember button with a 19pt bold white label, pinned in the thumb zone. :active mirrors the built pressed state (ember-hover fill, 0.97 scale on iOS). No hover or custom focus ring is built.",
+      "html": "<button class=\"ds-btn-primary\"><svg class=\"ds-btn-primary-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4\"/></svg><span>Imam poriv</span></button>",
+      "css": ".ds-btn-primary { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 60px; padding: 0 24px; border: none; border-radius: 16px; background: #ec691c; color: #ffffff; font-family: \"Manrope\", system-ui, sans-serif; font-weight: 700; font-size: 19px; line-height: 24px; cursor: pointer; transition: transform 220ms cubic-bezier(0.19, 1, 0.22, 1), background-color 90ms linear; } .ds-btn-primary-icon { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; flex: none; } .ds-btn-primary:active { background: #df5f13; transform: scale(0.97); transition: transform 90ms cubic-bezier(0.25, 0.46, 0.45, 0.94); } @media (prefers-reduced-motion: reduce) { .ds-btn-primary:active { transform: none; opacity: 0.7; } }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Built in the Button primitive, not yet rendered on a screen: white fill, 1pt warm line border, ink label; pressed fill is the well.",
+      "html": "<button class=\"ds-btn-secondary\"><span>Button label</span></button>",
+      "css": ".ds-btn-secondary { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 60px; padding: 0 24px; border: 1px solid #e8e1d8; border-radius: 16px; background: #ffffff; color: #191512; font-family: \"Manrope\", system-ui, sans-serif; font-weight: 700; font-size: 19px; line-height: 24px; cursor: pointer; transition: transform 220ms cubic-bezier(0.19, 1, 0.22, 1), background-color 90ms linear; } .ds-btn-secondary:active { background: #f6f2ec; transform: scale(0.97); transition: transform 90ms cubic-bezier(0.25, 0.46, 0.45, 0.94); } @media (prefers-reduced-motion: reduce) { .ds-btn-secondary:active { transform: none; opacity: 0.7; } }"
+    },
+    {
+      "name": "Tool Card",
+      "kind": "card",
+      "refersTo": "tool-card",
+      "description": "Signature component: white card, the tool's painted texture panel on top, then its glyph (tool colour on tint) beside the one-word label. The panel is shown here as its well placeholder; in the app it is the tool's painted texture from assets/tools. Shown for Dišem.",
+      "html": "<div class=\"ds-tool-card\" role=\"button\" tabindex=\"0\" aria-label=\"Dišem\"><div class=\"ds-tool-card-panel\"></div><div class=\"ds-tool-card-row\"><span class=\"ds-tool-card-badge\"><svg class=\"ds-tool-card-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12.8 19.6A2 2 0 1 0 14 16H2\"/><path d=\"M17.5 8a2.5 2.5 0 1 1 2 4H2\"/><path d=\"M9.8 4.4A2 2 0 1 1 11 8H2\"/></svg></span><span class=\"ds-tool-card-label\">Dišem</span></div></div>",
+      "css": ".ds-tool-card { display: flex; flex-direction: column; width: 162px; padding: 6px; border-radius: 20px; background: #ffffff; border: 1px solid #e8e1d8; cursor: pointer; transition: transform 220ms cubic-bezier(0.19, 1, 0.22, 1), background-color 90ms linear; } .ds-tool-card:active { transform: scale(0.97); transition: transform 90ms cubic-bezier(0.25, 0.46, 0.45, 0.94); } .ds-tool-card-panel { height: 84px; border-radius: 14px; background: #f6f2ec; } .ds-tool-card-row { display: flex; align-items: center; gap: 10px; padding: 12px 6px 6px; } .ds-tool-card-badge { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 10px; background: #e2f1ee; color: #2e8b80; flex: none; } .ds-tool-card-icon { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; flex: none; } .ds-tool-card-label { font-family: \"Manrope\", system-ui, sans-serif; font-weight: 700; font-size: 17px; line-height: 22px; color: #191512; } @media (prefers-reduced-motion: reduce) { .ds-tool-card:active { transform: none; opacity: 0.7; } }"
+    },
+    {
+      "name": "Segmented Control",
+      "kind": "nav",
+      "refersTo": "segmented-track",
+      "description": "The Napredak switch (Novac / Zdravlje / Vreme): well track, the selected segment filled in its own progress colour with a white label; unselected icons in the deep colour. In the app the fill slides (260ms, ease-out expo) and jumps under Reduce Motion.",
+      "html": "<div class=\"ds-seg\" role=\"tablist\"><button class=\"ds-seg-item ds-seg-money is-selected\" role=\"tab\" aria-selected=\"true\"><svg class=\"ds-seg-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect width=\"20\" height=\"12\" x=\"2\" y=\"6\" rx=\"2\"/><circle cx=\"12\" cy=\"12\" r=\"2\"/><path d=\"M6 12h.01M18 12h.01\"/></svg><span>Novac</span></button><button class=\"ds-seg-item ds-seg-health\" role=\"tab\" aria-selected=\"false\"><svg class=\"ds-seg-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5\"/><path d=\"M3.22 13H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27\"/></svg><span>Zdravlje</span></button><button class=\"ds-seg-item ds-seg-time\" role=\"tab\" aria-selected=\"false\"><svg class=\"ds-seg-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 6v6l4 2\"/></svg><span>Vreme</span></button></div>",
+      "css": ".ds-seg { display: flex; padding: 4px; border-radius: 16px; background: #f6f2ec; border: 0.5px solid #e8e1d8; } .ds-seg-item { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 52px; padding: 6px 4px; border: none; border-radius: 12px; background: transparent; color: #191512; font-family: \"Manrope\", system-ui, sans-serif; font-weight: 700; font-size: 17px; line-height: 22px; cursor: pointer; transition: background-color 260ms cubic-bezier(0.19, 1, 0.22, 1), color 260ms cubic-bezier(0.19, 1, 0.22, 1); } .ds-seg-icon { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; flex: none; } .ds-seg-money .ds-seg-icon { color: #2f6630; } .ds-seg-health .ds-seg-icon { color: #a93a60; } .ds-seg-time .ds-seg-icon { color: #58438f; } .ds-seg-item.is-selected, .ds-seg-item.is-selected .ds-seg-icon { color: #ffffff; } .ds-seg-money.is-selected { background: #3a7a3a; } .ds-seg-health.is-selected { background: #c2446f; } .ds-seg-time.is-selected { background: #6b52a8; } @media (prefers-reduced-motion: reduce) { .ds-seg-item { transition: none; } }"
+    },
+    {
+      "name": "Brand Lockup",
+      "kind": "custom",
+      "refersTo": "brand-mark",
+      "description": "The real white flame from iskraclub.com (inlined from assets/brand/iskra-flame-white.png) on a 36pt ember tile, beside the ISKRA wordmark in Host Grotesk. Top-left of the screen, announced as one image labelled Iskra.",
+      "html": "<div class=\"ds-lockup\" role=\"img\" aria-label=\"Iskra\"><span class=\"ds-lockup-tile\"><img class=\"ds-lockup-flame\" alt=\"\" src=\"data:image/png;base64,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Mzq8NNyly9Z5d9v+bA+92j5/aG6nlMYWG2DsApzXB+kvVJBuXKZpb88OP6uq25TttnjmaF1VfXoE5qhlgJlW1Z1LrV06qOn5qvqIqu5TxodPPef0CNzp6XS4gUkRzzzN9v9cNsCY2fjSCNxpR3SfMqJbKeOZ9QqaMoLFj+4+NgJz5LjLUROnXdodbInN7n72skeRrb/dvMhqEYbRZCIBV/aPSg4mybY3h2ypXUXSb9UkSmnN0YbGOYYxR47o/lspI7pR1jJHRw4Ze3Gm6Mequl6R8mpxhV9/4ubmHDZEO6xbfjUFfEBEVk6ICWdSPb+tPQ3RGsIUfSGaonIDpm7pjX8xoEwNYYp+aFHiWlm9yUh216QCHuqh9qdT+H9aVVeo6hsmOuYyCWTXtMuBQ9S9OFN0WjRF5QeMS6zeNGTR+00WIY6maALA8toBuz2d6VqpqpsXPWUS3ere5WT6n1zh+q+mgUNE5NFxDjCMkh/Z3VxVlw6gYRxvOSuS3AlxpYfoCnC85UbjLfXIW0quXeznhar6ZJ+BOsdbnlHVF5Wp1CNymM7iNsqfAGxM71Ol3IjYKZLFXk9G3jI52mUDVX20T+3izNbRMd4yeVnpD/aZlXb/3VU+B4oyOdrlT32kAXySWytDK3CU/rTLP/WhXRxYHlLVDcpazxyl+4St/+sx7tL0+op2j/GWyYy7fLRH7eLPcZkfSe5kapdNLX4yk3Zx5QotVT0wktzJTTKe3aN2mUoVcUewTFL5pWmXuTZEYCbt4sBypf3vYrnChGqXRT3Uu/jDkWplGI4UZTCw7O55O72ApTqRfdCR6GrFMsn3zqBdIlgiYJ4L0r0ngiVKL0S3YimAJ7uMwY9gibIWd/lKFzc6giXKWmDZyYDSaONGR7BEed6uhHbzdX1PaXEESwSMI7rHdwCLFn0lT5QRmiIDwMutT8gnug3v861+BDieXATMzW1AojbRe37MDUXxTdG7UrsUHbm9T1VfH0sUovjJxS1UdbmZoYanWa5V1Vmx+ClKWrtcmxprr6r6Sa/DMYIlguV5c+lWe/W3+5Zld1OU0QbotjdT5JugjaJWiZIO0NVsAdZd3siNY9KAihLF1y6fNbDcoKo7xfhKlG4TL9+sqktU9cQ0p4kymJTy8ESkZYG3LYBtReR/TaNURKQRX3uUjlomapUofZdgxpOIEiVKlChRSmfm/x+ZrigW3XqquAAAAIJ0RVh0aW1wZWNjYWJsZTpwcm9tcHQAT3JpZ2luOiB0cmltbWVkIGNyb3Agb2YgcHJlLWV4aXN0aW5nIGJyYW5kIG1hcmsgaXNrcmEtd2Vic2l0ZS9wdWJsaWMvYnJhbmQvaXNrcmEtZmxhbWUtd2hpdGUucG5nIChub3QgZ2VuZXJhdGVkKVKAHrUAAAAASUVORK5CYII=\"></span><span class=\"ds-lockup-word\">ISKRA</span></div>",
+      "css": ".ds-lockup { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; } .ds-lockup-tile { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 10px; background: #ec691c; } .ds-lockup-flame { width: 12px; height: 22px; object-fit: contain; } .ds-lockup-word { font-family: \"Host Grotesk\", system-ui, sans-serif; font-weight: 600; font-size: 20px; line-height: 24px; letter-spacing: 0.6px; color: #191512; }"
+    },
+    {
+      "name": "Pinned Action Footer",
+      "kind": "custom",
+      "refersTo": "action-footer",
+      "description": "The thumb-zone footer: paper fill, hairline warm-line top rule, 12 top padding, 20 gutters, bottom padding max(safe area, 12), holding the primary button. Content scrolls behind it.",
+      "html": "<div class=\"ds-footer\"><button class=\"ds-footer-btn\"><svg class=\"ds-footer-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4\"/></svg><span>Imam poriv</span></button></div>",
+      "css": ".ds-footer { padding: 12px 20px max(12px, env(safe-area-inset-bottom)); background: #fdfcfa; border-top: 0.5px solid #e8e1d8; } .ds-footer-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 60px; padding: 0 24px; border: none; border-radius: 16px; background: #ec691c; color: #ffffff; font-family: \"Manrope\", system-ui, sans-serif; font-weight: 700; font-size: 19px; line-height: 24px; cursor: pointer; transition: transform 220ms cubic-bezier(0.19, 1, 0.22, 1), background-color 90ms linear; } .ds-footer-icon { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; flex: none; } .ds-footer-btn:active { background: #df5f13; transform: scale(0.97); transition: transform 90ms cubic-bezier(0.25, 0.46, 0.45, 0.94); } @media (prefers-reduced-motion: reduce) { .ds-footer-btn:active { transform: none; opacity: 0.7; } }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The World Held in One Hand",
+    "overview": "The app does not have an identity of its own. It is the iskraclub.com world at phone size, as the direction contract in `src/app/_layout.tsx` puts it: paper ground, ember as the single voice of action, one colour per Poriv tool. The palette is ported value for value from the site, the tool cards reuse the site's painted texture panels, the brand mark is the site's real flame on an ember tile, and the Napredak switch is the site's Novac, Zdravlje and Vreme control. Nothing here was invented for the app; when the site changes, the app follows.\n\nThe system is calm, large and flat. `PRODUCT.md` describes the moment of use as one hand, agitated, possibly at night, with an attention span of about one sentence, so the build is organised around targets that a shaking hand can hit (a 48pt floor, a 60pt primary action pinned in the thumb zone) and type that keeps its layout as the system text size grows. Surfaces are white cards with a 1pt warm line on paper; no rendered surface casts a shadow. Motion is small and quick: a 3% press scale on iOS, the Material ripple on Android, one sliding fill in the segmented control, and all of it steps down under Reduce Motion.\n\nThe direction contract refuses the category's dark dashboard of counters and rings, and `SCREENS.md` Part 4 rejects the design export's many-card home for the same reason. The scheme is light only (`userInterfaceStyle: light`). The platform stance is `adaptive`: one visual identity on both operating systems, with the interaction layer (press feedback, headline line breaking) following each platform's native behaviour.",
+    "keyCharacteristics": [
+      "Warm paper ground with warm near-black ink; never a dark default.",
+      "Ember is the only colour that asks for a tap.",
+      "Six tool colours and three progress colours identify things; they never prompt an action.",
+      "Host Grotesk SemiBold for headlines only, Manrope for everything a person reads or taps, both bundled with latin-ext.",
+      "Flat surfaces: white fill and a 1pt line on paper, a sunken well for tracks, no shadows.",
+      "Every tap target is 48pt or larger; the primary action is 60pt tall and pinned above a hairline.",
+      "Rows stack into columns as text grows, instead of truncating or breaking words.",
+      "Platform-native feedback: scale on iOS, ripple on Android, haptics on touch-down."
+    ],
+    "rules": [
+      {
+        "name": "The Single Voice Rule",
+        "body": "Ember is the only colour that asks for a tap. Moji razlozi shares its hue, so its badge stays glyph on tint and never takes a solid ember fill next to \"Imam poriv\".",
+        "section": "colors"
+      },
+      {
+        "name": "The Large-Only Ember Rule",
+        "body": "White on ember measures 3.18:1 and ember on paper 3.1:1, so both pass only as WCAG large text. A label on ember is 19pt Manrope Bold or larger, or an icon; ember text on paper is a heading at 24pt or larger.",
+        "section": "colors"
+      },
+      {
+        "name": "The Verdict-Only Red Rule",
+        "body": "The `negative` colours mark a comparison verdict and nothing else. They never point at the user: no slip state, no streak, no warning.",
+        "section": "colors"
+      },
+      {
+        "name": "The Weight Lives in the File Rule",
+        "body": "`fontFamily` is the PostScript name and is never paired with `fontWeight`. The files are named after their PostScript names, so one string resolves on iOS (by PostScript name) and Android (by file name); a `fontWeight` on top would make Android synthesise a fake bold.",
+        "section": "typography"
+      },
+      {
+        "name": "The Headlines-Only Grotesk Rule",
+        "body": "Host Grotesk sets display, title, heading and the wordmark. Anything a person must read to act, or tap, is Manrope.",
+        "section": "typography"
+      },
+      {
+        "name": "The Grow Without Breaking Rule",
+        "body": "Every variant caps the system text size: display 1.3x, title 1.4x, heading and action 1.5x, label 1.6x, body, body large, body strong and caption 2.0x. Body text may double; display type may not.",
+        "section": "typography"
+      },
+      {
+        "name": "The Thumb Zone Rule",
+        "body": "The primary action is pinned at the bottom of the screen over paper, above a hairline rule, and never scrolls away.",
+        "section": "layout"
+      },
+      {
+        "name": "The 48 Floor Rule",
+        "body": "Every tappable element is at least 48 x 48pt whatever its visual size, one rule for both platforms. The `Pressable` primitive enforces it and ESLint blocks the raw React Native `Text`, `Pressable`, `TouchableOpacity` and `TouchableHighlight`.",
+        "section": "layout"
+      },
+      {
+        "name": "The Stack, Don't Truncate Rule",
+        "body": "When text grows past a component's threshold, its rows become columns; segments switch together so they keep one shared layout.",
+        "section": "layout"
+      },
+      {
+        "name": "The Line, Not Shadow Rule",
+        "body": "A card separates from paper by its white fill and a 1pt line border, not by a shadow.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Concentric Corner Rule",
+        "body": "A nested corner is the outer radius minus the inset: the 20pt card with 6 padding holds a 14pt texture panel, and the 16pt track with 4 padding holds 12pt segments.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Label Carries the Meaning Rule",
+        "body": "A tool glyph sits in the tool colour on its tint only beside its text label, because glyph-on-tint contrast runs from 2.78:1 (Moji razlozi) to 5.53:1 (Odlažem). A glyph standing alone, with no label, goes white on the solid tool colour (3.18:1 or better).",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "**Do** take every colour from `@/theme`: semantic roles (`color.text`, `color.accent`, `color.line`) for UI, `toolColor[key]` and `progressColor[key]` for the categorical families. Never a hex value in a screen.",
+      "**Do** render all text through the `Text` primitive with a ramp variant, and every tap through `Pressable` or `Button`.",
+      "**Do** set any label on an ember fill at 19pt Manrope Bold (the Action variant) or larger, or use an icon alone.",
+      "**Do** keep ember text on paper to headings of 24pt or larger; the two-tone heading sets its first line in ink and its second in ember.",
+      "**Do** pair every tool glyph (tool colour on its tint, 36pt badge, 10 radius) with the tool's label.",
+      "**Do** keep tap targets at 48pt or larger and the primary action 60pt tall, pinned at the bottom above a hairline.",
+      "**Do** give any side-by-side row that would break a word at large text a font-scale stacking threshold, and check it at iOS XXXL and AX3.",
+      "**Do** nest corners concentrically (outer radius minus inset).",
+      "**Do** rebuild design-export screens by remapping them onto these tokens, as `SCREENS.md` rules."
+    ],
+    "donts": [
+      "**Don't** pair `fontFamily` with `fontWeight`; the weight lives in the font file.",
+      "**Don't** give Moji razlozi a solid ember fill next to \"Imam poriv\"; ember is the single voice of action.",
+      "**Don't** point the `negative` colours at the user: no slip state, no streak, no warning.",
+      "**Don't** port `colors_and_type.css` from the design export, or take any colour or type value from it; its ember (#E8621A) and Manrope-only type are superseded by the tokens above.",
+      "**Don't** make a button a pill.",
+      "**Don't** add a shadow to a surface while the elevation decision below is open; today the system is flat.",
+      "**Don't** build a dark ground or a dark scheme ad hoc; no role for one exists yet.",
+      "**Don't** use an icon font or emoji; icons are Lucide at 1.9 stroke."
+    ]
+  }
+}

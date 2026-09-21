@@ -4,6 +4,10 @@ Read these before writing anything:
 
 - `PRODUCT.md`: why, for whom, and what must never happen. Decides anything the roadmap leaves open
 - `ROADMAP.md`: what to build and when. Milestones M0 to M9
+- `SCREENS.md`: what each screen is, the reworked onboarding order, and the nine places
+  the design export contradicts the current spec. Read it before M2 or M3. The export in
+  `ISKRA - mobile claude design export/` is reference, not instruction: SCREENS.md says
+  which parts of it are still true
 - Expo HAS CHANGED. Read the exact versioned docs at https://docs.expo.dev/versions/v57.0.0/
   before writing any Expo code. This project is on SDK 57 (React Native 0.86, React 19.2)
 
@@ -16,8 +20,14 @@ Expo managed workflow, Expo Router (`src/app`), TypeScript strict, development b
 npm run ios          # prebuild + run on the iOS simulator (needs Xcode)
 npm run android      # prebuild + run on an Android emulator (needs the Android SDK)
 npm start            # Metro for an already-installed dev build
-npm run check        # typecheck + lint + tests
+npm run check        # typecheck + lint + unit tests (no network)
+npm run test:rls     # RLS isolation against the live Supabase project (runs in CI)
+npm run gen:types    # regenerate src/lib/supabase/database.types.ts (npx supabase login once)
 ```
+
+Supabase project `aaknvhlirztdglxsnbho` (eu-west-1). Public URL and publishable key live in
+`.env` (see `.env.example`). The service role key never goes near this repo. Schema changes
+are SQL files in `supabase/migrations/`, applied to the project, then `npm run gen:types`.
 
 ## Rules the code enforces, and why
 
@@ -41,12 +51,35 @@ npm run check        # typecheck + lint + tests
 - **Serbian copy is final. Never write or paraphrase a Serbian string.** Need one that does not
   exist? Leave a `TODO(copy)` and flag it for Pavle
 
+## The data spine (M1)
+
+- **UI never talks to the network.** Screens read and write through `@/data/repo`, which writes
+  SQLite plus an outbox entry in one transaction and returns. ESLint blocks
+  `@supabase/supabase-js` and `@/data/supabase` in `src/app`, `src/components`, `src/features`.
+  Only `src/data/sync.ts` and `src/data/auth.ts` reach Supabase
+- **Reads come from SQLite, always.** Supabase is a backup and a sync target, never a source
+- **Row ids are client-generated uuids**, so every push is an idempotent upsert. Ownership
+  (`user_id`, or `id` for `profiles`) is stamped at push time, because a row can be written
+  before the first anonymous sign-in has happened
+- **Closed vocabularies live in `src/lib/vocab.ts`**: tool keys, craving outcome, trigger keys,
+  profile enums. A value outside them throws before it reaches SQLite. Changing one is a
+  product decision, plus a migration when the column has a server CHECK
+- **The day counter is `quitProgress()` in `src/lib/time/dayCount.ts`.** Whole calendar days
+  in `profiles.quit_time_zone`, never hours / 24. Nothing else computes a day count
+- **Slips never touch `quit_date`.** The total smoke-free time does not reset
+- **Queue logic is pure** (`src/lib/sync/queue.ts`, unit-tested); `src/data/` holds the drivers
+- **Dev harness:** `iskra://dev` (dev builds only). A test script can drive the spine without
+  the UI through the `dev.command` key in the app's SQLite; see `src/data/devCommands.ts`
+
 ## Layout
 
 ```
-src/app/                 routes (Expo Router)
+src/app/                  routes (Expo Router); dev.tsx is the dev-only data harness
 src/components/primitives Text, Pressable, Button, Icon
-src/features/<name>/     feature code (poriv, napredak, ...)
-src/lib/                 pure logic, unit-tested
-src/theme/               tokens.ts (site port), typography.ts, index.ts (roles)
+src/features/<name>/      feature code (poriv, napredak, ...)
+src/data/                 drivers: SQLite, repo, sync engine, auth, Supabase client
+src/lib/                  pure logic, unit-tested (vocab, time, sync, storage, i18n)
+src/theme/                tokens.ts (site port), typography.ts, index.ts (roles)
+supabase/migrations/      schema changes, applied to the live project
+tests/integration/        live-network tests, excluded from `npm test`
 ```

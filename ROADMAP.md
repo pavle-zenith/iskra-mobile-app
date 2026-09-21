@@ -278,7 +278,8 @@ the app is downloadable from a clean device.
 1. **Notifications, before M6.** `push_token` exists, so this is planned. A congratulatory
    push to someone who relapsed yesterday is the worst thing this app could do. The rule
    must be that notifications read state before they speak, plus a quiet mode.
-2. **Bundle id, before M0.** `com.iskraclub.app` unless there is a reason not to.
+2. **Bundle id: resolved 18.09.2026.** `com.iskraclub.iskra` (domain, then product) on both
+   platforms, set in M1 Task 0 before any EAS project, credential or store registration existed.
 3. **The Early Access offer, before M8.** Already promised publicly in the site's
    `llms.txt`. The app is where it gets honoured.
 

@@ -1,5 +1,7 @@
 import { Platform } from 'react-native';
 
+import type { ToolKey } from '@/lib/vocab';
+
 import { palette } from './tokens';
 
 export { palette } from './tokens';
@@ -32,7 +34,8 @@ export const color = {
 
 export type ColorRole = keyof typeof color;
 
-export type ToolKey = 'disem' | 'voda' | 'razlozi' | 'setam' | 'odlazem' | 'belezim';
+/** The tool vocabulary lives in src/lib/vocab.ts (it is also a database value). */
+export type { ToolKey } from '@/lib/vocab';
 
 /**
  * Poriv tool colours. As on the website, the glyph sits in `color` on a `tint` square,

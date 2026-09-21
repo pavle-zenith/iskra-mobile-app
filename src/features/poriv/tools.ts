@@ -9,7 +9,7 @@ import {
 } from 'lucide-react-native';
 import type { ImageSourcePropType } from 'react-native';
 
-import type { ToolKey } from '@/theme';
+import type { ToolKey } from '@/lib/vocab';
 
 export type PorivTool = {
   key: ToolKey;
@@ -24,8 +24,8 @@ export type PorivTool = {
  * The six Poriv tools, in PRODUCT.md order. Glyphs and textures match the website's
  * tool cards (see assets/PROVENANCE.md).
  *
- * TODO(M1): `key` must equal the value written to `cravings.tool_used`. Confirm the
- * column's allowed values against the live schema before the first row is written.
+ * `key` is the value written to `cravings.tool_used`. The allowed set is TOOL_KEYS in
+ * src/lib/vocab.ts, mirrored by the server CHECK cravings_tool_used_check. No seventh string.
  */
 export const porivTools: readonly PorivTool[] = [
   { key: 'disem', label: 'Dišem', icon: Wind, texture: require('@assets/tools/disem.jpg') },

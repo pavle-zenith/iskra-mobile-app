@@ -42,3 +42,7 @@ yarn-error.*
 
 # Impeccable review captures
 .impeccable/review/
+
+# Supabase CLI and type generation scratch
+supabase/.temp/
+src/lib/supabase/database.types.tmp

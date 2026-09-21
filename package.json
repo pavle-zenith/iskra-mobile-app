@@ -11,19 +11,28 @@
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
     "test": "jest",
-    "check": "npm run typecheck && npm run lint && npm test -- --ci"
+    "check": "npm run typecheck && npm run lint && npm test -- --ci",
+    "gen:types": "supabase gen types typescript --project-id aaknvhlirztdglxsnbho > src/lib/supabase/database.types.tmp && (printf '// GENERATED from the live schema of Supabase project aaknvhlirztdglxsnbho. Do not edit.\\n// Regenerate: npm run gen:types  (needs `npx supabase login` once)\\n\\n'; cat src/lib/supabase/database.types.tmp) > src/lib/supabase/database.types.ts && rm src/lib/supabase/database.types.tmp && prettier --write src/lib/supabase/database.types.ts",
+    "test:rls": "node --env-file-if-exists=.env node_modules/jest/bin/jest.js -c jest.integration.config.js --runInBand"
   },
   "jest": {
-    "preset": "jest-expo"
+    "preset": "jest-expo",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "<rootDir>/tests/integration/"
+    ]
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.116.0",
     "expo": "~57.0.24",
     "expo-constants": "~57.0.19",
+    "expo-crypto": "~57.0.3",
     "expo-dev-client": "~57.0.19",
     "expo-font": "~57.0.4",
     "expo-haptics": "~57.0.3",
     "expo-linking": "~57.0.10",
     "expo-localization": "~57.0.2",
+    "expo-network": "~57.0.2",
     "expo-router": "~57.0.22",
     "expo-secure-store": "~57.0.4",
     "expo-splash-screen": "~57.0.9",
@@ -38,6 +47,7 @@
     "react-native-safe-area-context": "~5.7.0",
     "react-native-screens": "~4.26.0",
     "react-native-svg": "15.15.4",
+    "react-native-url-polyfill": "^4.0.0",
     "react-native-worklets": "0.10.1"
   },
   "devDependencies": {

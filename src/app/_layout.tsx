@@ -17,10 +17,16 @@
  */
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { useEffect } from 'react';
 
+import { startDataSpine } from '@/data/spine';
 import { color } from '@/theme';
 
 export default function RootLayout() {
+  // Local database, anonymous auth and sync start here and are never awaited: the first frame
+  // renders from the phone, not the network.
+  useEffect(() => startDataSpine(), []);
+
   return (
     <>
       <StatusBar style="dark" />

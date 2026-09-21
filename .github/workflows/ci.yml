@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    name: Typecheck, lint, unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+
+  rls:
+    name: RLS isolation (live Supabase)
+    needs: check
+    runs-on: ubuntu-latest
+    # One run at a time: each run signs in two anonymous users, and the project allows
+    # 30 anonymous sign-ins per hour per IP.
+    concurrency: rls-isolation
+    env:
+      RLS_REQUIRED: '1'
+      # Public values (the same ones inlined into the app). Set them as repository
+      # variables, or commit .env; the test script loads .env when it exists.
+      EXPO_PUBLIC_SUPABASE_URL: ${{ vars.EXPO_PUBLIC_SUPABASE_URL }}
+      EXPO_PUBLIC_SUPABASE_ANON_KEY: ${{ vars.EXPO_PUBLIC_SUPABASE_ANON_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run test:rls

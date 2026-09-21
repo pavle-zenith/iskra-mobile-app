@@ -9,7 +9,7 @@
     "userInterfaceStyle": "light",
     "backgroundColor": "#fdfcfa",
     "ios": {
-      "bundleIdentifier": "com.iskraclub.app",
+      "bundleIdentifier": "com.iskraclub.iskra",
       "supportsTablet": false,
       "infoPlist": {
         "CFBundleDevelopmentRegion": "sr-Latn",
@@ -19,7 +19,7 @@
       }
     },
     "android": {
-      "package": "com.iskraclub.app",
+      "package": "com.iskraclub.iskra",
       "adaptiveIcon": {
         "backgroundColor": "#ec691c",
         "foregroundImage": "./assets/android-icon-foreground.png",
