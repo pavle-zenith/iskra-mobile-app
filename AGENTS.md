@@ -132,6 +132,62 @@ are SQL files in `supabase/migrations/`, applied to the project, then `npm run g
   exists. No placeholders, no "uskoro", no bottom nav until Napredak and Saznaj exist
 - **All M3 copy is genderless**, so nothing here calls `g()`
 
+## Designing a new screen: Refero first
+
+Every screen that is new, or redesigned, starts with a Refero pass before any code. Pavle's
+standing rule, 21.09.2026. Refero is the guiding star for **structure**: hierarchy, what leads,
+what sits where, how many things compete, empty and edge states, and how the flow before and after
+the screen works.
+
+**Order of authority, highest first.** Refero never overrides anything above it:
+
+1. `PRODUCT.md`: what must never happen, the copy rules, the craving moment
+2. The milestone brief for this screen
+3. The design export (`ISKRA - mobile claude design export/`), where the screen exists there
+4. `DESIGN.md` and `theme/tokens.ts`: Iskra's own look. Refero never supplies colours, fonts or
+   copy
+5. Refero: patterns from real, shipped apps
+
+**The pass:**
+
+1. Search `refero_search_screens` (platform `ios`) for the screen by what is literally on it, and
+   `refero_search_flows` when the screen is a step in a journey. Search
+   several framings: there is little quit-smoking coverage in Refero, so look at the nearest
+   categories. Those are habit and streak trackers, sobriety and meditation apps (Ten Percent
+   Happier, Headspace, Calm), health dashboards, and breathing apps (Breathwrk)
+2. Pick **three to five** references, not one. Copying a single app is not the goal; the
+   pattern several good apps agree on is
+3. Before building, write a short **Reference note** at the top of the screen's review folder
+   (`.impeccable/review/<screen>/REFERENCES.md`) with:
+   - each reference: app, Refero link, and the one thing taken from it
+   - one line on what was deliberately **not** taken, and why (usually a PRODUCT.md rule: streak
+     shaming, red failure states, upsells, English copy, gamified pressure)
+4. Build in Iskra's own tokens and approved copy. Text in a reference is never copy: any new
+   Serbian string is flagged as `missingCopy()` for Pavle
+5. The screen's final report names the references it used
+
+If Refero has nothing close, say so in the note and fall back to the export and the brief. Do not
+force a weak match.
+
+## Home (v2)
+
+- **`docs/HOME-V2-brief.md` is the spec**, and it supersedes `SCREENS.md` Part 4. Home is the
+  export's dashboard, corrected: the screen is the same in every state and only the lead slot
+  above the header changes
+- **A module with no data does not render.** No placeholder, no zero, no "uskoro". Module 4
+  arrives with M4, module 6 and the bottom nav with M5, and the screen reads as finished at
+  every stage. The week card hides entirely before the quit date for the same reason
+- **One day figure on Home**, the live timer, counted from `quit_date`. It never resets on a
+  slip. The export repeated the same number three times; that is cut to one
+- **Every unit label goes through `plural()`**: dan/dana/dana, sat/sata/sati,
+  minut/minuta/minuta, sekunda/sekunde/sekundi. The export renders "51 sekunde", which is wrong
+- **Nothing on the week card punishes.** A slip day is a filled neutral circle, never red and
+  never an X; a day nobody answered is faint, because the app does not know. Days before the
+  quit date are not misses
+- **Closing the check-in records nothing.** The export assumes a closed sheet means a clean day.
+  The app never guesses
+- **"Ova nedelja" is the one ember surface on Home**, as in the export. One per screen
+
 ## Layout
 
 ```

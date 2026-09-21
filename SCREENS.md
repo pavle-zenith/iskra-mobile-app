@@ -260,6 +260,14 @@ exactly. It is what stops seventeen questions feeling like a form.
 
 ## Part 4 - The home screen
 
+> **Superseded, 21.09.2026.** `docs/HOME-V2-brief.md` is now the home screen's spec: Pavle's
+> decision is that Home follows the export's `HomeScreenV3_1` dashboard, not the minimal
+> state-led screen this part argues for. What stays true below is the criticism of the export
+> (thirteen card types, tab previews, one screen for six states) and the rule that at most a
+> few things may compete. What is superseded is the "leads with one thing" table: the dashboard
+> is the same in every state, and only the lead slot above the header changes.
+
+
 The export's `HomeScreenV3_1` contains, on one scroll: greeting, avatar, streak badge, weekly
 tracker, live countdown, two stat cards, a quote card, a knowledge card, a next-goal card, six
 category goal cards with progress bars, a total-time tracker, a slip button, a fixed craving

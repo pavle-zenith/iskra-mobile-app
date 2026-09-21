@@ -13,22 +13,7 @@ import { plural } from '@/lib/i18n/plural';
  */
 
 /** Counts never use `n > 1`; Serbian has three forms. */
-export const dani = (n: number) => plural(n, { one: 'dan', few: 'dana', other: 'dana' });
 export const porivi = (n: number) => plural(n, { one: 'poriv', few: 'poriva', other: 'poriva' });
-
-export const home = {
-  cta: 'Imam poriv',
-  firstDay: 'Prvi dan bez cigarete.',
-  /** Under the big number. The number itself is rendered separately, in display type. */
-  dayCaption: (n: number) => `${dani(n)} bez cigarete`,
-  preQuitDate: (date: string) => `Tvoj dan: ${date}`,
-  preQuitCountdown: (n: number) => `Još ${n} ${dani(n)}`,
-  preQuitToday: 'Danas je tvoj dan.',
-  reasonsTitle: 'Tvoji razlozi',
-  survived: (n: number) => `${n} ${porivi(n)} iza tebe`,
-  postSlipLead: 'Jedna cigareta ne briše dane pre nje.',
-  postSlipSub: 'Ukupno vreme bez cigarete ostaje. Ne krećeš od nule.',
-} as const;
 
 export const mode = {
   eyebrow: 'PORIV',

@@ -1,6 +1,6 @@
 import { hasMissingCopy } from '@/features/onboarding/gender';
 
-import { home, mode, slip, success, tools } from '../copy';
+import { mode, slip, success, tools } from '../copy';
 
 /**
  * Every M3 string is genderless by design, so nothing in Poriv mod calls `g()`. That is the
@@ -10,16 +10,6 @@ import { home, mode, slip, success, tools } from '../copy';
 function everyString(): string[] {
   const counts = [0, 1, 2, 5, 11, 21, 22, 100];
   return [
-    home.cta,
-    home.firstDay,
-    ...counts.map(home.dayCaption),
-    home.preQuitDate('5. oktobar'),
-    ...counts.map(home.preQuitCountdown),
-    home.preQuitToday,
-    home.reasonsTitle,
-    ...counts.map(home.survived),
-    home.postSlipLead,
-    home.postSlipSub,
     ...Object.values(mode),
     ...Object.values(tools).flatMap((tool) =>
       Object.values(tool).flatMap((value) =>
@@ -64,19 +54,10 @@ describe('M3 copy', () => {
 });
 
 describe('counts agree in Serbian', () => {
-  it('uses all three forms for days, never n > 1', () => {
-    expect(home.dayCaption(1)).toBe('dan bez cigarete');
-    expect(home.dayCaption(2)).toBe('dana bez cigarete');
-    expect(home.dayCaption(5)).toBe('dana bez cigarete');
-    expect(home.dayCaption(21)).toBe('dan bez cigarete');
-    expect(home.dayCaption(22)).toBe('dana bez cigarete');
-  });
-
-  it('uses all three forms for cravings', () => {
-    expect(home.survived(1)).toBe('1 poriv iza tebe');
-    expect(home.survived(3)).toBe('3 poriva iza tebe');
-    expect(home.survived(7)).toBe('7 poriva iza tebe');
+  it('uses all three forms for cravings, never n > 1', () => {
     expect(success.today(1)).toBe('Danas: 1 poriv iza tebe.');
+    expect(success.today(3)).toBe('Danas: 3 poriva iza tebe.');
     expect(success.today(11)).toBe('Danas: 11 poriva iza tebe.');
+    expect(success.today(21)).toBe('Danas: 21 poriv iza tebe.');
   });
 });

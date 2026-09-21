@@ -325,6 +325,14 @@ export async function recordCheckin(date: string, clean: boolean): Promise<Check
   return row as unknown as CheckinRow;
 }
 
+/** Every check-in, newest first. `clean` comes back from SQLite as 0/1. */
+export async function listCheckins(): Promise<CheckinRow[]> {
+  const rows = await getDb().getAllAsync<Omit<CheckinRow, 'clean'> & { clean: number }>(
+    'SELECT id, date, clean, created_at FROM checkins ORDER BY date DESC',
+  );
+  return rows.map((row) => ({ ...row, clean: row.clean === 1 }));
+}
+
 // --- milestones ------------------------------------------------------------
 
 /** Unlocks a milestone once. Unlocking it again returns the original row untouched. */
