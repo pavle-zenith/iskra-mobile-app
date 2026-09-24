@@ -1,14 +1,23 @@
 import * as Haptics from 'expo-haptics';
 import * as Notifications from 'expo-notifications';
-import { Flame } from 'lucide-react-native';
+import { Check, Flame } from 'lucide-react-native';
 import { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import Animated, {
+  cancelAnimation,
+  Easing,
+  FadeIn,
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withTiming,
+} from 'react-native-reanimated';
 
 import { Icon, Pressable, Text } from '@/components/primitives';
 import { drain } from '@/data/sync';
 import { color, radius, space } from '@/theme';
 
-import { FieldScreen, GlyphChip, Plate, ProgressBar, Prompt, QuestionScreen } from '../components';
+import { FieldScreen, GlyphChip, Plate, Prompt, QuestionScreen } from '../components';
 import { annualCigarettes, annualCostRsd, copy, costEquivalent, formatRsd, REASONS } from '../copy';
 import { MILESTONE_DOTS, REASON_GLYPHS, STAT_GLYPHS } from '../glyphs';
 import { useOnboarding } from '../OnboardingProvider';
@@ -103,8 +112,21 @@ export function CommitmentStep() {
  * The processing beat. Real work, not a fake timer: the plan is computed here, and the profile
  * is pushed if there is signal. It never waits longer than the animation, so with no signal it
  * takes exactly as long as it does online.
+ *
+ * Paced like the website's LoadingStage: each bar fills in turn, at its own speed, so the four
+ * read as four pieces of work rather than one timer. The brief asks for three to four seconds;
+ * Pavle found that too quick to feel like anything (24.09.2026), so it runs about five and a half.
  */
-const STEP_MS = 900;
+const PROCESSING_BARS: readonly { start: number; duration: number }[] = [
+  { start: 0, duration: 1000 },
+  { start: 1200, duration: 1400 },
+  { start: 2800, duration: 1200 },
+  { start: 4200, duration: 800 },
+];
+/** How long the last bar stays full, ticked, before Summary. */
+const PROCESSING_HOLD_MS = 500;
+/** The second fact replaces the first when bar 2 is done: each is up long enough to read. */
+const FACT_SWAP_AFTER = 2;
 
 export function ProcessingStep() {
   const { goNext, copyContext } = useOnboarding();
@@ -120,14 +142,18 @@ export function ProcessingStep() {
     void plan;
     void drain();
 
-    const timers = copy.processing.steps.map((_, index) =>
-      setTimeout(() => setDone(index + 1), STEP_MS * (index + 1)),
+    const timers = PROCESSING_BARS.map(({ start, duration }, index) =>
+      setTimeout(() => setDone(index + 1), start + duration),
     );
-    const finish = setTimeout(() => {
-      if (advanced.current) return;
-      advanced.current = true;
-      void goNext('processing');
-    }, STEP_MS * copy.processing.steps.length);
+    const last = PROCESSING_BARS[PROCESSING_BARS.length - 1];
+    const finish = setTimeout(
+      () => {
+        if (advanced.current) return;
+        advanced.current = true;
+        void goNext('processing');
+      },
+      (last ? last.start + last.duration : 0) + PROCESSING_HOLD_MS,
+    );
 
     return () => {
       for (const timer of timers) clearTimeout(timer);
@@ -135,23 +161,57 @@ export function ProcessingStep() {
     };
   }, [copyContext, goNext]);
 
+  const fact = done >= FACT_SWAP_AFTER ? 1 : 0;
+
   return (
     <QuestionScreen step="processing">
       <Prompt title={copy.processing.header} />
       <View style={styles.processing}>
         {copy.processing.steps.map((label, index) => (
           <View key={label} style={styles.processingRow}>
-            <Text variant="body" color={index < done ? 'text' : 'textMuted'}>
-              {label}
-            </Text>
-            <ProgressBar current={index < done ? 1 : 0} total={1} />
+            <View style={styles.processingLabel}>
+              <Text variant="body" color={index < done ? 'text' : 'textMuted'} style={styles.grow}>
+                {label}
+              </Text>
+              {index < done ? (
+                <Animated.View entering={FadeIn.duration(200)}>
+                  <Icon as={Check} size={18} color={color.accent} />
+                </Animated.View>
+              ) : null}
+            </View>
+            <ProcessingBar {...(PROCESSING_BARS[index] ?? { start: 0, duration: 0 })} />
           </View>
         ))}
       </View>
-      <Text variant="caption" color="textMuted">
-        {copy.processing.facts[done % copy.processing.facts.length]}
-      </Text>
+      <Animated.View key={fact} entering={FadeIn.duration(400)}>
+        <Text variant="caption" color="textMuted">
+          {copy.processing.facts[fact]}
+        </Text>
+      </Animated.View>
     </QuestionScreen>
+  );
+}
+
+/**
+ * One bar of the processing beat, filled on the UI thread from its start, over its duration. A
+ * progress fill is information, not decoration, so it runs with Reduce Motion on too, as the
+ * system's own progress views do.
+ */
+function ProcessingBar({ start, duration }: { start: number; duration: number }) {
+  const fill = useSharedValue(0);
+  useEffect(() => {
+    fill.value = withDelay(
+      start,
+      withTiming(1, { duration, easing: Easing.bezier(0.45, 0, 0.25, 1) }),
+    );
+    return () => cancelAnimation(fill);
+  }, [start, duration, fill]);
+  const style = useAnimatedStyle(() => ({ width: `${fill.value * 100}%` }));
+
+  return (
+    <View style={styles.processingTrack} accessibilityElementsHidden importantForAccessibility="no">
+      <Animated.View style={[styles.processingFill, style]} />
+    </View>
   );
 }
 
@@ -340,7 +400,11 @@ const styles = StyleSheet.create({
   },
   pledgeText: { flex: 1 },
   processing: { gap: space.md, paddingVertical: space.lg },
-  processingRow: { gap: space.xxs },
+  processingRow: { gap: space.xs },
+  processingLabel: { flexDirection: 'row', alignItems: 'center', gap: space.xs },
+  grow: { flex: 1 },
+  processingTrack: { height: 6, borderRadius: 3, overflow: 'hidden', backgroundColor: color.line },
+  processingFill: { height: '100%', borderRadius: 3, backgroundColor: color.accent },
   statGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm },
   stat: { flexGrow: 1, flexBasis: '44%', gap: space.xxs, padding: space.md },
   milestone: {

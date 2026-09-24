@@ -278,16 +278,49 @@ export function fearCard(key: string): ReflectionCard | null {
 // --- screens ---------------------------------------------------------------
 
 export const copy = {
-  splash: {
+  /**
+   * The welcome intro before consent and step 1 (docs/WELCOME-brief.md), approved by Pavle
+   * 24.09.2026. Three beats, uncounted. All of it is genderless, which retired the old splash's
+   * gendered second line and the `hteo` token with it.
+   *
+   * Every claim is true of the build, and if one stops being true the line changes, not the
+   * code: "radi i bez interneta" (the data spine, M1 and M3), "ukupno vreme ostaje" (the timer
+   * counts from quit_date and a slip never moves it).
+   */
+  welcome: {
     wordmark: 'ISKRA',
-    line1: 'Znaš da treba.',
-    // Brief screen 1: "Iskra ti pomaže da i [g:hteo]." with the x rewrite given as
-    // "…da to i ostvariš." Since that rewrite exists, it is the genderless form here.
-    line2: (gender: GenderCode) =>
-      gender === 'x'
-        ? 'Iskra ti pomaže da to i ostvariš.'
-        : `Iskra ti pomaže da i ${g('hteo', gender)}.`,
-    cta: 'Počni',
+    skip: 'Preskoči',
+    beats: [
+      {
+        art: 'zora',
+        // Two-tone, like the site's hero and in the same words: the ad, the site and the app
+        // say one thing.
+        headline: ['Prestani da pušiš.', 'Ovaj put imaš plan.'],
+        sub: 'Srpska aplikacija za prestanak pušenja. Prati svoje zdravlje, finansije i oslobodi se nikotinske zavisnosti.',
+        cta: 'Dalje',
+      },
+      {
+        art: 'oluja',
+        headline: ['Poriv traje 3 do 5 minuta.', 'Iskra te provede kroz njega.'],
+        // The brief closes the quote with a straight ASCII " after an opening „. Serbian pairs „
+        // with ", and the font carries it, so the closing mark is corrected. The only character
+        // here that differs from the brief; flagged for Pavle.
+        sub: 'Jedan dodir na „Imam poriv“ otvara alate koji pomažu da prođe. Radi i bez interneta.',
+        cta: 'Dalje',
+      },
+      {
+        art: 'put',
+        // The promise that keeps someone through a slip. Preskoči lands here, never past it.
+        headline: ['Jedna cigareta i sve propadne?', 'Ne propadne.'],
+        sub: 'Ukupno vreme bez cigarete ostaje tvoje. Iskra pomaže da nastaviš, dan po dan.',
+        cta: 'Počnimo',
+      },
+    ],
+    /**
+     * Beat 1's returning-user link (docs/ACCOUNT-brief.md). Approved, and not rendered until
+     * ACCOUNT's sign-in exists: a link that leads nowhere is not shown.
+     */
+    signIn: 'Već imaš nalog? Prijavi se',
   },
 
   name: {

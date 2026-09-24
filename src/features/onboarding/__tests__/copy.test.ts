@@ -109,8 +109,9 @@ describe('every onboarding string, in every gender', () => {
     const c = ctx({ gender });
     const cards = [...REASON_KEYS.map((k) => reasonCard(k, c)), ...FEAR_KEYS.map(fearCard)];
     return [
-      copy.splash.line1,
-      copy.splash.line2(gender),
+      copy.welcome.skip,
+      copy.welcome.signIn,
+      ...copy.welcome.beats.flatMap((beat) => [...beat.headline, beat.sub, beat.cta]),
       copy.name.question,
       copy.gender.question,
       copy.product.question,
@@ -185,8 +186,7 @@ describe('every onboarding string, in every gender', () => {
 });
 
 describe('the sentences that branch for an unset gender', () => {
-  it('keeps the two rewrites the brief supplied itself', () => {
-    expect(copy.splash.line2('x')).toBe('Iskra ti pomaže da to i ostvariš.');
+  it('keeps the rewrite the brief supplied itself', () => {
     expect(copy.fearReflection.cta('x')).toBe('Idemo dalje');
   });
 
@@ -236,5 +236,35 @@ describe('missingCopy', () => {
   it('is unmistakable and carries no Serbian of its own', () => {
     expect(missingCopy('x')).toBe('«TODO(copy): x»');
     expect(hasMissingCopy(missingCopy('x'))).toBe(true);
+  });
+});
+
+/** The welcome intro (docs/WELCOME-brief.md): three beats, in order, with the promise last. */
+describe('the welcome intro', () => {
+  it('has three beats in the brief’s order, the slip promise last', () => {
+    expect(copy.welcome.beats.map((beat) => beat.art)).toEqual(['zora', 'oluja', 'put']);
+    expect(copy.welcome.beats[2]?.headline[1]).toBe('Ne propadne.');
+  });
+
+  it('gives every beat a two-line headline: ink first, ember second', () => {
+    for (const beat of copy.welcome.beats) expect(beat.headline).toHaveLength(2);
+  });
+
+  it('advances with Dalje twice and starts with Počnimo', () => {
+    expect(copy.welcome.beats.map((beat) => beat.cta)).toEqual(['Dalje', 'Dalje', 'Počnimo']);
+  });
+
+  it('invents no number: the only figures are the brief’s own', () => {
+    const figures = copy.welcome.beats
+      .flatMap((beat) => [...beat.headline, beat.sub])
+      .join(' ')
+      .match(/\d+/g);
+    expect(figures).toEqual(['3', '5']);
+  });
+
+  it('closes the quote the Serbian way', () => {
+    const sub = copy.welcome.beats[1]?.sub ?? '';
+    expect(sub).toContain('„Imam poriv“');
+    expect(sub).not.toContain('"');
   });
 });

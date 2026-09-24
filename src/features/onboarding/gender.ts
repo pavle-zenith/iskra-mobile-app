@@ -10,8 +10,9 @@
  * A word-level genderless form does not exist in Serbian: a rewrite changes the sentence around
  * the word, not the word itself ("Budi iskren" becomes "Odgovori iskreno"). So Pavle's answers
  * (21.09.2026) took most sentences genderless outright, which deleted their tokens, and branched
- * the rest: the five tokens below keep `m` and `f`, and every sentence that uses one supplies its
- * own `x` sentence, the way `splash.line2` always has.
+ * the rest: the four tokens below keep `m` and `f`, and every sentence that uses one supplies its
+ * own `x` sentence. (`hteo` went with the old splash, whose welcome intro replacement is
+ * genderless for everyone.)
  *
  * `x` is therefore always null here, and `g(token, 'x')` returns a marker. That is the safety
  * net, not the plan: a marker on screen means someone added a gendered sentence without an `x`
@@ -22,7 +23,7 @@ import { GENDERS, type Gender } from '@/lib/vocab';
 
 export type GenderCode = 'm' | 'f' | 'x';
 
-export type GenderToken = 'prestao' | 'pusio' | 'spreman' | 'hteo' | 'trosio';
+export type GenderToken = 'prestao' | 'pusio' | 'spreman' | 'trosio';
 
 type Forms = {
   m: string;
@@ -35,7 +36,6 @@ const TOKENS: Record<GenderToken, Forms> = {
   prestao: { m: 'prestao', f: 'prestala', x: null },
   pusio: { m: 'pušio', f: 'pušila', x: null },
   spreman: { m: 'spreman', f: 'spremna', x: null },
-  hteo: { m: 'hteo', f: 'htela', x: null },
   trosio: { m: 'trošio', f: 'trošila', x: null },
 };
 
