@@ -55,7 +55,8 @@ export function CategoryDetail({
   next?: string;
   intro?: React.ReactNode;
   rows: readonly TimelineRow[];
-  info: string;
+  /** The export's info card at the bottom. Zdravlje's carries its sources. */
+  info?: string;
 }) {
   const reached = rows.filter((row) => row.status === 'reached').length;
 
@@ -89,12 +90,14 @@ export function CategoryDetail({
         ))}
       </View>
 
-      <Card style={styles.info}>
-        <Icon as={Info} size={18} color={tone} />
-        <Text variant="caption" color="textSoft" style={styles.grow}>
-          {info}
-        </Text>
-      </Card>
+      {info ? (
+        <Card style={styles.info}>
+          <Icon as={Info} size={18} color={tone} />
+          <Text variant="caption" color="textSoft" style={styles.grow}>
+            {info}
+          </Text>
+        </Card>
+      ) : null}
     </DetailScreen>
   );
 }

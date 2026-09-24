@@ -1,5 +1,7 @@
 import { Stack } from 'expo-router';
+import { useEffect } from 'react';
 
+import { setPorivOpen } from '@/features/notifications/scheduler';
 import { PorivProvider } from '@/features/poriv/PorivSession';
 import { color } from '@/theme';
 
@@ -10,6 +12,12 @@ import { color } from '@/theme';
  * Gestures are off: nothing navigates away from a craving by accident.
  */
 export default function PorivLayout() {
+  // Nothing interrupts a craving: no notification is presented while this stack is open.
+  useEffect(() => {
+    setPorivOpen(true);
+    return () => setPorivOpen(false);
+  }, []);
+
   return (
     <PorivProvider>
       <Stack

@@ -28,7 +28,7 @@ const za: Record<TimeLeft['unit'], (n: number) => string> = {
 const period = (days: number) => `za ${formatNumber(days)} ${dani(days)} bez cigarete`;
 const upcoming = ({ value, unit }: TimeLeft) => `za ${value} ${za[unit](value)}`;
 
-/** The "Podeli svoju pobedu" button, hidden until M5's share card (Task 1b) exists. */
+/** "Podeli svoju pobedu": opens the share card with this screen's number (M5 Task 1b). */
 const share = 'Podeli svoju pobedu';
 
 export const progressCopy = {
@@ -53,6 +53,8 @@ export const progressCopy = {
     equivalentsNote: 'Poređenja se menjaju kako ušteđevina raste.',
     nextGoal: (amount: number) => `Sledeći cilj: ${formatNumber(amount)} RSD`,
     remaining: (amount: number) => `još ${formatNumber(amount)} RSD`,
+    /** The share card's second line: M5's approved Novac goal sub. */
+    shareSub: 'ušteđeno',
     cigarettesLink: 'Uz to, nije zapaljeno',
     cigarettesCount: (n: number) => `${formatNumber(n)} ${cigareta(n)}`,
     share,
@@ -88,6 +90,8 @@ export const progressCopy = {
     hours: (n: number) => `${formatNumber(n)} ${sati(n)}`,
     hoursSub: 'koje nije otišlo na pušenje',
     basis: 'Računamo 6 minuta po cigareti.',
+    /** The share card's second line: M5's approved Vreme goal sub. */
+    shareSub: 'bez cigarete',
     goalsTitle: 'Ciljevi',
     here: 'Ti si ovde',
     goalSub: 'bez cigarete',

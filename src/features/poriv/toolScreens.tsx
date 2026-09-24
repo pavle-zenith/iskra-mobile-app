@@ -15,8 +15,12 @@ import { tools } from './copy';
 import { usePorivSession } from './PorivSession';
 import { CRAVING_TOTAL_MS, remainingLabel } from './session';
 import { ToolShell } from './ToolShell';
+import { RisingWater, WalkingTrail } from './toolVisuals';
 
-/** Pijem vodu: one tap per gulp, eight to the bottom. Something for the hand to do. */
+/**
+ * Pijem vodu: one tap per gulp, eight to the bottom. Something for the hand to do. Each gulp
+ * raises the water over the whole screen one step (docs/M5-brief.md, Export alignment 11).
+ */
 const GULPS = 8;
 
 export function VodaScreen() {
@@ -24,19 +28,19 @@ export function VodaScreen() {
   const full = taken >= GULPS;
 
   return (
-    <ToolShell tool="voda" eyebrow={tools.voda.eyebrow} done={tools.voda.done}>
+    <ToolShell
+      tool="voda"
+      eyebrow={tools.voda.eyebrow}
+      done={tools.voda.done}
+      background={<RisingWater level={taken / GULPS} />}
+    >
       <Text variant="title">{tools.voda.lead}</Text>
       <Text variant="body" color="textMuted">
         {tools.voda.sub}
       </Text>
 
       <View style={styles.centre}>
-        <View style={styles.glass}>
-          <View
-            style={[styles.water, { height: `${(taken / GULPS) * 100}%`, opacity: full ? 1 : 0.9 }]}
-          />
-        </View>
-        <Text variant="label" color="textMuted">
+        <Text variant="label" color="textSoft">
           {taken} / {GULPS}
         </Text>
       </View>
@@ -118,12 +122,16 @@ export function RazloziScreen() {
   );
 }
 
-/** Šetam: text only. A pedometer needs a motion permission, and a prompt mid-craving is an
- * interruption. */
+/**
+ * Šetam: the export's dotted trail with a dot walking along it, and M3's text as it was. No
+ * pedometer: it needs a motion permission, and a prompt mid-craving is an interruption.
+ */
 export function SetamScreen() {
+  const [startedAt] = useState(() => Date.now());
   return (
     <ToolShell tool="setam" eyebrow={tools.setam.eyebrow} done={tools.setam.done}>
       <Text variant="title">{tools.setam.lead}</Text>
+      <WalkingTrail startedAt={startedAt} />
       <View style={styles.lines}>
         {tools.setam.lines.map((line) => (
           <Text key={line} variant="bodyLarge" color="textSoft">
@@ -236,18 +244,6 @@ export function BelezimScreen() {
 
 const styles = StyleSheet.create({
   centre: { alignItems: 'center', gap: space.sm, paddingVertical: space.lg },
-  glass: {
-    width: 120,
-    height: 180,
-    borderWidth: 2,
-    borderColor: toolColor.voda.color,
-    borderTopWidth: 0,
-    borderBottomLeftRadius: radius.card,
-    borderBottomRightRadius: radius.card,
-    justifyContent: 'flex-end',
-    overflow: 'hidden',
-  },
-  water: { width: '100%', backgroundColor: toolColor.voda.tint },
   gulp: {
     minHeight: 64,
     borderRadius: radius.control,

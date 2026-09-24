@@ -35,7 +35,8 @@ import { drain, getSyncSnapshot, setSimulatedOffline } from './sync';
  *     "INSERT OR REPLACE INTO kv (key, value) VALUES ('dev.command', 'log')"
  *
  * Commands: offline | online | log | drain | resync | report | state | profile |
- * poriv:start | poriv:survive | poriv:slip | poriv:report | quit:<days> | slip. Every one goes through the same
+ * poriv:start | poriv:survive | poriv:slip | poriv:report | quit:<days> | slip |
+ * notifications:report. Every one goes through the same
  * repository and sync engine the app uses; nothing here is a shortcut around them.
  * `report` prints the app's own view of the data to the Metro log.
  */
@@ -199,6 +200,25 @@ async function run(command: string) {
         await updateCraving(craving.id, { strength: craving.strength });
       }
       return drain();
+    case 'notifications:report': {
+      // What the phone holds for the next seven days, rebuilt first from what is true now.
+      const Notifications = await import('expo-notifications');
+      const { rescheduleNotifications } = await import('@/features/notifications/scheduler');
+      await rescheduleNotifications();
+      const scheduled = await Notifications.getAllScheduledNotificationsAsync();
+      const permission = await Notifications.getPermissionsAsync();
+      console.log(
+        `[dev] notifications ${JSON.stringify({
+          granted: permission.granted,
+          scheduled: scheduled.map((item) => ({
+            trigger: item.trigger,
+            title: item.content.title ?? null,
+            body: item.content.body,
+          })),
+        })}`,
+      );
+      return;
+    }
     case 'slip': {
       // The same slip path as Poriv mod and the check-in: its own row, nothing reset.
       const row = await logSlip({});

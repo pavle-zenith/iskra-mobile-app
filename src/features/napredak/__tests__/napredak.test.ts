@@ -124,8 +124,13 @@ describe('the four screens', () => {
     expect(screen('CigarettesScreen')).toContain("router.push('/napredak/novac')");
   });
 
-  it('draw no share button until M5 gives it somewhere to go', () => {
-    for (const name of SCREENS) expect(screen(name)).not.toMatch(/copy\.share|Share2?\b/);
+  it('share their own figure on the export card, in the header and at the foot (M5 1b)', () => {
+    for (const name of ['MoneyScreen', 'CigarettesScreen', 'TimeScreen'] as const) {
+      const source = screen(name);
+      expect(source).toContain('<ShareBox label={copy.share} onPress={shareIt} />');
+      expect(source).toContain('<ShareButton label={copy.share} onPress={shareIt} />');
+      expect(source).toMatch(/const shareIt = \(\) =>\s*share\(/);
+    }
   });
 
   it('take every figure from the engine and every colour from the theme', () => {

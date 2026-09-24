@@ -19,6 +19,7 @@ const slip = (createdAt: string): SlipRow => ({
   id: createdAt,
   trigger: null,
   notes: null,
+  cigarettes: 1,
   created_at: createdAt,
 });
 

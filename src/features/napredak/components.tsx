@@ -1,5 +1,5 @@
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
-import { ChevronLeft, ChevronRight, type LucideIcon } from 'lucide-react-native';
+import { ChevronLeft, ChevronRight, Share, type LucideIcon } from 'lucide-react-native';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   AppState,
@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Icon, Pressable, Text } from '@/components/primitives';
+import { Button, Icon, Pressable, Text } from '@/components/primitives';
 import { Card } from '@/features/home/components';
 import { color, minTarget, radius, space } from '@/theme';
 
@@ -86,6 +86,25 @@ export function DetailScreen({
       </ScrollView>
     </View>
   );
+}
+
+/** The export's share box, top right of the header, the same size as the back box. */
+export function ShareBox({ onPress, label }: { onPress: () => void; label: string }) {
+  return (
+    <Pressable
+      onPress={onPress}
+      accessibilityLabel={label}
+      hitSlop={BOX_SLOP}
+      style={styles.boxButton}
+    >
+      <Icon as={Share} size={20} color={color.textMuted} />
+    </Pressable>
+  );
+}
+
+/** "Podeli svoju pobedu", the export's outlined button at the foot of each progress screen. */
+export function ShareButton({ label, onPress }: { label: string; onPress: () => void }) {
+  return <Button variant="secondary" icon={Share} label={label} onPress={onPress} />;
 }
 
 /** The export's hero: a glyph, the big number, its label, and the period line under them. */

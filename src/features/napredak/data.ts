@@ -8,7 +8,7 @@ import type { Profile } from '@/lib/sync/profileRow';
  */
 export function progressInputFor(
   profile: Profile | null,
-  slips: readonly Pick<SlipRow, 'created_at'>[],
+  slips: readonly Pick<SlipRow, 'created_at' | 'cigarettes'>[],
   now: Date,
 ): ProgressInput {
   return {
@@ -16,15 +16,15 @@ export function progressInputFor(
     cigarettesPerDay: profile?.cigarettesPerDay ?? null,
     packPriceRsd: profile?.packPriceRsd ?? null,
     cigarettesPerPack: profile?.cigarettesPerPack ?? null,
-    // No count on a slip row yet: the engine counts each as one until the M5 slip flow adds it.
-    slips: slips.map((slip) => ({ createdAt: slip.created_at })),
+    // Each slip subtracts the cigarettes recorded on it (docs/M5-brief.md Task 6).
+    slips: slips.map((slip) => ({ createdAt: slip.created_at, cigarettes: slip.cigarettes })),
     now,
   };
 }
 
 export function progressFor(
   profile: Profile | null,
-  slips: readonly Pick<SlipRow, 'created_at'>[],
+  slips: readonly Pick<SlipRow, 'created_at' | 'cigarettes'>[],
   now: Date,
 ): Progress {
   return computeProgress(progressInputFor(profile, slips, now));

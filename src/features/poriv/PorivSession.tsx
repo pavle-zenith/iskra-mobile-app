@@ -8,6 +8,7 @@ import {
   useState,
 } from 'react';
 
+import { rescheduleNotifications } from '@/features/notifications/scheduler';
 import { kvGet, kvSet } from '@/data/db';
 import { listCravings, logCraving, updateCraving, updateSlip, type CravingRow } from '@/data/repo';
 import type { CravingOutcome, ToolKey, TriggerKey } from '@/lib/vocab';
@@ -39,8 +40,11 @@ export type PorivSessionValue = {
   openTool: (tool: ToolKey) => Promise<void>;
   /** Beležim, or the one optional tap afterwards. Updates the slip row too, when there is one. */
   note: (input: { trigger?: TriggerKey; strength?: number }) => Promise<void>;
-  /** True if this call is the one that ended the craving; false if it was already over. */
-  finish: (outcome: CravingOutcome) => Promise<boolean>;
+  /**
+   * The ending, if this call is the one that ended the craving: with the slip's id when it
+   * ended in a cigarette. Null if it was already over.
+   */
+  finish: (outcome: CravingOutcome) => Promise<{ slipId: string | null } | null>;
   /** The X: leaves `outcome` null, because we do not know how it ended and never guess. */
   dismiss: () => Promise<void>;
 };
@@ -135,13 +139,15 @@ export function PorivProvider({ children }: { children: React.ReactNode }) {
   const finish = useCallback(
     async (outcome: CravingOutcome) => {
       const current = cravingRef.current;
-      if (!current) return false;
+      if (!current) return null;
       const result = await finishCraving(current, outcome);
-      if (!result) return false;
+      // A slip starts 48 hours of silence: anything already scheduled in them is cancelled now.
+      if (outcome === 'slipped') void rescheduleNotifications();
+      if (!result) return null;
       remember(result.craving);
       slipRef.current = result.slipId;
       setSlipId(result.slipId);
-      return true;
+      return { slipId: result.slipId };
     },
     [remember],
   );

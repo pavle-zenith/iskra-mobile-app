@@ -13,8 +13,12 @@ import {
   Hero,
   LinkCard,
   Section,
+  ShareBox,
+  ShareButton,
   useProgressSource,
 } from './components';
+import { useShareCard } from '@/features/share/ShareCard';
+
 import { progressCopy } from './copy';
 import { progressFor } from './data';
 
@@ -32,6 +36,7 @@ const TICK_MS = 60_000;
 export function CigarettesScreen() {
   const router = useRouter();
   const { source, now } = useProgressSource(TICK_MS);
+  const { share, host } = useShareCard();
   const copy = progressCopy.cigarettes;
   const tone = progressColor.time.base;
 
@@ -40,8 +45,9 @@ export function CigarettesScreen() {
   const progress = progressFor(source.profile, source.slips, now);
   const count = progress.cigarettesNotSmoked;
 
+  const shareIt = () => share({ title: formatNumber(count), sub: copy.heroLabel(count) });
   return (
-    <DetailScreen title={copy.title}>
+    <DetailScreen title={copy.title} right={<ShareBox label={copy.share} onPress={shareIt} />}>
       <Hero
         icon={CigaretteOff}
         iconColor={tone}
@@ -89,9 +95,10 @@ export function CigarettesScreen() {
         />
       ) : null}
 
-      {/* "Podeli svoju pobedu" arrives with M5's share card (Task 1b). */}
+      <ShareButton label={copy.share} onPress={shareIt} />
 
       <FinePrint>{copy.finePrint}</FinePrint>
+      {host}
     </DetailScreen>
   );
 }

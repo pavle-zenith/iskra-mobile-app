@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { View } from 'react-native';
 
 import { getProfile } from '@/data/repo';
-import { HomeScreen } from '@/features/home/HomeScreen';
 import { resumeOnboardingTarget } from '@/features/onboarding/OnboardingProvider';
 import { resumableCraving } from '@/features/poriv/PorivSession';
 import type { StepId } from '@/lib/onboarding/steps';
@@ -80,5 +79,6 @@ export default function IndexRoute() {
     );
   }
 
-  return <HomeScreen />;
+  // Home is the first tab (docs/M5-brief.md Task 0).
+  return <Redirect href="/pocetna" />;
 }

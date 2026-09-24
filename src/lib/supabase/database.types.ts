@@ -253,6 +253,7 @@ export type Database = {
       };
       slips: {
         Row: {
+          cigarettes: number;
           created_at: string | null;
           id: string;
           notes: string | null;
@@ -260,6 +261,7 @@ export type Database = {
           user_id: string | null;
         };
         Insert: {
+          cigarettes?: number;
           created_at?: string | null;
           id?: string;
           notes?: string | null;
@@ -267,6 +269,7 @@ export type Database = {
           user_id?: string | null;
         };
         Update: {
+          cigarettes?: number;
           created_at?: string | null;
           id?: string;
           notes?: string | null;

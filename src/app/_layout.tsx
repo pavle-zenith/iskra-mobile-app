@@ -15,17 +15,40 @@
  * FINISH: unreviewed and undocumented is unfinished; this build ends with the finish
  * review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
  */
-import { Stack } from 'expo-router';
+import * as Notifications from 'expo-notifications';
+import { router, Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 
 import { startDataSpine } from '@/data/spine';
+import {
+  installNotificationHandler,
+  type NotificationTarget,
+} from '@/features/notifications/scheduler';
 import { color } from '@/theme';
 
 export default function RootLayout() {
   // Local database, anonymous auth and sync start here and are never awaited: the first frame
   // renders from the phone, not the network.
   useEffect(() => startDataSpine(), []);
+
+  // Local notifications (docs/M5-brief.md Task 5): never shown over a craving, and a tap opens
+  // what it is about, including a tap that launched the app.
+  useEffect(() => {
+    installNotificationHandler();
+    const open = (response: Notifications.NotificationResponse | null) => {
+      const target = response?.notification.request.content.data?.target as
+        NotificationTarget | undefined;
+      if (target === 'checkin') {
+        router.push({ pathname: '/pocetna', params: { checkin: String(Date.now()) } });
+      } else if (target === 'goal') router.push('/napredak');
+      else if (target === 'nudge') router.push('/pocetna');
+    };
+    const launched = Notifications.getLastNotificationResponse();
+    if (launched) open(launched);
+    const subscription = Notifications.addNotificationResponseReceivedListener(open);
+    return () => subscription.remove();
+  }, []);
 
   return (
     <>

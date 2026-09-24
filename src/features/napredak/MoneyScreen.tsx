@@ -29,9 +29,13 @@ import {
   Hero,
   LinkCard,
   Section,
+  ShareBox,
+  ShareButton,
   styles as shared,
   useProgressSource,
 } from './components';
+import { useShareCard } from '@/features/share/ShareCard';
+
 import { progressCopy } from './copy';
 import { progressFor, progressInputFor } from './data';
 
@@ -62,6 +66,7 @@ const DAY_MS = 86_400_000;
 export function MoneyScreen() {
   const router = useRouter();
   const { source, now } = useProgressSource(TICK_MS);
+  const { share, host } = useShareCard();
   const copy = progressCopy.money;
   const money = progressColor.money;
 
@@ -74,8 +79,9 @@ export function MoneyScreen() {
   const perDay = source.profile?.cigarettesPerDay;
   const price = source.profile?.packPriceRsd;
 
+  const shareIt = () => share({ title: copy.rsd(progress.rsdSaved), sub: copy.shareSub });
   return (
-    <DetailScreen title={copy.title}>
+    <DetailScreen title={copy.title} right={<ShareBox label={copy.share} onPress={shareIt} />}>
       <Hero
         icon={Coins}
         iconColor={color.accent}
@@ -168,9 +174,10 @@ export function MoneyScreen() {
         />
       ) : null}
 
-      {/* "Podeli svoju pobedu" arrives with M5's share card (Task 1b). */}
+      <ShareButton label={copy.share} onPress={shareIt} />
 
       <FinePrint>{copy.finePrint}</FinePrint>
+      {host}
     </DetailScreen>
   );
 }

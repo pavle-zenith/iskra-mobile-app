@@ -14,6 +14,8 @@ Every raster that ships in the app, and where it came from.
 | `welcome/welcome-1-zora.jpg` | Generated with Higgsfield (gpt_image_2_5), 24.09.2026, style reference iskraclub.com/bands/path-poriv-mobile.jpg, approved by Pavle | Resized from 1520 x 2688 to 1080 x 1910, JPEG q82. Full-size original in Pavle's Higgsfield account |
 | `welcome/welcome-2-oluja.jpg` | Same | Same |
 | `welcome/welcome-3-put.jpg` | Same | Same |
+| `napredak/sky-hero.jpg` | iskraclub.com `public/bands/sky-hero-mobile.jpg` | Resized from 1152 x 2048 to 675 x 1200, JPEG q80. The Napredak tab's photo hero, in place of the export's unsourced sky test image |
+| `saznaj/path-cta.jpg` | iskraclub.com `public/bands/path-cta-mobile.jpg` | Resized from 1152 x 2048 to 675 x 1200, JPEG q80. Saznaj's featured-card texture, blended into ember, in place of the export's unsourced canyon image |
 | `fonts/*.ttf` | Google Fonts static builds via `@expo-google-fonts/host-grotesk@0.4.1` and `@expo-google-fonts/manrope@0.4.2` | SIL OFL 1.1, licences alongside |
 | `icon.png`, `android-icon-*.png` | Expo `blank-typescript` template | **Placeholders.** Replace with the Iskra app icon before any build leaves the team |
 

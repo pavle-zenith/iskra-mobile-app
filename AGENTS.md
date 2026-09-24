@@ -251,6 +251,38 @@ force a weak match.
 - **Dev builds:** `quit:<days>` or `quit:<ISO date>` and `slip` in the dev harness set up a day to
   check; `?scroll=end` opens a progress screen at its bottom for screenshots
 
+## The tabs and the rest of the core (M5)
+
+- **`docs/M5-brief.md` is the spec, and its "Export alignment" section overrides Tasks 1 to 6.**
+  Every screen follows its export file; every deviation, with its reason, is in
+  `.impeccable/review/m5/REFERENCES.md`
+- **Four tabs** (`src/app/(tabs)`): Početna, Napredak, Saznaj, Profil. The gate at `/` sends Home
+  to `/pocetna`. Stack screens (Poriv, onboarding, the progress screens, the slip flow) push over
+  the tabs. "Imam poriv" is pinned above the tab bar on Home only
+- **Goals live in `src/lib/progress/goals.ts`**, six categories, pure and tested. `syncGoals()`
+  writes a `milestones` row for each goal crossed and never removes one: a row is history, and a
+  slip or a quit-date edit never locks a goal again. Home, the Napredak tab and Success call it
+- **A celebration shows once, on Home only, never within 48 hours of a slip**
+- **No category is ember**, the one voice of action (`goalColor` in `src/theme`). White sits on a
+  category colour only at large sizes; small text on a colour goes on a white plate
+- **Nothing that is not a craving routes into `/poriv`.** Its provider opens a craving when none
+  is open. The slip flow is `/posrtaj` (slip id, and craving id when there was one, in the
+  route); Moji razlozi from Home is `/razlozi`. `src/features/posrtaj/__tests__/flow.test.ts`
+- **Notifications are local and rebuilt from state** (`src/lib/notifications/plan.ts`, pure):
+  at most three a day, nothing 22:00 to 08:00 (a goal crossed at night is told at 08:00), 48
+  hours of silence after a slip, never over Poriv mod. Rebuilt on every Home focus, after a slip
+  and after any setting or profile change
+- **Saznaj reads the site's public Sanity dataset** with the site's `LISTED` filter, caches the
+  index in SQLite and refreshes at most every six hours or on pull
+- **Misao dana renders nothing until `src/features/misao/misli.ts` holds approved lines**
+- **The share card is the export's**, the person's own figure only, captured off screen with
+  `react-native-view-shot` and shared with `expo-sharing`
+- **After any Release build on a simulator, the prebuilt React Native and Expo frameworks stay
+  in their release flavour** and the next Debug build either fails to link or crashes at launch
+  (`RCTPackagerConnection` missing, or a bus error in `Props::Props`). Swap them back:
+  `replace-rncore-version.js -c Debug` for React and `replace-xcframework.js -c debug` for each
+  Expo module, after writing `release` into their `.last_build_configuration`
+
 ## Welcome intro (WELCOME)
 
 - **`docs/WELCOME-brief.md` is the spec, with one change from Pavle (24.09.2026):** one centred
@@ -282,8 +314,10 @@ src/app/                  routes (Expo Router); dev.tsx is the dev-only data har
 src/app/onboarding/       welcome intro plus one dynamic route for the seventeen steps
 src/app/poriv/            Mode, the six tools (alat/[tool]), success and slip
 src/app/onboarding/consent  consent, before step 1
-src/app/profil.tsx        Profil: the account, consent toggles, delete everything
-src/app/napredak/         the four progress screens (M4)
+src/app/profil/           Profil's edit screens (the tab is (tabs)/profil)
+src/app/(tabs)/           the four tabs: pocetna, napredak, saznaj, profil (M5)
+src/app/napredak/         the four progress screens (M4), category goals, the roadmap
+src/app/posrtaj/          the slip flow, outside /poriv (M5)
 src/components/primitives Text, Pressable, Button, Icon
 src/features/<name>/      feature code (poriv, napredak, ...)
 src/data/                 drivers: SQLite, repo, sync engine, auth, Supabase client

@@ -78,3 +78,19 @@ export const isTiming = (v: unknown): v is Timing => isOneOf(TIMINGS, v);
 
 export const isStrength = (v: unknown): v is number =>
   typeof v === 'number' && Number.isInteger(v) && v >= STRENGTH_MIN && v <= STRENGTH_MAX;
+
+/**
+ * `slips.cigarettes`: how many a slip was. Server CHECK: between 1 and 40 (migration
+ * 20260924125902). 40 is the onboarding ceiling for cigarettes a day, so one slip never counts
+ * more than a whole day of the old habit.
+ */
+export const SLIP_CIGARETTES = { min: 1, max: 40, default: 1 } as const;
+
+export function isSlipCigarettes(value: unknown): value is number {
+  return (
+    typeof value === 'number' &&
+    Number.isInteger(value) &&
+    value >= SLIP_CIGARETTES.min &&
+    value <= SLIP_CIGARETTES.max
+  );
+}

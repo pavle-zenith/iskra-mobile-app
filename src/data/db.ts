@@ -107,6 +107,12 @@ const MIGRATIONS: readonly string[] = [
   ALTER TABLE profiles ADD COLUMN marketing_consent INTEGER NOT NULL DEFAULT 0;
   ALTER TABLE profiles ADD COLUMN marketing_consent_at TEXT;
   `,
+
+  // 3: how many cigarettes a slip was, mirrored from Supabase migration 20260924125902
+  // (docs/M5-brief.md Task 6). Existing slips count as one, as the engine always counted them.
+  `
+  ALTER TABLE slips ADD COLUMN cigarettes INTEGER NOT NULL DEFAULT 1;
+  `,
 ];
 
 /** Every table that holds anything a person entered or the app derived from it. */

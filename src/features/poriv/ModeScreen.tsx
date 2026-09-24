@@ -73,7 +73,15 @@ export function ModeScreen() {
     // Only navigate if this call is the one that ended it; a second tap changes nothing.
     const ended = await finish(outcome);
     if (!ended) return;
-    router.replace(outcome === 'survived' ? '/poriv/success' : '/poriv/slip');
+    if (outcome === 'survived') {
+      router.replace('/poriv/success');
+      return;
+    }
+    // The slip flow lives outside this stack; it takes the slip and the craving by id.
+    router.replace({
+      pathname: '/posrtaj',
+      params: { slip: ended.slipId ?? '', craving: craving?.id ?? '' },
+    });
   };
 
   return (

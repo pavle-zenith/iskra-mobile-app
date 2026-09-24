@@ -5,20 +5,25 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button, Text } from '@/components/primitives';
 import { getProfile, listCravings } from '@/data/repo';
+import { syncGoals } from '@/features/ciljevi/data';
+import { NextGoalCard } from '@/features/ciljevi/HomeModules';
+import { nearestGoals, type Goal } from '@/lib/progress';
 import { resolveAnchorTimeZone } from '@/lib/time/dayCount';
 import type { TriggerKey } from '@/lib/vocab';
 import { color, space } from '@/theme';
 
 import { TriggerChips } from './components';
-import { slip as slipCopy, success as successCopy } from './copy';
+import { success as successCopy } from './copy';
 import { usePorivSession } from './PorivSession';
 import { survivedOn } from './session';
 
 /**
- * The two ways a craving ends.
+ * How a craving ends well.
  *
- * Neither screen asks for a rating, shows a milestone or offers a share: M3 has none of
- * those, and a rating prompt here would be asking for something in the person's worst minute.
+ * Neither screen asks for a rating or offers a share: a rating prompt here would be asking for
+ * something in the person's worst minute. Success shows the next goal and how far it is, the
+ * export's card, now that goals exist (docs/M5-brief.md, Export alignment 9). A slip goes to the
+ * slip flow in src/features/posrtaj.
  * The trigger chips appear only when the craving carries no trigger yet, so nobody is asked
  * the same question twice.
  */
@@ -75,12 +80,15 @@ function OptionalTrigger({ question }: { question: string }) {
 export function SuccessScreen() {
   const router = useRouter();
   const [today, setToday] = useState<number | null>(null);
+  const [next, setNext] = useState<Goal | null>(null);
 
   useEffect(() => {
     let alive = true;
     void (async () => {
-      const [rows, profile] = await Promise.all([listCravings(), getProfile()]);
+      // syncGoals also writes a Porivi goal this craving may just have reached.
+      const [rows, profile, goals] = await Promise.all([listCravings(), getProfile(), syncGoals()]);
       if (!alive) return;
+      setNext(nearestGoals(goals.goals, 1)[0] ?? null);
       // The same anchor zone Home counts days in, so "Danas" means one day in the app.
       const zone = resolveAnchorTimeZone(
         profile?.quitTimeZone,
@@ -105,25 +113,8 @@ export function SuccessScreen() {
       <Text variant="body" color="textMuted">
         {successCopy.learning}
       </Text>
+      {next ? <NextGoalCard goal={next} /> : null}
       <OptionalTrigger question={successCopy.triggerQuestion} />
-    </OutcomeShell>
-  );
-}
-
-/**
- * The slip minimum. M5 builds the full flow; this exists so the link never leads nowhere.
- * Absolution first: the day count does not move, and the screen says so plainly.
- */
-export function SlipScreen() {
-  const router = useRouter();
-
-  return (
-    <OutcomeShell homeLabel={slipCopy.home} onHome={() => router.replace('/')}>
-      <Text variant="display">{slipCopy.header}</Text>
-      <Text variant="bodyLarge" color="textSoft">
-        {slipCopy.lead}
-      </Text>
-      <OptionalTrigger question={slipCopy.triggerQuestion} />
     </OutcomeShell>
   );
 }

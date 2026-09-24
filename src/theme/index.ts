@@ -45,6 +45,9 @@ export const color = {
   fieldPlate: palette.surface,
   /** Hairlines and inactive track on a field. Decoration only, never text. */
   onFieldFaint: 'rgba(255, 255, 255, 0.32)',
+
+  /** Ink at 45% behind a sheet, so the screen under it recedes without going dark. */
+  scrim: 'rgba(25, 21, 18, 0.45)',
 } as const;
 
 export type ColorRole = keyof typeof color;
@@ -78,6 +81,27 @@ export const progressColor: Record<ProgressKey, { base: string; deep: string; ti
   health: { base: palette.health, deep: palette.healthDeep, tint: palette.healthTint },
   time: { base: palette.time, deep: palette.timeDeep, tint: palette.timeTint },
 };
+
+/**
+ * The six goal categories (docs/M5-brief.md, Ciljevi). Each keeps the colour it already has in
+ * the app where it has one: Novac is money green and Zdravlje health rose (M4's screens and the
+ * site's Napredak switch), Cigarete the violet of Odbijene cigarete. The export's blue and teal
+ * map to Vreme and Porivi, and Provere takes the remaining distinct hue. Ember is no category's
+ * colour: it is the one voice of action.
+ *
+ * `solid` carries white only at large sizes (3.88:1 at its lowest, Vreme); small text on a goal
+ * colour goes on a white plate. `tint` carries ink text. `text` is the category's colour for
+ * small text on paper, 4.5:1 or better: the deep shade where the site has one, ink where the
+ * colour itself falls short (Vreme 3.88:1, Porivi 4.10:1).
+ */
+export const goalColor = {
+  vreme: { solid: palette.toolVoda, tint: palette.toolVodaTint, text: palette.ink },
+  novac: { solid: palette.money, tint: palette.moneyTint, text: palette.moneyDeep },
+  cigarete: { solid: palette.time, tint: palette.timeTint, text: palette.timeDeep },
+  porivi: { solid: palette.toolDisem, tint: palette.toolDisemTint, text: palette.ink },
+  provere: { solid: palette.toolOdlazem, tint: palette.toolOdlazemTint, text: palette.toolOdlazem },
+  zdravlje: { solid: palette.health, tint: palette.healthTint, text: palette.healthDeep },
+} as const;
 
 /** 4pt base. Tight inside a group, generous between groups. */
 export const space = {

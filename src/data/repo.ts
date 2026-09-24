@@ -10,9 +10,11 @@ import {
 } from '@/lib/sync/profileRow';
 import {
   isCravingOutcome,
+  isSlipCigarettes,
   isStrength,
   isToolKey,
   isTriggerKey,
+  SLIP_CIGARETTES,
   type CravingOutcome,
   type ToolKey,
   type TriggerKey,
@@ -46,6 +48,8 @@ export type SlipRow = {
   id: string;
   trigger: TriggerKey | null;
   notes: string | null;
+  /** How many cigarettes the slip was, 1 to 40. The progress engine subtracts it. */
+  cigarettes: number;
   created_at: string;
 };
 export type CheckinRow = { id: string; date: string; clean: boolean; created_at: string };
@@ -231,20 +235,28 @@ export async function listCravings(): Promise<Synced<CravingRow>[]> {
  * Logs a slip. It never touches `quit_date` or any counter: the total smoke-free time does
  * not reset (PRODUCT.md). That is why slips are their own table.
  */
-export async function logSlip(input: { trigger?: TriggerKey | null; notes?: string | null }) {
+export async function logSlip(input: {
+  trigger?: TriggerKey | null;
+  notes?: string | null;
+  cigarettes?: number;
+}) {
   if (input.trigger != null) assertVocab(isTriggerKey(input.trigger), 'trigger', input.trigger);
+  const cigarettes = input.cigarettes ?? SLIP_CIGARETTES.default;
+  assertVocab(isSlipCigarettes(cigarettes), 'cigarettes', cigarettes);
   const row: SlipRow = {
     id: randomUUID(),
     trigger: input.trigger ?? null,
     notes: input.notes ?? null,
+    cigarettes,
     created_at: new Date().toISOString(),
   };
   await write(async (tx) => {
     await tx.runAsync(
-      'INSERT INTO slips (id, trigger, notes, created_at) VALUES (?, ?, ?, ?)',
+      'INSERT INTO slips (id, trigger, notes, cigarettes, created_at) VALUES (?, ?, ?, ?, ?)',
       row.id,
       row.trigger,
       row.notes,
+      row.cigarettes,
       row.created_at,
     );
     await enqueue(tx, 'slips', row.id, 'upsert', row);
@@ -259,13 +271,16 @@ export async function logSlip(input: { trigger?: TriggerKey | null; notes?: stri
  */
 export async function updateSlip(
   id: string,
-  input: { trigger?: TriggerKey | null; notes?: string | null },
+  input: { trigger?: TriggerKey | null; notes?: string | null; cigarettes?: number },
 ): Promise<SlipRow | null> {
   if (input.trigger != null) assertVocab(isTriggerKey(input.trigger), 'trigger', input.trigger);
+  if (input.cigarettes !== undefined) {
+    assertVocab(isSlipCigarettes(input.cigarettes), 'cigarettes', input.cigarettes);
+  }
   let updated: SlipRow | null = null;
   await write(async (tx) => {
     const current = await tx.getFirstAsync<SlipRow>(
-      'SELECT id, trigger, notes, created_at FROM slips WHERE id = ?',
+      'SELECT id, trigger, notes, cigarettes, created_at FROM slips WHERE id = ?',
       id,
     );
     if (!current) return;
@@ -273,11 +288,13 @@ export async function updateSlip(
       ...current,
       trigger: input.trigger !== undefined ? input.trigger : current.trigger,
       notes: input.notes !== undefined ? input.notes : current.notes,
+      cigarettes: input.cigarettes ?? current.cigarettes,
     };
     await tx.runAsync(
-      'UPDATE slips SET trigger = ?, notes = ? WHERE id = ?',
+      'UPDATE slips SET trigger = ?, notes = ?, cigarettes = ? WHERE id = ?',
       updated.trigger,
       updated.notes,
+      updated.cigarettes,
       id,
     );
     await enqueue(tx, 'slips', id, 'upsert', updated);
@@ -287,7 +304,7 @@ export async function updateSlip(
 
 export async function listSlips(): Promise<SlipRow[]> {
   return getDb().getAllAsync<SlipRow>(
-    'SELECT id, trigger, notes, created_at FROM slips ORDER BY created_at DESC',
+    'SELECT id, trigger, notes, cigarettes, created_at FROM slips ORDER BY created_at DESC',
   );
 }
 
@@ -335,8 +352,18 @@ export async function listCheckins(): Promise<CheckinRow[]> {
 
 // --- milestones ------------------------------------------------------------
 
-/** Unlocks a milestone once. Unlocking it again returns the original row untouched. */
-export async function unlockMilestone(key: string, category: string): Promise<MilestoneRow> {
+/**
+ * Unlocks a milestone once. Unlocking it again returns the original row untouched: a row is
+ * history, and a later slip or quit-date edit never removes it (docs/M5-brief.md, Unlocking).
+ *
+ * `unlockedAt` is the moment it was crossed where that can be computed (Vreme and Zdravlje: the
+ * quit date plus the threshold); otherwise the moment it is first seen.
+ */
+export async function unlockMilestone(
+  key: string,
+  category: string,
+  unlockedAt: Date = new Date(),
+): Promise<MilestoneRow> {
   let row: MilestoneRow | null = null;
   await write(async (tx) => {
     const existing = await tx.getFirstAsync<Omit<MilestoneRow, 'shared'> & { shared: number }>(
@@ -347,7 +374,7 @@ export async function unlockMilestone(key: string, category: string): Promise<Mi
       row = { ...existing, shared: existing.shared === 1 };
       return;
     }
-    row = { id: randomUUID(), key, category, unlocked_at: new Date().toISOString(), shared: false };
+    row = { id: randomUUID(), key, category, unlocked_at: unlockedAt.toISOString(), shared: false };
     await tx.runAsync(
       'INSERT INTO milestones (id, key, category, unlocked_at, shared) VALUES (?, ?, ?, ?, 0)',
       row.id,
@@ -358,6 +385,26 @@ export async function unlockMilestone(key: string, category: string): Promise<Mi
     await enqueue(tx, 'milestones', row.id, 'upsert', row);
   });
   return row as unknown as MilestoneRow;
+}
+
+export async function listMilestones(): Promise<MilestoneRow[]> {
+  const rows = await getDb().getAllAsync<Omit<MilestoneRow, 'shared'> & { shared: number }>(
+    'SELECT id, key, category, unlocked_at, shared FROM milestones ORDER BY unlocked_at DESC',
+  );
+  return rows.map((row) => ({ ...row, shared: row.shared === 1 }));
+}
+
+/** Marks a milestone as shared, after the share sheet opened for it (docs/M5-brief.md 1b). */
+export async function markMilestoneShared(key: string): Promise<void> {
+  await write(async (tx) => {
+    const row = await tx.getFirstAsync<Omit<MilestoneRow, 'shared'> & { shared: number }>(
+      'SELECT id, key, category, unlocked_at, shared FROM milestones WHERE key = ?',
+      key,
+    );
+    if (!row || row.shared === 1) return;
+    await tx.runAsync('UPDATE milestones SET shared = 1 WHERE key = ?', key);
+    await enqueue(tx, 'milestones', row.id, 'upsert', { ...row, shared: true });
+  });
 }
 
 // --- profile ---------------------------------------------------------------

@@ -60,6 +60,14 @@ export const home = {
 
   reasonsTitle: 'Tvoji razlozi',
 
+  /** Module 6, HOME-V2's approved names (docs/HOME-V2-brief.md Copy). */
+  progress: {
+    title: 'Moj napredak',
+    article: 'Dnevno znanje',
+    read: 'Čitaj',
+    nextGoal: 'Sledeći cilj',
+  },
+
   slipLink: {
     label: 'Desila se cigareta',
     sub: 'Beležimo bez osude.',

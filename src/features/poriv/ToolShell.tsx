@@ -24,6 +24,7 @@ export function ToolShell({
   onDone,
   disabled,
   contentStyle,
+  background,
 }: {
   tool: ToolKey;
   eyebrow: string;
@@ -32,6 +33,8 @@ export function ToolShell({
   onDone?: () => void;
   disabled?: boolean;
   contentStyle?: StyleProp<ViewStyle>;
+  /** Drawn behind everything, full screen: the rising water of Pijem vodu. */
+  background?: React.ReactNode;
 }) {
   useKeepAwake();
   const router = useRouter();
@@ -45,6 +48,7 @@ export function ToolShell({
 
   return (
     <View style={styles.screen}>
+      {background}
       <View style={{ paddingTop: insets.top + space.xs, paddingHorizontal: space.gutter }}>
         <View style={styles.topBar}>
           <Pressable

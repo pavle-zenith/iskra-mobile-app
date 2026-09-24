@@ -64,7 +64,7 @@ export function CheckInSheet({
 }
 
 const styles = StyleSheet.create({
-  backdrop: { flex: 1, backgroundColor: 'rgba(25, 21, 18, 0.45)', justifyContent: 'flex-end' },
+  backdrop: { flex: 1, backgroundColor: color.scrim, justifyContent: 'flex-end' },
   dismissArea: { flex: 1 },
   sheet: {
     backgroundColor: color.bg,

@@ -9,7 +9,16 @@ import { breakdown, columns } from '@/features/home/elapsed';
 import { formatNumber, timeGoals, timeLeft } from '@/lib/progress';
 import { color, progressColor, radius, space } from '@/theme';
 
-import { DetailScreen, FinePrint, Section, useProgressSource } from './components';
+import { useShareCard } from '@/features/share/ShareCard';
+
+import {
+  DetailScreen,
+  FinePrint,
+  Section,
+  ShareBox,
+  ShareButton,
+  useProgressSource,
+} from './components';
 import { goalTitle, progressCopy } from './copy';
 import { progressFor } from './data';
 
@@ -30,6 +39,7 @@ const TICK_MS = 1_000;
 
 export function TimeScreen() {
   const { source, now } = useProgressSource(TICK_MS);
+  const { share, host } = useShareCard();
   const copy = progressCopy.time;
 
   if (!source) return <DetailScreen title={copy.title}>{null}</DetailScreen>;
@@ -39,10 +49,15 @@ export function TimeScreen() {
   const cells = columns(breakdown(progress.smokeFreeMs));
   const goals = timeGoals(quitDate, now);
   const reached = goals.filter((goal) => goal.status === 'reached');
+  const shareIt = () =>
+    share({
+      title: `${formatNumber(progress.smokeFreeDays)} ${dani(progress.smokeFreeDays)}`,
+      sub: copy.shareSub,
+    });
   const ahead = goals.filter((goal) => goal.status === 'upcoming');
 
   return (
-    <DetailScreen title={copy.title}>
+    <DetailScreen title={copy.title} right={<ShareBox label={copy.share} onPress={shareIt} />}>
       <View
         style={styles.counter}
         accessible
@@ -131,9 +146,10 @@ export function TimeScreen() {
         ))}
       </View>
 
-      {/* "Podeli svoju pobedu" arrives with M5's share card (Task 1b). */}
+      <ShareButton label={copy.share} onPress={shareIt} />
 
       <FinePrint>{copy.finePrint}</FinePrint>
+      {host}
     </DetailScreen>
   );
 }
