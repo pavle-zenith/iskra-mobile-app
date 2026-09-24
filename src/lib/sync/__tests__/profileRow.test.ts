@@ -20,7 +20,11 @@ const row: LocalProfileRow = {
   is_premium: 0,
   committed: 1,
   signature_data: 'M0,0 L10,10',
-  push_token: null,
+  push_token: 'ExponentPushToken[left-over]',
+  consented_at: '2026-09-24T09:00:00.000Z',
+  analytics_consent: 0,
+  marketing_consent: 1,
+  marketing_consent_at: '2026-09-24T09:05:00.000Z',
   created_at: '2026-09-20T10:00:00.000Z',
   updated_at: '2026-09-21T10:00:00.000Z',
 };
@@ -62,5 +66,27 @@ describe('toProfilePayload', () => {
 
   it('never sends is_premium: pricing is not wired and the column stays false', () => {
     expect(payload).not.toHaveProperty('is_premium');
+  });
+});
+
+describe('consent', () => {
+  it('reads consent and both opt-ins back as booleans', () => {
+    const profile = toProfile(row);
+    expect(profile.consentedAt).toBe('2026-09-24T09:00:00.000Z');
+    expect(profile.analyticsConsent).toBe(false);
+    expect(profile.marketingConsent).toBe(true);
+  });
+
+  it('sends consent and its timestamps to the server', () => {
+    const payload = toProfilePayload(row);
+    expect(payload.consented_at).toBe('2026-09-24T09:00:00.000Z');
+    expect(payload.analytics_consent).toBe(false);
+    expect(payload.marketing_consent).toBe(true);
+    expect(payload.marketing_consent_at).toBe('2026-09-24T09:05:00.000Z');
+  });
+
+  it('never sends a push token, even one left in an old local row', () => {
+    // Every notification is local (ROADMAP Part 4), so the app stopped collecting it.
+    expect(toProfilePayload(row)).not.toHaveProperty('push_token');
   });
 });

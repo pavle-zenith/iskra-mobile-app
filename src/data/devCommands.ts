@@ -1,4 +1,12 @@
-import { getDb, kvGet, kvSet } from './db';
+import { deleteEverything } from './account';
+import {
+  finishPendingDeletion,
+  getBoundUserId,
+  hasPendingDeletion,
+  stashSessionForDeletion,
+} from './auth';
+import { getDb, kvGet, kvSet, wipeLocalData } from './db';
+import { startAccountServices, stopAccountServices } from './spine';
 import { deriveUserState } from '@/features/home/state';
 import { resolveAnchorTimeZone } from '@/lib/time/dayCount';
 
@@ -12,6 +20,7 @@ import {
   logCraving,
   updateCraving,
   updateProfile,
+  recordConsent,
   updateSlip,
 } from './repo';
 import { drain, getSyncSnapshot, setSimulatedOffline } from './sync';
@@ -91,6 +100,53 @@ async function run(command: string) {
       const slip = (await listSlips())[0];
       if (slip) await updateSlip(slip.id, { trigger: 'kafa' });
       console.log('[dev] noted kafa on both rows');
+      return;
+    }
+    // --- consent and deletion (docs/LEGAL-brief.md) ---------------------------------------
+    case 'consent': {
+      // Exactly what "Prihvatam i nastavljam" does.
+      await recordConsent({ analytics: false });
+      startAccountServices();
+      console.log('[dev] consent recorded, services started');
+      return;
+    }
+    case 'delete': {
+      // Exactly what Profil's "Obriši sve podatke" does.
+      const { server } = await deleteEverything();
+      console.log(`[dev] deleted locally; server ${await server}`);
+      return;
+    }
+    case 'delete:offline': {
+      // Every step of deleteEverything except the server call, as with no signal at all.
+      stopAccountServices();
+      await stashSessionForDeletion();
+      await wipeLocalData();
+      console.log('[dev] deleted locally; server queued');
+      return;
+    }
+    case 'delete:finish': {
+      console.log(`[dev] pending deletion ${await finishPendingDeletion()}`);
+      return;
+    }
+    case 'legal:report': {
+      const db = getDb();
+      const count = async (table: string) =>
+        (await db.getFirstAsync<{ n: number }>(`SELECT COUNT(*) AS n FROM ${table}`))?.n ?? -1;
+      const profile = await getProfile();
+      console.log(
+        `[dev] legal report ${JSON.stringify({
+          consentedAt: profile?.consentedAt ?? null,
+          analytics: profile?.analyticsConsent ?? null,
+          boundUser: await getBoundUserId(),
+          pendingDeletion: await hasPendingDeletion(),
+          rows: {
+            profiles: await count('profiles'),
+            outbox: await count('outbox'),
+            kv: await count('kv'),
+            cravings: await count('cravings'),
+          },
+        })}`,
+      );
       return;
     }
     case 'poriv:report': {

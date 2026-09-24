@@ -98,13 +98,37 @@ const MIGRATIONS: readonly string[] = [
     value TEXT
   );
   `,
+
+  // 2: consent, mirrored from Supabase migration 20260924095550 (docs/LEGAL-brief.md).
+  // `consented_at` is the gate: until it is set, nothing but this schema exists on the phone.
+  `
+  ALTER TABLE profiles ADD COLUMN consented_at TEXT;
+  ALTER TABLE profiles ADD COLUMN analytics_consent INTEGER NOT NULL DEFAULT 0;
+  ALTER TABLE profiles ADD COLUMN marketing_consent INTEGER NOT NULL DEFAULT 0;
+  ALTER TABLE profiles ADD COLUMN marketing_consent_at TEXT;
+  `,
 ];
 
+/** Every table that holds anything a person entered or the app derived from it. */
+const DATA_TABLES = ['cravings', 'slips', 'checkins', 'milestones', 'outbox', 'kv', 'profiles'];
+
 let database: SQLiteDatabase | null = null;
+
+/**
+ * True when this launch created the database from nothing: a first install, or a reinstall.
+ * "Obriši sve podatke" empties the tables but keeps the schema, so it never looks like this.
+ */
+let createdThisLaunch = false;
+
+export function wasCreatedThisLaunch(): boolean {
+  getDb();
+  return createdThisLaunch;
+}
 
 function migrate(db: SQLiteDatabase) {
   const row = db.getFirstSync<{ user_version: number }>('PRAGMA user_version');
   const current = row?.user_version ?? 0;
+  if (current === 0) createdThisLaunch = true;
   for (let version = current; version < MIGRATIONS.length; version += 1) {
     db.withTransactionSync(() => {
       db.execSync(MIGRATIONS[version] as string);
@@ -163,5 +187,19 @@ export async function kvSet(key: string, value: string | null): Promise<void> {
       key,
       value,
     ),
+  );
+}
+
+/**
+ * "Obriši sve podatke", on the phone: every row in every table, in one transaction, leaving
+ * only the empty schema, which is exactly the state of a first launch. Goes through the write
+ * queue like every other write, and deliberately does not ask for a sync: there is nothing left
+ * to send, and the outbox itself is one of the tables emptied.
+ */
+export async function wipeLocalData(): Promise<void> {
+  await serialiseWrite(() =>
+    getDb().withExclusiveTransactionAsync(async (tx) => {
+      for (const table of DATA_TABLES) await tx.runAsync(`DELETE FROM ${table}`);
+    }),
   );
 }

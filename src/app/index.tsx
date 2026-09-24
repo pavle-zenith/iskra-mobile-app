@@ -37,7 +37,15 @@ export default function IndexRoute() {
       const [profile, resume] = await Promise.all([getProfile(), resumeOnboardingTarget()]);
       if (!alive) return;
 
-      if (!profile?.onboardingCompleted) {
+      // Consent outranks everything, even a finished onboarding: health data is stored only with
+      // it, so anyone without it, including a tester from before it existed, sees the intro and
+      // the consent screen first (docs/LEGAL-brief.md).
+      if (!profile?.consentedAt) {
+        setTarget({ kind: 'onboarding', splash: true, step: resume.step });
+        return;
+      }
+
+      if (!profile.onboardingCompleted) {
         setTarget({ kind: 'onboarding', splash: resume.splash, step: resume.step });
         return;
       }

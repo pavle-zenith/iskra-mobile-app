@@ -15,7 +15,9 @@
         "CFBundleDevelopmentRegion": "sr-Latn",
         "CFBundleAllowMixedLocalizations": true,
         "ITSAppUsesNonExemptEncryption": false,
-        "UISupportedInterfaceOrientations": ["UIInterfaceOrientationPortrait"]
+        "UISupportedInterfaceOrientations": [
+          "UIInterfaceOrientationPortrait"
+        ]
       }
     },
     "android": {
@@ -54,8 +56,12 @@
         "expo-localization",
         {
           "supportedLocales": {
-            "ios": ["sr-Latn"],
-            "android": ["sr-Latn"]
+            "ios": [
+              "sr-Latn"
+            ],
+            "android": [
+              "sr-Latn"
+            ]
           }
         }
       ],
@@ -65,7 +71,8 @@
         {
           "faceIDPermission": false
         }
-      ]
+      ],
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true

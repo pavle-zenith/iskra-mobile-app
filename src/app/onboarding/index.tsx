@@ -45,7 +45,8 @@ export default function OnboardingSplash() {
         <Button
           variant="onField"
           label={copy.splash.cta}
-          onPress={() => router.push({ pathname: '/onboarding/[step]', params: { step: 'name' } })}
+          // Consent before step 1: nothing is stored until it is given (docs/LEGAL-brief.md).
+          onPress={() => router.push('/onboarding/consent')}
         />
       </View>
     </View>

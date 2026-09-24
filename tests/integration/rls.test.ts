@@ -13,8 +13,11 @@ import type { Database } from '../../src/lib/supabase/database.types';
  * entire protection (verified 18.09.2026: `auth.uid() = user_id`, and `auth.uid() = id` for
  * profiles). This test keeps it that way: if a policy is ever loosened, it fails.
  *
- * Side effects: two anonymous auth users per run (auth.users rows cannot be deleted without the
- * service role, which this repo must never hold). Every data row it writes, it deletes.
+ * Side effects: none left behind. Each anonymous user the suite creates deletes itself at the end
+ * through `delete_my_account()`, the same function "Obriši sve podatke" calls, so the in-app
+ * deletion path is exercised on every run too. (Before it existed, every run leaked two
+ * anonymous auth users: they cannot be deleted without the service role, which this repo must
+ * never hold.)
  * Needs EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_ANON_KEY; skipped without them.
  *
  * Run: npm run test:rls
@@ -110,11 +113,9 @@ suite('RLS isolation (live Supabase)', () => {
   }, 30_000);
 
   afterAll(async () => {
-    if (a) {
-      for (const table of TABLES) await from(a.client, table).delete().eq('id', aRows[table]);
-      await a.client.from('profiles').delete().eq('id', a.id);
-    }
-    if (b) await b.client.from('profiles').delete().eq('id', b.id);
+    // Each user deletes itself: its profile, every row cascading from it, and its auth user.
+    if (a) await a.client.rpc('delete_my_account');
+    if (b) await b.client.rpc('delete_my_account');
   }, 30_000);
 
   it.each(TABLES)('A reads its own %s row', async (table) => {
@@ -253,5 +254,48 @@ suite('RLS isolation (live Supabase)', () => {
         .insert(rowFor.cravings(uuid(), a.id) as never);
       expect(error).not.toBeNull();
     });
+
+    it('cannot delete an account', async () => {
+      const { error } = await stranger().rpc('delete_my_account');
+      expect(error).not.toBeNull();
+    });
+  });
+
+  /**
+   * "Obriši sve podatke" on the server (docs/LEGAL-brief.md Task 2). `profiles` has no foreign
+   * key to auth.users, so the function deletes the profile (cascading to every table) and then
+   * the auth user explicitly. This proves both happen, and that nobody else is touched.
+   */
+  describe('delete_my_account', () => {
+    it('removes the caller, every row under them and their auth user, and nobody else', async () => {
+      const c = await anonymousUser();
+      ok(await c.client.from('profiles').insert({ id: c.id }));
+      for (const table of TABLES) {
+        ok(await from(c.client, table).insert(rowFor[table](uuid(), c.id) as never));
+      }
+
+      ok(await c.client.rpc('delete_my_account'));
+
+      // The JWT still verifies until it expires, so reading as C shows what is left of C: nothing.
+      for (const table of [...TABLES, 'profiles' as const]) {
+        const { data } = await (c.client.from(table) as unknown as ReturnType<Client['from']>)
+          .select('id')
+          .limit(1);
+        expect({ table, rows: data ?? [] }).toEqual({ table, rows: [] });
+      }
+
+      // And the auth user itself is gone: the session no longer resolves to anyone.
+      const { data: user, error } = await c.client.auth.getUser();
+      expect(user.user).toBeNull();
+      expect(error).not.toBeNull();
+
+      // A, who never asked, still has everything.
+      const { data: stillA } = await a.client.from('profiles').select('id').eq('id', a.id);
+      expect(stillA).toHaveLength(1);
+      for (const table of TABLES) {
+        const { data } = await from(a.client, table).select('id').eq('id', aRows[table]);
+        expect({ table, rows: data?.length }).toEqual({ table, rows: 1 });
+      }
+    }, 30_000);
   });
 });

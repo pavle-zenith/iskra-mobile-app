@@ -186,7 +186,11 @@ export function HomeScreen() {
         {/* Module 0, the lead slot: empty in every state but the 48 hours after a slip. */}
         {data.state === 'post-slip' ? <AbsolutionCard /> : null}
 
-        <Header name={data.profile?.name?.trim() ?? ''} survived={data.survived} />
+        <Header
+          name={data.profile?.name?.trim() ?? ''}
+          survived={data.survived}
+          onProfile={() => router.push('/profil')}
+        />
 
         <View style={styles.modules}>
           {showWeek ? (

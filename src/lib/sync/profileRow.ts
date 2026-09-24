@@ -27,6 +27,10 @@ export type LocalProfileRow = {
   committed: number;
   signature_data: string | null;
   push_token: string | null;
+  consented_at: string | null;
+  analytics_consent: number;
+  marketing_consent: number;
+  marketing_consent_at: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -49,7 +53,10 @@ export type Profile = {
   isPremium: boolean;
   committed: boolean;
   signatureData: string | null;
-  pushToken: string | null;
+  /** When both required consent boxes were ticked. Null means nothing may be stored yet. */
+  consentedAt: string | null;
+  analyticsConsent: boolean;
+  marketingConsent: boolean;
   updatedAt: string;
 };
 
@@ -84,12 +91,20 @@ export function toProfile(row: LocalProfileRow): Profile {
     isPremium: row.is_premium === 1,
     committed: row.committed === 1,
     signatureData: row.signature_data,
-    pushToken: row.push_token,
+    consentedAt: row.consented_at,
+    analyticsConsent: row.analytics_consent === 1,
+    marketingConsent: row.marketing_consent === 1,
     updatedAt: row.updated_at,
   };
 }
 
-/** The row as Supabase stores it. `id` is added by the sync engine from the session. */
+/**
+ * The row as Supabase stores it. `id` is added by the sync engine from the session.
+ *
+ * `push_token` is not sent, and the server no longer has the column (migration 20260924122353).
+ * Every notification is local and scheduled on the phone (ROADMAP Part 4, 23.09.2026), so no
+ * server ever needs to reach this device. The phone's own column stays, always empty.
+ */
 export function toProfilePayload(row: LocalProfileRow): Record<string, unknown> {
   return {
     name: row.name,
@@ -108,7 +123,10 @@ export function toProfilePayload(row: LocalProfileRow): Record<string, unknown> 
     onboarding_completed: row.onboarding_completed === 1,
     committed: row.committed === 1,
     signature_data: row.signature_data,
-    push_token: row.push_token,
+    consented_at: row.consented_at,
+    analytics_consent: row.analytics_consent === 1,
+    marketing_consent: row.marketing_consent === 1,
+    marketing_consent_at: row.marketing_consent_at,
     created_at: row.created_at,
     updated_at: row.updated_at,
   };

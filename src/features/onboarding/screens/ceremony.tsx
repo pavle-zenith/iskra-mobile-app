@@ -6,7 +6,6 @@ import { StyleSheet, View } from 'react-native';
 
 import { Icon, Pressable, Text } from '@/components/primitives';
 import { drain } from '@/data/sync';
-import { updateProfile } from '@/data/repo';
 import { color, radius, space } from '@/theme';
 
 import { FieldScreen, GlyphChip, Plate, ProgressBar, Prompt, QuestionScreen } from '../components';
@@ -273,22 +272,15 @@ export function NotificationsStep() {
   const [asking, setAsking] = useState(false);
 
   /**
-   * Permission only. Iskra sends nothing in M2: the rule that a push reads state before it
-   * speaks is undecided (ROADMAP Part 4), and congratulating someone who slipped yesterday is
-   * the worst thing this app could do.
+   * Permission only, and no push token. Every notification Iskra will send is local, scheduled
+   * on this phone (ROADMAP Part 4, 23.09.2026), so no server ever needs to reach the device and
+   * there is nothing to collect (docs/LEGAL-brief.md Task 3). Nothing is scheduled yet either:
+   * that is M6, with its rule that a notification reads state before it speaks.
    */
   const allow = async () => {
     setAsking(true);
     try {
-      const { status } = await Notifications.requestPermissionsAsync();
-      if (status === 'granted') {
-        try {
-          const token = await Notifications.getDevicePushTokenAsync();
-          await updateProfile({ pushToken: String(token.data) });
-        } catch {
-          // No token on a simulator, and none without push credentials. Permission still holds.
-        }
-      }
+      await Notifications.requestPermissionsAsync();
     } finally {
       setAsking(false);
       await finish();

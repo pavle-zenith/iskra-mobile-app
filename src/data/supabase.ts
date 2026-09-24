@@ -9,6 +9,14 @@ import { env } from './env';
 import { chunkedSecureStorage } from './secureStorage';
 
 /**
+ * Where the session lives in the keychain. This is supabase-js's own default, spelled out, so
+ * "Obriši sve podatke" can remove the session directly when signing out cannot: offline, with an
+ * expired access token, `signOut()` gives up before it clears anything. Same value as before, so
+ * no existing session is lost by naming it.
+ */
+export const SESSION_STORAGE_KEY = `sb-${new URL(env.supabaseUrl).hostname.split('.')[0]}-auth-token`;
+
+/**
  * The one Supabase client. Screens never import it: they read and write SQLite through
  * src/data/repo.ts, and only the sync engine and auth talk to the network.
  *
@@ -17,6 +25,7 @@ import { chunkedSecureStorage } from './secureStorage';
 export const supabase = createClient<Database>(env.supabaseUrl, env.supabaseAnonKey, {
   auth: {
     storage: chunkedSecureStorage,
+    storageKey: SESSION_STORAGE_KEY,
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: false,

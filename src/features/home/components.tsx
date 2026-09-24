@@ -3,6 +3,7 @@ import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { Icon, Pressable, Text } from '@/components/primitives';
 import { color, elevation, minTarget, radius, space } from '@/theme';
+import { profil } from '@/features/legal/copy';
 
 import { home } from './copy';
 import type { WeekDay } from './week';
@@ -39,17 +40,35 @@ export function Card({
   return <View style={[styles.card, style]}>{children}</View>;
 }
 
-/** "Zdravo," the name, and the flame chip. The chip counts cravings survived, not days. */
-export function Header({ name, survived }: { name: string; survived: number }) {
+/**
+ * "Zdravo," the name, and the flame chip. The chip counts cravings survived, not days.
+ *
+ * The avatar is the name's initial on ember (nobody uploads a photo in v1) and opens Profil,
+ * which is where "Obriši sve podatke" lives (docs/LEGAL-brief.md Task 2).
+ */
+export function Header({
+  name,
+  survived,
+  onProfile,
+}: {
+  name: string;
+  survived: number;
+  onProfile: () => void;
+}) {
   const initial = name.trim().charAt(0).toUpperCase();
 
   return (
     <View style={styles.header}>
-      <View style={styles.avatar}>
+      <Pressable
+        haptic="light"
+        onPress={onProfile}
+        accessibilityLabel={profil.title}
+        style={styles.avatar}
+      >
         <Text variant="label" style={{ color: color.onAccent }}>
           {initial}
         </Text>
-      </View>
+      </Pressable>
       <View style={styles.headerText}>
         <Text variant="caption" color="textMuted">
           {home.greeting}

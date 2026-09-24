@@ -161,7 +161,7 @@ export function useOnboarding(): OnboardingValue {
 
 /**
  * Where onboarding should open: the saved step, held back to the first unanswered question.
- * `splash` is true only for someone who has never answered anything.
+ * `splash` is true until consent is on the phone: the intro and the consent screen come first.
  */
 export async function resumeOnboardingTarget(): Promise<{ splash: boolean; step: StepId }> {
   const [saved, profile] = await Promise.all([kvGet(STEP_KEY), getProfile()]);
@@ -183,5 +183,7 @@ export async function resumeOnboardingTarget(): Promise<{ splash: boolean; step:
       }
     : {};
   const step = resumeStep((saved as StepId | null) ?? null, draft);
-  return { splash: !saved && !profile?.name, step };
+  // The intro and consent come first for anyone who has not consented. After consent the
+  // intro is behind them: they resume on a step, which is step 1 if nothing is answered yet.
+  return { splash: !profile?.consentedAt, step };
 }

@@ -121,19 +121,22 @@ export type Database = {
       };
       profiles: {
         Row: {
+          analytics_consent: boolean;
           cigarettes_per_day: number | null;
           cigarettes_per_pack: number | null;
           committed: boolean | null;
+          consented_at: string | null;
           created_at: string | null;
           fears: string[] | null;
           gender: string | null;
           id: string;
           is_premium: boolean | null;
+          marketing_consent: boolean;
+          marketing_consent_at: string | null;
           name: string | null;
           onboarding_completed: boolean | null;
           pack_price_rsd: number | null;
           product: string | null;
-          push_token: string | null;
           quit_date: string | null;
           quit_time_zone: string | null;
           reason_text: string | null;
@@ -144,19 +147,22 @@ export type Database = {
           updated_at: string | null;
         };
         Insert: {
+          analytics_consent?: boolean;
           cigarettes_per_day?: number | null;
           cigarettes_per_pack?: number | null;
           committed?: boolean | null;
+          consented_at?: string | null;
           created_at?: string | null;
           fears?: string[] | null;
           gender?: string | null;
           id: string;
           is_premium?: boolean | null;
+          marketing_consent?: boolean;
+          marketing_consent_at?: string | null;
           name?: string | null;
           onboarding_completed?: boolean | null;
           pack_price_rsd?: number | null;
           product?: string | null;
-          push_token?: string | null;
           quit_date?: string | null;
           quit_time_zone?: string | null;
           reason_text?: string | null;
@@ -167,19 +173,22 @@ export type Database = {
           updated_at?: string | null;
         };
         Update: {
+          analytics_consent?: boolean;
           cigarettes_per_day?: number | null;
           cigarettes_per_pack?: number | null;
           committed?: boolean | null;
+          consented_at?: string | null;
           created_at?: string | null;
           fears?: string[] | null;
           gender?: string | null;
           id?: string;
           is_premium?: boolean | null;
+          marketing_consent?: boolean;
+          marketing_consent_at?: string | null;
           name?: string | null;
           onboarding_completed?: boolean | null;
           pack_price_rsd?: number | null;
           product?: string | null;
-          push_token?: string | null;
           quit_date?: string | null;
           quit_time_zone?: string | null;
           reason_text?: string | null;
@@ -279,7 +288,7 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      delete_my_account: { Args: never; Returns: undefined };
     };
     Enums: {
       [_ in never]: never;

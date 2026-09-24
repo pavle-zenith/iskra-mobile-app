@@ -405,7 +405,7 @@ export type ProfilePatch = Partial<{
   onboardingCompleted: boolean;
   committed: boolean;
   signatureData: string | null;
-  pushToken: string | null;
+  analyticsConsent: boolean;
 }>;
 
 /** How each patch field lands in SQLite: column name plus the value it stores. */
@@ -426,16 +426,74 @@ const PROFILE_COLUMNS: { [K in keyof Required<ProfilePatch>]: [string, (v: never
   onboardingCompleted: ['onboarding_completed', (v: boolean) => (v ? 1 : 0)],
   committed: ['committed', (v: boolean) => (v ? 1 : 0)],
   signatureData: ['signature_data', (v: string | null) => v],
-  pushToken: ['push_token', (v: string | null) => v],
+  analyticsConsent: ['analytics_consent', (v: boolean) => (v ? 1 : 0)],
 };
 
+/**
+ * The local profile, or null before there is one. A read, and only a read: it used to create
+ * the row as a side effect, which meant merely opening the app wrote to SQLite before consent,
+ * and did so outside the write queue.
+ */
 export async function getProfile(): Promise<Profile | null> {
-  await ensureLocalProfile();
   const row = await getDb().getFirstAsync<LocalProfileRow>(
     'SELECT * FROM profiles WHERE id = ?',
     PROFILE_ID,
   );
   return row ? toProfile(row) : null;
+}
+
+/**
+ * Consent: both required boxes ticked on the consent screen (docs/LEGAL-brief.md). This is the
+ * first row the app ever stores, so it creates the profile. Nothing before it writes anything.
+ */
+export async function recordConsent(input: { analytics: boolean }): Promise<void> {
+  const now = new Date().toISOString();
+  await write(async (tx) => {
+    await ensureLocalProfile(tx);
+    await tx.runAsync(
+      'UPDATE profiles SET consented_at = ?, analytics_consent = ?, updated_at = ? WHERE id = ?',
+      now,
+      input.analytics ? 1 : 0,
+      now,
+      PROFILE_ID,
+    );
+    const row = await tx.getFirstAsync<LocalProfileRow>(
+      'SELECT * FROM profiles WHERE id = ?',
+      PROFILE_ID,
+    );
+    if (row) await enqueue(tx, 'profiles', PROFILE_ID, 'upsert', toProfilePayload(row));
+  });
+}
+
+/** True once consent is on the phone. Everything that stores or syncs waits for this. */
+export async function hasConsented(): Promise<boolean> {
+  const row = await getDb().getFirstAsync<{ consented_at: string | null }>(
+    'SELECT consented_at FROM profiles WHERE id = ?',
+    PROFILE_ID,
+  );
+  return !!row?.consented_at;
+}
+
+/**
+ * Profil's "Emailovi sa savetima". The time is kept with the choice, because a campaign may only
+ * go to someone who said yes, and it has to be possible to show when they did.
+ */
+export async function setMarketingConsent(on: boolean): Promise<void> {
+  const now = new Date().toISOString();
+  await write(async (tx) => {
+    await tx.runAsync(
+      'UPDATE profiles SET marketing_consent = ?, marketing_consent_at = ?, updated_at = ? WHERE id = ?',
+      on ? 1 : 0,
+      on ? now : null,
+      now,
+      PROFILE_ID,
+    );
+    const row = await tx.getFirstAsync<LocalProfileRow>(
+      'SELECT * FROM profiles WHERE id = ?',
+      PROFILE_ID,
+    );
+    if (row) await enqueue(tx, 'profiles', PROFILE_ID, 'upsert', toProfilePayload(row));
+  });
 }
 
 /**
