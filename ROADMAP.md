@@ -186,7 +186,8 @@ outcome. That table is the only real behavioural dataset this product will have.
 
 ### M4 - Napredak. By 06.11
 
-Three tabs: money, health, time. Colours in tokens.
+Four separate detail screens as in the design export (Ušteđevina, Odbijene cigarete, Tvoje vreme,
+Zdravlje), no tabs. See `docs/M4-brief.md` (changed 24.09.2026).
 
 Port the arithmetic from `iskra-website-final/src/lib/calc.ts`. It is corrected and sourced:
 `CIGS_PER_PACK = 20`, `MINUTES_PER_CIG = 6`, plus a comparison list of everyday Serbian
@@ -275,13 +276,21 @@ the app is downloadable from a clean device.
 
 ## Part 4 - Still needs Pavle
 
-1. **Notifications, before M6.** `push_token` exists, so this is planned. A congratulatory
-   push to someone who relapsed yesterday is the worst thing this app could do. The rule
-   must be that notifications read state before they speak, plus a quiet mode.
+1. **Notifications: decided 23.09.2026.** Three kinds, all local and scheduled on the phone:
+   the daily check-in reminder (evening, at a time the user picks), milestone reached (real
+   milestones on the WHO timeline), and the risky-moment nudge (at the times of the triggers
+   they chose in onboarding, e.g. morning coffee). **At most 3 a day.** Quiet hours 22:00 to
+   08:00. **Every push is silent for 48 hours after a slip**, never fires during an open craving,
+   and reads state before it speaks. Full spec goes into the M6 brief.
 2. **Bundle id: resolved 18.09.2026.** `com.iskraclub.iskra` (domain, then product) on both
    platforms, set in M1 Task 0 before any EAS project, credential or store registration existed.
 3. **The Early Access offer, before M8.** Already promised publicly in the site's
-   `llms.txt`. The app is where it gets honoured.
+   `llms.txt`. The app is where it gets honoured. Open: see Part 4 note in chat, 23.09.2026.
+4. **Legal: decided 23.09.2026.** Data controller is Pavle's existing PR entity (Zenith Digital,
+   Kanjiža). Privacy policy and terms drafted in Serbian against ZZPL and GDPR, no lawyer for
+   now. Contact for data requests: hello@thezenithdigital.com. **Minimum age 18**, confirmed with
+   one line in onboarding. Health-adjacent data (cravings, slips, check-ins) needs explicit
+   consent before the first row is stored. Blocks the first beta tester.
 
 ---
 

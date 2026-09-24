@@ -87,7 +87,7 @@ are SQL files in `supabase/migrations/`, applied to the project, then `npm run g
 - **Copy comes from `src/features/onboarding/copy.ts`**, transcribed from the copy brief, which
   wins over the export's screen files. Never write, translate or paraphrase a Serbian string
 - **A genderless rewrite is a sentence, not a word.** Most onboarding lines are genderless for
-  everyone. The five that are not (`prestao`, `pusio`, `spreman`, `hteo`, `trosio`) go through
+  everyone. The four that are not (`prestao`, `pusio`, `spreman`, `trosio`) go through
   `g(token, gender)` for `m`/`f` and branch a whole sentence for `x`. Never a slash, never
   masculine-by-default: `g(token, 'x')` returns a marker, which means a branch is missing. Add a
   token only with the screen that needs it. See `docs/M2-copy-todo.md`
@@ -132,6 +132,37 @@ are SQL files in `supabase/migrations/`, applied to the project, then `npm run g
   exists. No placeholders, no "uskoro", no bottom nav until Napredak and Saznaj exist
 - **All M3 copy is genderless**, so nothing here calls `g()`
 
+## Consent and deletion (LEGAL)
+
+- **Nothing is stored before consent.** At launch the spine opens the SQLite schema and nothing
+  else. The first row the app ever writes is the consent itself (`recordConsent()`), and only then
+  do sign-in and sync start (`startAccountServices()`). A fresh launch leaves every table empty
+  and creates no server user; `src/features/legal/__tests__/gate.test.ts` guards the order
+- **Reads never write.** `getProfile()` returns null before there is a profile. It used to create
+  the row, which wrote to SQLite on every launch before consent
+- **Consent outranks everything in the gate**, a finished onboarding included: a tester from
+  before consent existed sees the intro and consent first
+- **"Obriši sve podatke" wipes the phone first, then the server.** `deleteEverything()` stops
+  sync, moves the session aside, empties every SQLite table, then calls `delete_my_account()`.
+  Offline, the server part is queued and finished on the next launch, reconnect or foreground
+- **The deletion keeps exactly one credential**, the session it needs, in the keychain under
+  `account.pending-deletion`, and drops it once the server confirms. Supabase rotates refresh
+  tokens and a reused one revokes the session: never call `signOut()` during deletion, and never
+  let two attempts run at once
+- **`delete_my_account()` deletes the profile, then the auth user.** It acts only on `auth.uid()`.
+  `profiles.id` references `auth.users` with `on delete cascade` (migration 20260924122353), and
+  the four data tables cascade from `profiles`, so a user deleted in the Supabase dashboard takes
+  their data with them too
+- **A reinstall starts fresh.** When the local database is created on this launch, the Keychain's
+  leftover session is dropped before anything can sign in (`discardLeftoverSession()`), so a
+  reinstall never reattaches to old server data. Returning people sign in once ACCOUNT exists
+- **A new SQLite table must be added to `DATA_TABLES`** in `src/data/db.ts`, or the wipe misses
+  it. A test compares the two lists
+- **No push token.** Every notification is local and scheduled on the phone, so none is
+  requested or synced, and the server column is dropped. A test fails if one is sent
+- **Anything that needs an account email waits for `docs/ACCOUNT-brief.md`**: the email line and
+  the marketing toggle in Profil, Apple token revocation on deletion, and "Već imaš nalog?"
+
 ## Designing a new screen: Refero first
 
 Every screen that is new, or redesigned, starts with a Refero pass before any code. Pavle's
@@ -166,6 +197,17 @@ the screen works.
    Serbian string is flagged as `missingCopy()` for Pavle
 5. The screen's final report names the references it used
 
+**The export is the structural default.** Where a screen exists in the design export, build its
+structure and order (which screens exist, what is on each, in what sequence). Deviate only where
+`PRODUCT.md` or a brief forces it, and list every deviation in the screen's report. Pavle,
+24.09.2026, after the Napredak screens were merged behind a segmented control that the export
+never had.
+
+**The `refero-design` skill describes itself as the primary design authority. In this repo it is
+not.** The order above wins over the skill's self-description, and `impeccable` stays in use
+for the finish review. Use the skill for its search method: several references, never copy
+one, never average them into a safe middle, never change token meanings.
+
 If Refero has nothing close, say so in the note and fall back to the export and the brief. Do not
 force a weak match.
 
@@ -188,16 +230,64 @@ force a weak match.
   The app never guesses
 - **"Ova nedelja" is the one ember surface on Home**, as in the export. One per screen
 
+## Progress screens (M4)
+
+- **`docs/M4-brief.md` is the spec: four stack screens in the export's layout**, never a segmented
+  control. Ušteđevina (`/napredak/novac`), Odbijene cigarete (`/napredak/cigarete`), Tvoje vreme
+  (`/napredak/vreme`), Zdravlje (`/napredak/zdravlje`). Every deviation from the export is listed,
+  with its reason, in `.impeccable/review/m4/REFERENCES.md`
+- **Every figure comes from `src/lib/progress`**, through `progressFor()` in
+  `src/features/napredak/data.ts`. No screen multiplies a habit by anything. The engine recomputes
+  from the current habits each time, floors every figure, subtracts slips (1 each until M5 records
+  a count) and never resets `smokeFreeMs`
+- **`calc.ts` is the website's, ported.** Its sources and "Last verified" date stay; its prices go
+  stale, so re-check them with the site. The app floors where the site rounded
+- **The savings chart is the real series**, point to point, stepping down at slips. Never smooth it
+- **Zdravlje is the Zdravlje instance of `CategoryDetail`**, the export's CategoryScreen template
+  that M5 fills for the other five categories. It takes rows as data; keep health out of it
+- **No share button until M5's share card exists**, in the header or at the bottom. A button that
+  leads nowhere is not shown
+- **The cigarette screen and card are violet, never red**: the export's red is `negative` exactly
+- **Dev builds:** `quit:<days>` or `quit:<ISO date>` and `slip` in the dev harness set up a day to
+  check; `?scroll=end` opens a progress screen at its bottom for screenshots
+
+## Welcome intro (WELCOME)
+
+- **`docs/WELCOME-brief.md` is the spec, with one change from Pavle (24.09.2026):** one centred
+  column under the brand tile, after Roots' welcome screen, instead of the top-left wordmark. The
+  painting still falls into paper (`color.bg`), as the brief has it; a dark version was tried and
+  dropped the same day. Ember in the headline is allowed only because it is display size
+- **Words sit on the solid end of the fade, never on the painting.** The fade is sized from where
+  the text starts, so a small phone or the largest Dynamic Type size moves the paper up rather
+  than putting text over art. The brand tile carries its own ground and may sit in the fade
+- **Each painting is lifted to its subject** (`SUBJECT` in `WelcomeIntro.tsx`), and its `width`
+  is explicit: without it RN draws the 1080px file at intrinsic width, 2.7x too large
+- **Preskoči stops on beat 3**, never past it: beat 3 is the promise that keeps someone through
+  a slip. Nothing advances on its own, and Reduce Motion stops the drift, slide and cross-fade.
+  `src/features/onboarding/__tests__/welcome.test.ts` guards these and that the intro stores
+  nothing
+- **The pager's position is never a controlled prop.** iOS writes a changed `contentOffset`
+  straight onto the scroll view; fed from `index`, it fought `scrollTo` and one Dalje skipped
+  beat 2. The offset is fixed at mount, and scroll events during a button's scroll are ignored
+- **The headline is `title` (28/32), not `display`**: one line per sentence on beats 1 and 2
+- **The light status bar is scoped to focus** (`useIsFocused`). The intro stays mounted under
+  everything pushed after it, and an unscoped light bar was white on paper for all of onboarding
+- **"Već imaš nalog? Prijavi se" is not rendered** until ACCOUNT's sign-in exists
+- **Dev builds open any beat with `iskra://onboarding?beat=N`**; release builds start on beat 1
+
 ## Layout
 
 ```
 src/app/                  routes (Expo Router); dev.tsx is the dev-only data harness
-src/app/onboarding/       splash plus one dynamic route for the seventeen steps
+src/app/onboarding/       welcome intro plus one dynamic route for the seventeen steps
 src/app/poriv/            Mode, the six tools (alat/[tool]), success and slip
+src/app/onboarding/consent  consent, before step 1
+src/app/profil.tsx        Profil: the account, consent toggles, delete everything
+src/app/napredak/         the four progress screens (M4)
 src/components/primitives Text, Pressable, Button, Icon
 src/features/<name>/      feature code (poriv, napredak, ...)
 src/data/                 drivers: SQLite, repo, sync engine, auth, Supabase client
-src/lib/                  pure logic, unit-tested (vocab, time, sync, storage, i18n)
+src/lib/                  pure logic, unit-tested (vocab, time, sync, storage, i18n, progress)
 src/theme/                tokens.ts (site port), typography.ts, index.ts (roles)
 supabase/migrations/      schema changes, applied to the live project
 tests/integration/        live-network tests, excluded from `npm test`

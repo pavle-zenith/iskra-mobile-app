@@ -63,7 +63,7 @@ Approved exactly as proposed. No changes.
 - **Summary, 1 godina:** `Rizik od bolesti srca upola manji`. "Bolesti srca" rather than
   "srčanog udara", because the source finding is about coronary heart disease overall, and
   the line has to be defensible.
-- **Notification samples:** `Dan 8 bez cigarete` and `Za 2 sata: nova prekretnica`. No
+- **Notification samples:** `Dan 8 bez cigarete` and `Za 2 sata: novi cilj` (was „nova prekretnica", renamed 24.09). No
   English loanwords.
 - **IQOS accusative:** `štapiće`.
 
