@@ -18,6 +18,7 @@ import {
   listCravings,
   listSlips,
   logCraving,
+  logSlip,
   updateCraving,
   updateProfile,
   recordConsent,
@@ -34,7 +35,7 @@ import { drain, getSyncSnapshot, setSimulatedOffline } from './sync';
  *     "INSERT OR REPLACE INTO kv (key, value) VALUES ('dev.command', 'log')"
  *
  * Commands: offline | online | log | drain | resync | report | state | profile |
- * poriv:start | poriv:survive | poriv:slip | poriv:report. Every one goes through the same
+ * poriv:start | poriv:survive | poriv:slip | poriv:report | quit:<days> | slip. Every one goes through the same
  * repository and sync engine the app uses; nothing here is a shortcut around them.
  * `report` prints the app's own view of the data to the Metro log.
  */
@@ -50,6 +51,22 @@ const TEST_CRAVING = {
 } as const;
 
 async function run(command: string) {
+  // quit:<days> moves the quit date that many days into the past (decimals allowed: quit:0.125
+  // is three hours), for checking Home and the progress screens at day 0, 3, 40 or 400.
+  // quit:<ISO date> sets it exactly, to put a tester's own date back afterwards.
+  if (command.startsWith('quit:')) {
+    const value = command.slice('quit:'.length);
+    const exact = value.includes('T') ? new Date(value) : null;
+    const days = Number(value);
+    if (exact ? Number.isNaN(exact.getTime()) : !Number.isFinite(days)) {
+      throw new Error(`quit needs days or an ISO date, got ${command}`);
+    }
+    const quitDate = (exact ?? new Date(Date.now() - days * 86_400_000)).toISOString();
+    await updateProfile({ quitDate });
+    console.log(`[dev] quit date set to ${quitDate}`);
+    return;
+  }
+
   switch (command) {
     case 'offline':
       return setSimulatedOffline(true);
@@ -182,6 +199,12 @@ async function run(command: string) {
         await updateCraving(craving.id, { strength: craving.strength });
       }
       return drain();
+    case 'slip': {
+      // The same slip path as Poriv mod and the check-in: its own row, nothing reset.
+      const row = await logSlip({});
+      console.log(`[dev] slip logged ${row.id}`);
+      return;
+    }
     case 'profile': {
       // Exercises the real onboarding write path: SQLite plus an outbox entry, no network.
       const stamp = new Date().toISOString().slice(11, 19);

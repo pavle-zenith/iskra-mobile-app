@@ -119,11 +119,6 @@ function Harness() {
         }}
       />
       <Button variant="secondary" label="Drain now" onPress={() => void drain()} />
-      <Button
-        variant="secondary"
-        label="Foundations specimen"
-        onPress={() => router.push('/foundations')}
-      />
       <Button variant="secondary" label="Poriv mod" onPress={() => router.push('/poriv')} />
 
       <Text variant="heading">Local cravings ({cravings.length})</Text>

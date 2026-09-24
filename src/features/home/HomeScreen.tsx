@@ -13,7 +13,9 @@ import {
   logCraving,
   logSlip,
   recordCheckin,
+  type SlipRow,
 } from '@/data/repo';
+import { progressFor } from '@/features/napredak/data';
 import { GlyphChip } from '@/features/onboarding/components';
 import { REASONS } from '@/features/onboarding/copy';
 import { REASON_GLYPHS } from '@/features/onboarding/glyphs';
@@ -22,7 +24,15 @@ import { quitProgress, resolveAnchorTimeZone } from '@/lib/time/dayCount';
 import { color, space } from '@/theme';
 
 import { CheckInSheet } from './CheckInSheet';
-import { AbsolutionCard, Card, Header, SlipLink, TimerCard, WeekCard } from './components';
+import {
+  AbsolutionCard,
+  Card,
+  Header,
+  SlipLink,
+  StatCards,
+  TimerCard,
+  WeekCard,
+} from './components';
 import { home } from './copy';
 import { breakdown, columns, sinceQuit } from './elapsed';
 import { deriveUserState, type UserState } from './state';
@@ -44,6 +54,7 @@ type HomeData = {
   quitDate: Date | null;
   zone: string;
   survived: number;
+  slips: SlipRow[];
   week: { days: WeekDay[]; clean: number };
 };
 
@@ -81,6 +92,7 @@ export function HomeScreen() {
       quitDate,
       zone,
       survived: cravings.filter((row) => row.outcome === 'survived').length,
+      slips,
       week: weekFor({
         now: at,
         anchorTimeZone: zone,
@@ -173,6 +185,13 @@ export function HomeScreen() {
    */
   const showWeek = data.week.days.some((day) => day.state !== 'before');
 
+  /**
+   * Module 4, from the progress engine. Before the quit date, and in the first minutes after it,
+   * nothing has been saved yet: a card showing 0 is a module with no data, which does not render.
+   */
+  const progress = preQuit ? null : progressFor(data.profile, data.slips, now);
+  const showStats = !!progress && progress.cigarettesNotSmoked > 0;
+
   const words = data.profile?.reasonText?.trim();
   const reasons = (data.profile?.reasons ?? []).slice(0, 2);
   const showReasons = !!words || reasons.length > 0;
@@ -201,7 +220,23 @@ export function HomeScreen() {
             />
           ) : null}
 
-          {timer ? <TimerCard eyebrow={timer.eyebrow} columns={timer.columns} /> : null}
+          {timer ? (
+            <TimerCard
+              eyebrow={timer.eyebrow}
+              columns={timer.columns}
+              // Counting down to the quit date, there is no time of theirs to show yet.
+              onPress={preQuit ? undefined : () => router.push('/napredak/vreme')}
+            />
+          ) : null}
+
+          {showStats && progress ? (
+            <StatCards
+              rsdSaved={progress.rsdSaved}
+              cigarettesNotSmoked={progress.cigarettesNotSmoked}
+              onMoney={() => router.push('/napredak/novac')}
+              onCigarettes={() => router.push('/napredak/cigarete')}
+            />
+          ) : null}
 
           {showReasons ? (
             <Card

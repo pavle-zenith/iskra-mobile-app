@@ -44,6 +44,20 @@ export const home = {
     preQuitEyebrow: 'DO TVOG DANA',
   },
 
+  /**
+   * Module 4 (M4). "ušteđeno" with đ; the export misspelt it. The cigarette label agrees with
+   * its number: 1 cigareta odbijena, 2 cigarete odbijene, 5 cigareta odbijeno.
+   */
+  stats: {
+    money: 'RSD ušteđeno',
+    cigarettes: (n: number) =>
+      plural(n, {
+        one: 'cigareta odbijena',
+        few: 'cigarete odbijene',
+        other: 'cigareta odbijeno',
+      }),
+  },
+
   reasonsTitle: 'Tvoji razlozi',
 
   slipLink: {

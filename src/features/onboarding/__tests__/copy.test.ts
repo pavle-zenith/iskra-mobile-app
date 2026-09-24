@@ -32,16 +32,18 @@ describe('formatRsd', () => {
     expect(formatRsd(1234567)).toBe('1.234.567');
   });
 
-  it('never rounds up to a nicer number', () => {
-    expect(formatRsd(164249.6)).toBe('164.250');
+  it('never rounds a saving up: the figure is floored, as everywhere', () => {
+    expect(formatRsd(164249.6)).toBe('164.249');
     expect(formatRsd(164249.4)).toBe('164.249');
   });
 });
 
 describe('annualCostRsd', () => {
-  it('is packs a day times price times 365', () => {
+  it('is packs a day times price times 365, floored by the engine', () => {
     expect(annualCostRsd(ctx())).toBe(450 * 365);
     expect(annualCostRsd(ctx({ cigarettesPerDay: 10 }))).toBe(0.5 * 450 * 365);
+    // 15 / 20 × 455 × 365 = 124.556,25
+    expect(annualCostRsd(ctx({ cigarettesPerDay: 15, packPriceRsd: 455 }))).toBe(124556);
   });
 });
 

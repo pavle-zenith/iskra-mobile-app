@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 
 import { Icon, Pressable, Text } from '@/components/primitives';
+import { formatDay } from '@/lib/i18n/date';
 import { color, fontFamily, minTarget, radius, space, textVariants } from '@/theme';
 
 import { copy } from './copy';
@@ -210,7 +211,8 @@ export function Calendar({
               feedback="none"
               accessibilityRole="button"
               accessibilityState={{ selected, disabled: isPast }}
-              accessibilityLabel={`${date.getDate()}. ${copy.date.months[date.getMonth()]}`}
+              // A day is a date, so its month is genitive; the header above names the month.
+              accessibilityLabel={formatDay(date)}
               style={[
                 styles.day,
                 selected && styles.daySelected,

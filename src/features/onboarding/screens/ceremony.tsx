@@ -15,6 +15,7 @@ import Animated, {
 
 import { Icon, Pressable, Text } from '@/components/primitives';
 import { drain } from '@/data/sync';
+import { formatDay } from '@/lib/i18n/date';
 import { color, radius, space } from '@/theme';
 
 import { FieldScreen, GlyphChip, Plate, Prompt, QuestionScreen } from '../components';
@@ -223,9 +224,8 @@ export function SummaryStep() {
   const stats = [
     {
       label: copy.summary.statLabels.quitDate,
-      value: quitDate
-        ? `${quitDate.getDate()}. ${copy.date.months[quitDate.getMonth()]?.toLowerCase() ?? ''}`
-        : '',
+      // A date takes the genitive month: "24. septembra" (docs/M4-copy-answers.md).
+      value: quitDate ? formatDay(quitDate) : '',
       glyph: STAT_GLYPHS.quitDate,
     },
     {

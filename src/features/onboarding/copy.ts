@@ -10,6 +10,12 @@
  * `[var]` slots take profile data. `[g:token]` slots go through `g()`, which never produces a
  * slash and never defaults to masculine.
  */
+import {
+  annualCigarettes as engineAnnualCigarettes,
+  annualCost,
+  formatNumber,
+} from '@/lib/progress';
+
 import { g, type GenderCode } from './gender';
 
 export type ProductKey = 'cigarete' | 'iqos';
@@ -28,26 +34,21 @@ export type CopyContext = {
 // --- numbers ---------------------------------------------------------------
 
 /**
- * Serbian grouping: 7300 becomes "7.300". Grouped by hand rather than through Intl, whose
- * separator for sr-RS varies by engine (Hermes on two platforms, Node in tests).
- *
- * Rounded to the nearest dinar and never up to a nicer number: PRODUCT.md forbids flattering
- * this figure, and it is the product's sharpest proof.
+ * Serbian grouping, "7.300", from the progress engine (`src/lib/progress`), so onboarding and
+ * the progress screens write one figure one way. Floored, never rounded: one rule everywhere,
+ * never round a saving up (Pavle, docs/M4-copy-answers.md, decision 1).
  */
 export function formatRsd(amount: number): string {
-  const whole = Math.round(Math.abs(amount));
-  const grouped = String(whole).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-  return amount < 0 ? `-${grouped}` : grouped;
+  return formatNumber(amount);
 }
 
-/** annualCost = (cigsPerDay / cigsPerPack) * packPrice * 365 (brief section 1). */
+/** The year's spend at the current habit, from the engine: (cigs a day / per pack) × price × 365. */
 export function annualCostRsd(ctx: CopyContext): number {
-  const packs = ctx.cigarettesPerDay / Math.max(1, ctx.cigarettesPerPack);
-  return packs * ctx.packPriceRsd * 365;
+  return annualCost(ctx.cigarettesPerDay, ctx.packPriceRsd, ctx.cigarettesPerPack);
 }
 
 export function annualCigarettes(ctx: CopyContext): number {
-  return ctx.cigarettesPerDay * 365;
+  return engineAnnualCigarettes(ctx.cigarettesPerDay);
 }
 
 /**
@@ -571,7 +572,7 @@ export const copy = {
         title: 'Dan 8 bez cigarete',
         body: 'Već 8 dana bez cigarete. Pluća ti se zahvaljuju.',
       },
-      { title: 'Za 2 sata: nova prekretnica', body: 'Cirkulacija se poboljšava. Oseti razliku.' },
+      { title: 'Za 2 sata: novi cilj', body: 'Cirkulacija se poboljšava. Oseti razliku.' },
       {
         title: 'Vuče te? Otvori Iskru.',
         body: 'Poriv prolazi za 5 minuta. Klikni i prođi kroz njega.',

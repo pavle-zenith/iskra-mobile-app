@@ -1,9 +1,19 @@
-import { Check, Flame } from 'lucide-react-native';
+import { Banknote, Check, CigaretteOff, Flame } from 'lucide-react-native';
 import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { Icon, Pressable, Text } from '@/components/primitives';
-import { color, elevation, minTarget, radius, space } from '@/theme';
 import { profil } from '@/features/legal/copy';
+import { GlyphChip } from '@/features/onboarding/components';
+import { formatNumber } from '@/lib/progress';
+import {
+  color,
+  elevation,
+  minTarget,
+  progressColor,
+  radius,
+  space,
+  type ProgressKey,
+} from '@/theme';
 
 import { home } from './copy';
 import type { WeekDay } from './week';
@@ -169,12 +179,22 @@ function DayMark({ day, onPress }: { day: WeekDay; onPress: () => void }) {
 export function TimerCard({
   eyebrow,
   columns: values,
+  onPress,
 }: {
   eyebrow: string;
   columns: readonly { value: number; label: string }[];
+  /** Opens Tvoje vreme (M4). */
+  onPress?: () => void;
 }) {
   return (
-    <Card style={styles.timerCard}>
+    <Card
+      style={styles.timerCard}
+      onPress={onPress}
+      accessibilityLabel={[
+        eyebrow,
+        ...values.map((column) => `${column.value} ${column.label}`),
+      ].join(', ')}
+    >
       <Text variant="caption" style={styles.timerEyebrow}>
         {eyebrow}
       </Text>
@@ -193,6 +213,69 @@ export function TimerCard({
           </View>
         ))}
       </View>
+    </Card>
+  );
+}
+
+/**
+ * Module 4: money saved and cigarettes not smoked, side by side, as in the export. They open
+ * Ušteđevina and Odbijene cigarete. The export coloured the cigarette count red; `negative` is
+ * never pointed at the user, so it takes the calm violet Odbijene cigarete uses.
+ */
+export function StatCards({
+  rsdSaved,
+  cigarettesNotSmoked,
+  onMoney,
+  onCigarettes,
+}: {
+  rsdSaved: number;
+  cigarettesNotSmoked: number;
+  onMoney: () => void;
+  onCigarettes: () => void;
+}) {
+  return (
+    <View style={styles.stats}>
+      <StatCard
+        tone="money"
+        icon={Banknote}
+        value={formatNumber(rsdSaved)}
+        label={home.stats.money}
+        onPress={onMoney}
+      />
+      <StatCard
+        tone="time"
+        icon={CigaretteOff}
+        value={formatNumber(cigarettesNotSmoked)}
+        label={home.stats.cigarettes(cigarettesNotSmoked)}
+        onPress={onCigarettes}
+      />
+    </View>
+  );
+}
+
+function StatCard({
+  tone,
+  icon,
+  value,
+  label,
+  onPress,
+}: {
+  tone: ProgressKey;
+  icon: typeof Banknote;
+  value: string;
+  label: string;
+  onPress: () => void;
+}) {
+  const palette = progressColor[tone];
+  return (
+    <Card style={styles.stat} onPress={onPress} accessibilityLabel={`${value} ${label}`}>
+      <GlyphChip glyph={{ icon, color: palette.deep, tint: palette.tint }} size={36} />
+      <Text variant="title" style={styles.statValue} numberOfLines={1} adjustsFontSizeToFit>
+        {value}
+      </Text>
+      <Text variant="caption" style={{ color: palette.deep }}>
+        {label}
+      </Text>
     </Card>
   );
 }
@@ -240,6 +323,9 @@ const styles = StyleSheet.create({
     ...(elevation.raised as object),
   },
   header: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
+  stats: { flexDirection: 'row', gap: space.sm },
+  stat: { flex: 1, gap: space.xxs },
+  statValue: { marginTop: space.xs, fontVariant: ['tabular-nums'] },
   avatar: {
     width: 44,
     height: 44,
